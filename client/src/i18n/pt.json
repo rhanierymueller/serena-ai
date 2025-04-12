@@ -1,0 +1,11 @@
+{
+  "header": {
+    "title": "Serena AI",
+    "subtitle": "Uma experiência de conversa empática com inteligência artificial."
+  },
+  "home": {
+    "testNow": "Testar agora",
+    "register": "Registrar",
+    "welcome": "Bem-vindo(a)!"
+  }
+}
