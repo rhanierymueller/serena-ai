@@ -6,6 +6,12 @@
   "home": {
     "testNow": "Probar ahora",
     "register": "Registrar",
-    "welcome": "¡Bienvenido(a)!"
+    "welcome": "¡Bienvenido(a)!",
+    "disclaimer": {
+      "title": "Término de responsabilidad",
+      "text": "Serena AI es un asistente virtual con fines informativos y de escucha empática. No reemplaza el acompañamiento profesional de psicólogos, terapeutas o psiquiatras. Si estás pasando por un momento difícil, busca ayuda médica especializada.",
+      "understood": "Entiendo",
+      "back": "Volver"
+    }
   }
 }

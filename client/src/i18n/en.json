@@ -6,6 +6,12 @@
   "home": {
     "testNow": "Try now",
     "register": "Register",
-    "welcome": "Welcome!"
+    "welcome": "Welcome!",
+    "disclaimer": {
+      "title": "Disclaimer",
+      "text": "Serena AI is a virtual assistant for informational and empathetic listening purposes. It does not replace professional care from psychologists, therapists, or psychiatrists. If you are going through a difficult time, please seek specialized medical help.",
+      "understood": "I understand",
+      "back": "Back"
+    }
   }
 }

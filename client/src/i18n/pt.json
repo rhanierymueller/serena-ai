@@ -6,6 +6,12 @@
   "home": {
     "testNow": "Testar agora",
     "register": "Registrar",
-    "welcome": "Bem-vindo(a)!"
+    "welcome": "Bem-vindo(a)!",
+    "disclaimer": {
+      "title": "Termo de responsabilidade",
+      "text": "A Serena AI é um assistente virtual com fins informativos e de escuta empática. Ela não substitui atendimento profissional com psicólogos, terapeutas ou psiquiatras. Se você estiver passando por uma situação difícil, procure ajuda médica especializada.",
+      "understood": "Entendi",
+      "back": "Voltar"
+    }
   }
 }
