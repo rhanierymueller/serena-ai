@@ -3,6 +3,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
   },
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -12,12 +13,13 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ["react", "@typescript-eslint", "prettier"],
+  plugins: ["react", "@typescript-eslint", "prettier", "react-hooks"],
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended",
   ],
   settings: {
     react: {
@@ -25,9 +27,19 @@ module.exports = {
     },
   },
   rules: {
-    "prettier/prettier": "error",
+    "prettier/prettier": ["error", {
+      "singleQuote": true,
+      "trailingComma": "es5",
+      "arrowParens": "avoid",
+      "endOfLine": "auto",
+      "printWidth": 100,
+      "tabWidth": 2
+    }],
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-ts-comment": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "react/prop-types": "off",
   },
 };

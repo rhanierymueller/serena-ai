@@ -1,30 +1,30 @@
-import React, { useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Eye, EyeOff } from "lucide-react";
-import { useI18n } from "../../i18n/I18nContext";
-import Modal from "../../components/Modal";
-import Select from "../../components/Select";
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { Eye, EyeOff } from 'lucide-react';
+import { useI18n } from '../../i18n/I18nContext';
+import Modal from '../../components/Modal';
+import Select from '../../components/Select';
 
-import { createUser } from "../../services/userService";
-import { saveUser } from "../../services/userSession";
+import { createUser } from '../../services/userService';
+import { saveUser } from '../../services/userSession';
 
 interface RegisterModalProps {
   onClose: () => void;
 }
 
 const countries = [
-  { value: "br", label: "Brasil" },
-  { value: "us", label: "United States" },
-  { value: "es", label: "España" },
-  { value: "pt", label: "Portugal" },
-  { value: "mx", label: "México" },
+  { value: 'br', label: 'Brasil' },
+  { value: 'us', label: 'United States' },
+  { value: 'es', label: 'España' },
+  { value: 'pt', label: 'Portugal' },
+  { value: 'mx', label: 'México' },
 ];
 
 const genders = [
-  { value: "male", label: "Masculino" },
-  { value: "female", label: "Feminino" },
-  { value: "other", label: "Outros" },
+  { value: 'male', label: 'Masculino' },
+  { value: 'female', label: 'Feminino' },
+  { value: 'other', label: 'Outros' },
 ];
 
 const RegisterModal: React.FC<RegisterModalProps> = ({ onClose }) => {
@@ -34,34 +34,34 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose }) => {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      birthDate: "",
-      country: "br",
-      gender: "",
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      birthDate: '',
+      country: 'br',
+      gender: '',
     },
     validationSchema: Yup.object({
-      name: Yup.string().required(t("register.validation.firstName")),
+      name: Yup.string().required(t('register.validation.firstName')),
       email: Yup.string()
-        .email(t("register.validation.emailInvalid"))
-        .required(t("register.validation.emailRequired")),
+        .email(t('register.validation.emailInvalid'))
+        .required(t('register.validation.emailRequired')),
       password: Yup.string()
-        .required(t("register.validation.passwordRequired"))
-        .min(8, t("register.validation.passwordMin"))
-        .matches(/[A-Z]/, t("register.validation.passwordUpper"))
-        .matches(/[a-z]/, t("register.validation.passwordLower"))
-        .matches(/[0-9]/, t("register.validation.passwordNumber"))
-        .matches(/[!@#$%^&*(),.?":{}|<>]/, t("register.validation.passwordSymbol")),
+        .required(t('register.validation.passwordRequired'))
+        .min(8, t('register.validation.passwordMin'))
+        .matches(/[A-Z]/, t('register.validation.passwordUpper'))
+        .matches(/[a-z]/, t('register.validation.passwordLower'))
+        .matches(/[0-9]/, t('register.validation.passwordNumber'))
+        .matches(/[!@#$%^&*(),.?":{}|<>]/, t('register.validation.passwordSymbol')),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password")], t("register.validation.passwordMatch"))
-        .required(t("register.validation.passwordConfirm")),
-      birthDate: Yup.string().required(t("register.validation.birthDate")),
-      country: Yup.string().required(t("register.validation.country")),
-      gender: Yup.string().required(t("register.validation.gender")),
+        .oneOf([Yup.ref('password')], t('register.validation.passwordMatch'))
+        .required(t('register.validation.passwordConfirm')),
+      birthDate: Yup.string().required(t('register.validation.birthDate')),
+      country: Yup.string().required(t('register.validation.country')),
+      gender: Yup.string().required(t('register.validation.gender')),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
         const user = await createUser({
           name: values.name,
@@ -73,20 +73,20 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose }) => {
         saveUser(user);
         onClose();
       } catch (error) {
-        console.error("Erro ao registrar:", error);
-        alert("Erro ao registrar. Tente novamente.");
+        console.error('Erro ao registrar:', error);
+        alert('Erro ao registrar. Tente novamente.');
       }
     },
   });
 
   return (
     <Modal
-      title={t("register.title")}
+      title={t('register.title')}
       description={
         <form onSubmit={formik.handleSubmit} className="space-y-4 text-white">
           <div>
             <label className="text-sm block mb-1">
-              {t("register.firstName")} <span className="text-red-500">*</span>
+              {t('register.firstName')} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -102,7 +102,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose }) => {
 
           <div>
             <label className="text-sm block mb-1">
-              {t("register.email")} <span className="text-red-500">*</span>
+              {t('register.email')} <span className="text-red-500">*</span>
             </label>
             <input
               type="email"
@@ -118,10 +118,10 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose }) => {
 
           <div className="relative">
             <label className="text-sm block mb-1">
-              {t("register.password")} <span className="text-red-500">*</span>
+              {t('register.password')} <span className="text-red-500">*</span>
             </label>
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               name="password"
               onChange={formik.handleChange}
               value={formik.values.password}
@@ -140,10 +140,10 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose }) => {
 
           <div className="relative">
             <label className="text-sm block mb-1">
-              {t("register.confirmPassword")} <span className="text-red-500">*</span>
+              {t('register.confirmPassword')} <span className="text-red-500">*</span>
             </label>
             <input
-              type={showConfirmPassword ? "text" : "password"}
+              type={showConfirmPassword ? 'text' : 'password'}
               name="confirmPassword"
               onChange={formik.handleChange}
               value={formik.values.confirmPassword}
@@ -163,7 +163,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose }) => {
           <div className="flex gap-4">
             <div className="w-1/2">
               <label className="text-sm block mb-1">
-                {t("register.birthDate")} <span className="text-red-500">*</span>
+                {t('register.birthDate')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="date"
@@ -179,11 +179,11 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose }) => {
 
             <div className="w-1/2">
               <label className="text-sm block mb-1">
-                {t("register.country")} <span className="text-red-500">*</span>
+                {t('register.country')} <span className="text-red-500">*</span>
               </label>
               <Select
                 value={formik.values.country}
-                onChange={(val) => formik.setFieldValue("country", val)}
+                onChange={val => formik.setFieldValue('country', val)}
                 options={countries}
               />
               {formik.touched.country && formik.errors.country && (
@@ -194,11 +194,11 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose }) => {
 
           <div>
             <label className="text-sm block mb-1">
-              {t("register.gender")} <span className="text-red-500">*</span>
+              {t('register.gender')} <span className="text-red-500">*</span>
             </label>
             <Select
               value={formik.values.gender}
-              onChange={(val) => formik.setFieldValue("gender", val)}
+              onChange={val => formik.setFieldValue('gender', val)}
               options={genders}
             />
             {formik.touched.gender && formik.errors.gender && (
@@ -209,8 +209,8 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose }) => {
       }
       onCancel={onClose}
       onConfirm={formik.submitForm}
-      cancelText={t("register.cancel")}
-      confirmText={t("register.submit")}
+      cancelText={t('register.cancel')}
+      confirmText={t('register.submit')}
       size="md"
     />
   );

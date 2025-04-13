@@ -1,5 +1,5 @@
-import React from "react";
-import { ChevronDown } from "lucide-react";
+import React from 'react';
+import { ChevronDown } from 'lucide-react';
 
 interface Option<T> {
   value: T;
@@ -19,7 +19,7 @@ const Select = <T extends string | number>({
   value,
   onChange,
   options,
-  className = "",
+  className = '',
   name,
   id,
 }: SelectProps<T>) => {
@@ -29,10 +29,10 @@ const Select = <T extends string | number>({
         name={name}
         id={id}
         value={value}
-        onChange={(e) => onChange(e.target.value as T)}
+        onChange={e => onChange(e.target.value as T)}
         className="appearance-none bg-gray-700 text-white px-4 py-2 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
       >
-        {options.map((opt) => (
+        {options.map(opt => (
           <option key={opt.value} value={opt.value}>
             {opt.label}
           </option>

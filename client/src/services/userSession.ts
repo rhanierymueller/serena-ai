@@ -1,4 +1,4 @@
-const USER_KEY = "serena_user_profile";
+const USER_KEY = 'serena_user_profile';
 
 export function saveUser(user: any) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));

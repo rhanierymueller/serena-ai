@@ -1,21 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Bot } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useI18n } from "../i18n/I18nContext";
-import Modal from "../components/Modal";
-import Select from "../components/Select";
-import Footer from "../components/Footer";
-import RegisterModal from "./modals/RegisterModal";
-import { TypingText } from "../components/TypingText";
-import { clearUser, getUser } from "../services/userSession";
-import LoginModal from "./modals/LoginModal";
+import React, { useEffect, useRef, useState } from 'react';
+import { Bot } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useI18n } from '../i18n/I18nContext';
+import Modal from '../components/Modal';
+import Select from '../components/Select';
+import Footer from '../components/Footer';
+import RegisterModal from './modals/RegisterModal';
+import { TypingText } from '../components/TypingText';
+import { clearUser, getUser } from '../services/userSession';
+import LoginModal from './modals/LoginModal';
 
-type Language = "pt" | "en" | "es";
+type Language = 'pt' | 'en' | 'es';
 
 const languageOptions: { value: Language; label: string }[] = [
-  { value: "pt", label: "Português" },
-  { value: "en", label: "English" },
-  { value: "es", label: "Español" },
+  { value: 'pt', label: 'Português' },
+  { value: 'en', label: 'English' },
+  { value: 'es', label: 'Español' },
 ];
 
 const Home: React.FC = () => {
@@ -25,9 +25,8 @@ const Home: React.FC = () => {
   const [showRegister, setShowRegister] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
-  const [gender, setGender] = useState<"male" | "female" | "other">("other");
+  const [gender, setGender] = useState<'male' | 'female' | 'other'>('other');
   const [showLogin, setShowLogin] = useState(false);
-
 
   const { language, setLanguage, t } = useI18n();
 
@@ -42,14 +41,14 @@ const Home: React.FC = () => {
       setMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top });
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   useEffect(() => {
     updateUserState();
   }, []);
-  
+
   const handleRegisterSuccess = () => {
     updateUserState();
     setShowRegister(false);
@@ -60,15 +59,15 @@ const Home: React.FC = () => {
   const handleAcceptDisclaimer = () => {
     setShowDisclaimer(false);
     setTransitioning(true);
-    setTimeout(() => navigate("/chat"), 600);
+    setTimeout(() => navigate('/chat'), 600);
   };
 
   const updateUserState = () => {
     const user = getUser();
     if (user) {
-      const [firstName] = user.name.split(" ");
+      const [firstName] = user.name.split(' ');
       setUserName(firstName);
-      setGender(user.gender || "other");
+      setGender(user.gender || 'other');
     }
   };
 
@@ -86,11 +85,11 @@ const Home: React.FC = () => {
           className="absolute inset-0 z-0 pointer-events-none"
           style={{
             backgroundImage: "url('/image/foto_egipcia.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
             WebkitMaskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
             maskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
-            transition: "mask-image 0.2s ease, -webkit-mask-image 0.2s ease",
+            transition: 'mask-image 0.2s ease, -webkit-mask-image 0.2s ease',
           }}
         />
 
@@ -98,24 +97,20 @@ const Home: React.FC = () => {
           ref={blurRef}
           className="pointer-events-none absolute w-64 h-64 rounded-full z-10"
           style={{
-            filter: "blur(40px)",
+            filter: 'blur(40px)',
             transform: `translate(${mouse.x - 128}px, ${mouse.y - 128}px)`,
-            transition: "transform 0.05s linear",
+            transition: 'transform 0.05s linear',
           }}
         />
 
         <div className="absolute top-0 right-0 p-4 z-20 flex items-center gap-4">
-          <Select
-            value={language}
-            onChange={setLanguage}
-            options={languageOptions}
-          />
+          <Select value={language} onChange={setLanguage} options={languageOptions} />
           {userName && (
             <button
               onClick={() => setShowLogoutModal(true)}
               className="text-sm text-gray-400 hover:text-white transition"
             >
-              {t("home.logout")}
+              {t('home.logout')}
             </button>
           )}
         </div>
@@ -123,13 +118,11 @@ const Home: React.FC = () => {
         <div className="flex-1 flex flex-col items-center justify-center relative z-10">
           <div className="flex items-center gap-3 mb-8">
             <Bot size={40} className="text-green-500" />
-            <h1 className="text-4xl font-bold font-sans">
-              {t("header.title")}
-            </h1>
+            <h1 className="text-4xl font-bold font-sans">{t('header.title')}</h1>
           </div>
 
           <p className="text-center text-lg md:text-xl text-gray-300 max-w-xl mb-6">
-            {t("header.subtitle")}
+            {t('header.subtitle')}
           </p>
 
           {userName && (
@@ -137,12 +130,8 @@ const Home: React.FC = () => {
               <TypingText
                 text={`${t(
                   `home.welcome${
-                    gender === "female"
-                      ? "Female"
-                      : gender === "male"
-                        ? "Male"
-                        : "Other"
-                  }`,
+                    gender === 'female' ? 'Female' : gender === 'male' ? 'Male' : 'Other'
+                  }`
                 )}, ${userName}!`}
               />
             </div>
@@ -155,19 +144,19 @@ const Home: React.FC = () => {
                   onClick={handleTestClick}
                   className="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
-                  {t("home.testNow")}
+                  {t('home.testNow')}
                 </button>
                 <button
                   onClick={() => setShowRegister(true)}
                   className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
-                  {t("register.title")}
+                  {t('register.title')}
                 </button>
                 <button
                   onClick={() => setShowLogin(true)}
                   className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
-                  {t("login.title")}
+                  {t('login.title')}
                 </button>
               </>
             ) : (
@@ -175,7 +164,7 @@ const Home: React.FC = () => {
                 onClick={handleTestClick}
                 className="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
               >
-                {t("home.testNow")}
+                {t('home.testNow')}
               </button>
             )}
           </div>
@@ -186,12 +175,12 @@ const Home: React.FC = () => {
 
       {showDisclaimer && (
         <Modal
-          title={t("home.disclaimer.title")}
-          description={t("home.disclaimer.text")}
+          title={t('home.disclaimer.title')}
+          description={t('home.disclaimer.text')}
           onCancel={() => setShowDisclaimer(false)}
           onConfirm={handleAcceptDisclaimer}
-          cancelText={t("home.disclaimer.back")}
-          confirmText={t("home.disclaimer.understood")}
+          cancelText={t('home.disclaimer.back')}
+          confirmText={t('home.disclaimer.understood')}
           size="md"
         />
       )}
@@ -200,29 +189,29 @@ const Home: React.FC = () => {
 
       {showLogoutModal && (
         <Modal
-          title={t("home.logoutTitle")}
-          description={t("home.logoutConfirm")}
+          title={t('home.logoutTitle')}
+          description={t('home.logoutConfirm')}
           onCancel={() => setShowLogoutModal(false)}
           onConfirm={() => {
             clearUser();
             setUserName(null);
             setShowLogoutModal(false);
           }}
-          cancelText={t("home.logoutCancel")}
-          confirmText={t("home.logoutConfirmBtn")}
+          cancelText={t('home.logoutCancel')}
+          confirmText={t('home.logoutConfirmBtn')}
           size="sm"
         />
       )}
 
       {showLogin && (
         <LoginModal
-        onClose={() => setShowLogin(false)}
-        onSuccess={() => {
-        updateUserState();
-        setShowLogin(false);
-      }}
-    />
-  )}
+          onClose={() => setShowLogin(false)}
+          onSuccess={() => {
+            updateUserState();
+            setShowLogin(false);
+          }}
+        />
+      )}
     </>
   );
 };

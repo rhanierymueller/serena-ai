@@ -1,11 +1,11 @@
 // src/pages/modals/LoginModal.tsx
-import React, { useState } from "react";
-import Modal from "../../components/Modal";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { loginUser } from "../../services/userService";
-import { saveUser } from "../../services/userSession";
-import { useI18n } from "../../i18n/I18nContext";
+import React, { useState } from 'react';
+import Modal from '../../components/Modal';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { loginUser } from '../../services/userService';
+import { saveUser } from '../../services/userSession';
+import { useI18n } from '../../i18n/I18nContext';
 
 interface LoginModalProps {
   onClose: () => void;
@@ -18,22 +18,22 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("E-mail inválido").required("Obrigatório"),
-      password: Yup.string().required("Senha obrigatória"),
+      email: Yup.string().email('E-mail inválido').required('Obrigatório'),
+      password: Yup.string().required('Senha obrigatória'),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
-        if (!isHuman) return alert("Confirme que você não é um robô.");
+        if (!isHuman) return alert('Confirme que você não é um robô.');
 
         const user = await loginUser(values);
         saveUser(user);
         onSuccess();
       } catch (err) {
-        alert("Erro ao autenticar.");
+        alert('Erro ao autenticar.');
         console.error(err);
       }
     },
@@ -41,11 +41,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
 
   return (
     <Modal
-      title={t("login.title")}
+      title={t('login.title')}
       description={
         <form onSubmit={formik.handleSubmit} className="space-y-4 text-white">
           <div>
-            <label className="text-sm mb-1 block">{t("login.email")}</label>
+            <label className="text-sm mb-1 block">{t('login.email')}</label>
             <input
               type="email"
               name="email"
@@ -55,7 +55,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
             />
           </div>
           <div>
-            <label className="text-sm mb-1 block">{t("login.password")}</label>
+            <label className="text-sm mb-1 block">{t('login.password')}</label>
             <input
               type="password"
               name="password"
@@ -68,18 +68,18 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
             <label>
               <input
                 type="checkbox"
-                onChange={(e) => setIsHuman(e.target.checked)}
+                onChange={e => setIsHuman(e.target.checked)}
                 className="mr-2"
               />
-              {t("login.notARobot")}
+              {t('login.notARobot')}
             </label>
           </div>
         </form>
       }
       onCancel={onClose}
       onConfirm={formik.submitForm}
-      confirmText={t("login.confirm")}
-      cancelText={t("register.cancel")}
+      confirmText={t('login.confirm')}
+      cancelText={t('register.cancel')}
       size="sm"
     />
   );

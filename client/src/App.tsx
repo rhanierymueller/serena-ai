@@ -1,6 +1,6 @@
-import { Routes, Route } from "react-router-dom";
-import SerenaChat from "./components/SerenaChat";
-import Home from "./pages/Home";
+import { Routes, Route } from 'react-router-dom';
+import SerenaChat from './pages/SerenaChat';
+import Home from './pages/Home';
 
 const App = () => {
   return (
