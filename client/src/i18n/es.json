@@ -7,6 +7,15 @@
     "testNow": "Probar ahora",
     "register": "Registrar",
     "welcome": "¡Bienvenido(a)!",
+    "welcomeMale": "Bienvenido",
+    "welcomeFemale": "Bienvenida",
+    "welcomeOther": "Bienvenidx",
+    "logout": "Salir",
+    "logoutTitle": "¿Deseas salir?",
+    "logoutConfirm": "¿Estás seguro de que deseas salir de Serena AI?",
+    "logoutCancel": "Cancelar",
+    "logoutConfirmBtn": "Sí, salir",
+    "gender": "Género",
     "disclaimer": {
       "title": "Término de responsabilidad",
       "text": "Serena AI es un asistente virtual con fines informativos y de escucha empática. No reemplaza el acompañamiento profesional de psicólogos, terapeutas o psiquiatras. Si estás pasando por un momento difícil, busca ayuda médica especializada.",
@@ -34,5 +43,23 @@
     "collapse": "Colapsar",
     "expand": "Expandir",
     "delete": "Eliminar conversación"
+  },
+  "register": {
+    "title": "Crear cuenta",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "birthDate": "Fecha de nacimiento",
+    "country": "País",
+    "submit": "Registrar",
+    "cancel": "Cancelar",
+    "validation": {
+      "firstName": "El nombre es obligatorio.",
+      "lastName": "El apellido es obligatorio.",
+      "emailRequired": "El correo es obligatorio.",
+      "emailInvalid": "Ingresa un correo válido.",
+      "birthDate": "La fecha de nacimiento es obligatoria.",
+      "country": "Selecciona un país."
+    }
   }
 }

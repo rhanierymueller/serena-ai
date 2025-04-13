@@ -7,6 +7,14 @@
     "testNow": "Try now",
     "register": "Register",
     "welcome": "Welcome!",
+    "welcomeMale": "Welcome",
+    "welcomeFemale": "Welcome",
+    "welcomeOther": "Welcome",
+    "logout": "Logout",
+    "logoutTitle": "Do you want to logout?",
+    "logoutConfirm": "Are you sure you want to logout from Serena AI?",
+    "logoutCancel": "Cancel",
+    "logoutConfirmBtn": "Yes, logout",
     "disclaimer": {
       "title": "Disclaimer",
       "text": "Serena AI is a virtual assistant for informational and empathetic listening purposes. It does not replace professional care from psychologists, therapists, or psychiatrists. If you are going through a difficult time, please seek specialized medical help.",
@@ -34,5 +42,24 @@
     "collapse": "Collapse",
     "expand": "Expand",
     "delete": "Delete conversation"
+  },
+  "register": {
+    "title": "Create Account",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "birthDate": "Date of Birth",
+    "country": "Country",
+    "submit": "Register",
+    "cancel": "Cancel",
+    "gender": "Gender",
+    "validation": {
+      "firstName": "First name is required.",
+      "lastName": "Last name is required.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Enter a valid email.",
+      "birthDate": "Birth date is required.",
+      "country": "Select a country."
+    }
   }
 }

@@ -31,9 +31,9 @@ const Modal: React.FC<ModalProps> = ({
         className={`bg-[#1a1a1a] rounded-2xl w-full ${sizeMap[size]} p-6 text-white shadow-lg border border-gray-700`}
       >
         <h2 className="text-xl font-semibold mb-4">{title}</h2>
-        <p className="text-sm text-gray-300 mb-6 leading-relaxed">
+        <div className="text-sm text-gray-300 mb-6 leading-relaxed">
           {description}
-        </p>
+        </div>
         <div className="flex justify-end gap-3">
           <button
             onClick={onCancel}
