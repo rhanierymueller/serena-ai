@@ -8,10 +8,11 @@ import {
 } from "lucide-react";
 
 import { useI18n } from "../i18n/I18nContext";
+import { getUser } from "../services/userSession";
+import { getChats, createChat } from "../services/chatService";
 
 interface ChatHistoryItem {
   id: string;
-  title: string;
   createdAt: string;
 }
 
@@ -21,27 +22,43 @@ const ChatSidebar: React.FC<{
   currentChatId: string | null;
 }> = ({ onSelectChat, onCreateNew, currentChatId }) => {
   const { t } = useI18n();
-
   const [history, setHistory] = useState<ChatHistoryItem[]>([]);
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("serena_chat_history");
-    if (stored) setHistory(JSON.parse(stored));
+    const fetchChats = async () => {
+      const user = getUser();
+      if (!user) return;
+
+      try {
+        const chats = await getChats(user.id);
+        setHistory(chats);
+      } catch (err) {
+        console.error("Erro ao buscar histórico de chats:", err);
+      }
+    };
+
+    fetchChats();
   }, []);
 
-  const handleNewChat = () => {
-    const newId = Date.now().toString();
-    const newItem: ChatHistoryItem = {
-      id: newId,
-      title: t("sidebar.newConversation"),
-      createdAt: new Date().toISOString(),
-    };
-    const updated = [newItem, ...history];
-    setHistory(updated);
-    localStorage.setItem("serena_chat_history", JSON.stringify(updated));
-    onCreateNew();
-    onSelectChat(newId);
+  const handleNewChat = async () => {
+    const user = getUser();
+    if (!user) return;
+
+    try {
+      const newChat = await createChat(user.id);
+      setHistory((prev) => [newChat, ...prev]);
+      onCreateNew();
+      onSelectChat(newChat.id);
+    } catch (err) {
+      console.error("Erro ao criar novo chat:", err);
+    }
+  };
+
+  const handleDeleteChat = (chatId: string) => {
+    setHistory((prev) => prev.filter((chat) => chat.id !== chatId));
+    if (chatId === currentChatId) onSelectChat("");
+    // ➕ aqui você pode futuramente chamar uma API de delete (se quiser)
   };
 
   return (
@@ -78,24 +95,12 @@ const ChatSidebar: React.FC<{
                 >
                   <MessageSquare size={16} />
                   <span className="flex-1 truncate">
-                    {item.title === "Nova conversa" ||
-                    item.title === "New conversation" ||
-                    item.title === "Nueva conversación"
-                      ? t("sidebar.newConversation")
-                      : item.title}
+                    {t("sidebar.newConversation")}
                   </span>
                 </button>
 
                 <button
-                  onClick={() => {
-                    const updated = history.filter((h) => h.id !== item.id);
-                    setHistory(updated);
-                    localStorage.setItem(
-                      "serena_chat_history",
-                      JSON.stringify(updated),
-                    );
-                    if (item.id === currentChatId) onSelectChat("");
-                  }}
+                  onClick={() => handleDeleteChat(item.id)}
                   className="absolute right-2 top-2 p-1 text-gray-400 hover:text-red-400 transition-opacity opacity-0 group-hover:opacity-100"
                   title={t("sidebar.delete")}
                 >

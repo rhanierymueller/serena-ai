@@ -53,13 +53,30 @@
     "country": "País",
     "submit": "Registrar",
     "cancel": "Cancelar",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
     "validation": {
       "firstName": "El nombre es obligatorio.",
       "lastName": "El apellido es obligatorio.",
       "emailRequired": "El correo es obligatorio.",
       "emailInvalid": "Ingresa un correo válido.",
       "birthDate": "La fecha de nacimiento es obligatoria.",
-      "country": "Selecciona un país."
+      "country": "Selecciona un país.",
+      "passwordRequired": "La contraseña es obligatoria.",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres.",
+      "passwordUpper": "La contraseña debe contener una letra mayúscula.",
+      "passwordLower": "La contraseña debe contener una letra minúscula.",
+      "passwordNumber": "La contraseña debe contener un número.",
+      "passwordSymbol": "La contraseña debe contener un carácter especial.",
+      "passwordMatch": "Las contraseñas no coinciden.",
+      "passwordConfirm": "Se requiere la confirmación de la contraseña."
     }
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "notARobot": "No soy un robot",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirm": "Confirmar"
   }
 }

@@ -7,6 +7,8 @@ import Select from "../components/Select";
 import Footer from "../components/Footer";
 import RegisterModal from "./modals/RegisterModal";
 import { TypingText } from "../components/TypingText";
+import { clearUser, getUser } from "../services/userSession";
+import LoginModal from "./modals/LoginModal";
 
 type Language = "pt" | "en" | "es";
 
@@ -24,6 +26,8 @@ const Home: React.FC = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
   const [gender, setGender] = useState<"male" | "female" | "other">("other");
+  const [showLogin, setShowLogin] = useState(false);
+
 
   const { language, setLanguage, t } = useI18n();
 
@@ -43,13 +47,13 @@ const Home: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const userData = localStorage.getItem("serena_user_profile");
-    if (userData) {
-      const parsed = JSON.parse(userData);
-      setUserName(parsed.firstName);
-      setGender(parsed.gender || "other");
-    }
+    updateUserState();
   }, []);
+  
+  const handleRegisterSuccess = () => {
+    updateUserState();
+    setShowRegister(false);
+  };
 
   const handleTestClick = () => setShowDisclaimer(true);
 
@@ -59,14 +63,13 @@ const Home: React.FC = () => {
     setTimeout(() => navigate("/chat"), 600);
   };
 
-  const handleRegisterSuccess = () => {
-    const userData = localStorage.getItem("serena_user_profile");
-    if (userData) {
-      const parsed = JSON.parse(userData);
-      setUserName(parsed.firstName);
-      setGender(parsed.gender || "other");
+  const updateUserState = () => {
+    const user = getUser();
+    if (user) {
+      const [firstName] = user.name.split(" ");
+      setUserName(firstName);
+      setGender(user.gender || "other");
     }
-    setShowRegister(false);
   };
 
   return (
@@ -158,7 +161,13 @@ const Home: React.FC = () => {
                   onClick={() => setShowRegister(true)}
                   className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
-                  {t("home.register")}
+                  {t("register.title")}
+                </button>
+                <button
+                  onClick={() => setShowLogin(true)}
+                  className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                >
+                  {t("login.title")}
                 </button>
               </>
             ) : (
@@ -195,7 +204,7 @@ const Home: React.FC = () => {
           description={t("home.logoutConfirm")}
           onCancel={() => setShowLogoutModal(false)}
           onConfirm={() => {
-            localStorage.removeItem("serena_user_profile");
+            clearUser();
             setUserName(null);
             setShowLogoutModal(false);
           }}
@@ -204,6 +213,16 @@ const Home: React.FC = () => {
           size="sm"
         />
       )}
+
+      {showLogin && (
+        <LoginModal
+        onClose={() => setShowLogin(false)}
+        onSuccess={() => {
+        updateUserState();
+        setShowLogin(false);
+      }}
+    />
+  )}
     </>
   );
 };

@@ -3,30 +3,56 @@ import { Bot, Mic, Send, AlertTriangle, LogOut } from "lucide-react";
 import ChatSidebar from "./ChatSidebar";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n/I18nContext";
+import { createChat, getChats } from "../services/chatService";
+import { getMessages, sendMessage } from "../services/messageService";
+import { getUser } from "../services/userSession";
+import { generateReply } from "../services/llmService";
+
 
 interface Message {
   sender: "user" | "bot";
   text: string;
 }
 
+interface ApiMessage {
+  role: string;
+  content: string;
+}
+
 const SerenaChat: React.FC = () => {
   const { t } = useI18n();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [inCall, setInCall] = useState(false);
+  const [plan, setPlan] = useState<"pro" | "free">("free");
+
   const [chatId, setChatId] = useState<string | null>(null);
   const chatRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const SpeechRecognition =
-    (window as any).SpeechRecognition ||
-    (window as any).webkitSpeechRecognition;
-  const recognition = new SpeechRecognition();
-  recognition.lang = "pt-BR";
-  recognition.interimResults = false;
-  recognition.continuous = false;
 
-  const synth = window.speechSynthesis;
+  useEffect(() => {
+    const initChat = async () => {
+      const user = getUser();
+      if (!user) return;
+        setPlan(user.plan);
+      const chats = await getChats(user.id);
+      if (chats.length > 0) {
+        setChatId(chats[0].id);
+        const loadedMessages: ApiMessage[] = await getMessages(chats[0].id);
+        setMessages(
+          loadedMessages.map((m): Message => ({
+            sender: m.role === "user" ? "user" : "bot",
+            text: m.content,
+          }))
+        );
+      } else {
+        const newChat = await createChat(user.id);
+        setChatId(newChat.id);
+      }
+    };
+  
+    initChat();
+  }, []);
 
   const scrollToBottom = () => {
     if (chatRef.current) {
@@ -38,67 +64,21 @@ const SerenaChat: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = (text: string) => {
-    if (!text.trim()) return;
+  const handleSend = async (text: string) => {
+    if (!text.trim() || !chatId) return;
+  
     const userMsg: Message = { sender: "user", text };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
-
-    setTimeout(() => {
-      simulateBotResponse(text);
-    }, 500);
-  };
-
-  const simulateBotResponse = (input: string) => {
-    const reply = `${t("chat.youSaid")} "${input}".`;
-    const botMsg: Message = { sender: "bot", text: reply };
-    setMessages((prev) => [...prev, botMsg]);
-    speak(reply);
-  };
-
-  const speak = (text: string) => {
-    if (synth.speaking) synth.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "pt-BR";
-    utterance.onend = () => {
-      if (inCall) recognition.start();
-    };
-    synth.speak(utterance);
-  };
-
-  const handleCallToggle = () => {
-    if (!inCall) {
-      setInCall(true);
-      recognition.start();
-    } else {
-      setInCall(false);
-      recognition.stop();
-      synth.cancel();
-    }
-  };
-
-  recognition.onresult = (event: any) => {
-    const transcript = event.results[0][0].transcript;
-    const userMsg: Message = { sender: "user", text: transcript };
-    setMessages((prev) => [...prev, userMsg]);
-
-    const reply = `${t("chat.youSaid")} "${transcript}"`;
-    const botMsg: Message = { sender: "bot", text: reply };
-    setMessages((prev) => [...prev, botMsg]);
-
-    speak(reply);
-  };
-
-  recognition.onerror = () => {
-    if (inCall) {
-      recognition.stop();
-      setTimeout(() => recognition.start(), 1000);
-    }
-  };
-
-  recognition.onend = () => {
-    if (inCall && !synth.speaking) {
-      setTimeout(() => recognition.start(), 1000);
+  
+    await sendMessage(chatId, "user", text);
+  
+    try {
+      const botReply = await generateReply(chatId);
+      const botMsg: Message = { sender: "bot", text: botReply.content };
+      setMessages((prev) => [...prev, botMsg]);
+    } catch (error) {
+      console.error("Erro ao buscar resposta:", error);
     }
   };
 
@@ -130,6 +110,14 @@ const SerenaChat: React.FC = () => {
           >
             <LogOut size={28} />
           </button>
+        </div>
+
+        <div className="px-4 pt-2">
+          <span className={`text-xs px-3 py-1 rounded-xl text-white ${
+            plan === "pro" ? "bg-blue-700" : "bg-green-700"
+          }`}>
+            Plano: {plan === "pro" ? "Pro (GPT)" : "Gratuito (HuggingFace)"}
+          </span>
         </div>
 
         <div
@@ -174,15 +162,6 @@ const SerenaChat: React.FC = () => {
               title={t("chat.send")}
             >
               <Send size={20} />
-            </button>
-            <button
-              onClick={handleCallToggle}
-              className={`${
-                inCall ? "bg-red-600" : "bg-gray-700"
-              } hover:bg-opacity-80 p-3 rounded-xl text-white transition-colors`}
-              title={inCall ? t("chat.endCall") : t("chat.startCall")}
-            >
-              {inCall ? "⛔" : <Mic size={20} />}
             </button>
           </div>
         </div>

@@ -53,13 +53,30 @@
     "submit": "Registrar",
     "cancel": "Cancelar",
     "gender": "Gênero",
+    "password": "Senha",
+    "confirmPassword": "Confirmar senha",
     "validation": {
       "firstName": "O nome é obrigatório.",
       "lastName": "O sobrenome é obrigatório.",
       "emailRequired": "O e-mail é obrigatório.",
       "emailInvalid": "Informe um e-mail válido.",
       "birthDate": "A data de nascimento é obrigatória.",
-      "country": "Selecione um país."
+      "country": "Selecione um país.",
+      "passwordRequired": "A senha é obrigatória.",
+      "passwordMin": "A senha deve ter pelo menos 8 caracteres.",
+      "passwordUpper": "A senha deve conter uma letra maiúscula.",
+      "passwordLower": "A senha deve conter uma letra minúscula.",
+      "passwordNumber": "A senha deve conter um número.",
+      "passwordSymbol": "A senha deve conter um caractere especial.",
+      "passwordMatch": "As senhas não coincidem.",
+      "passwordConfirm": "Confirmação de senha obrigatória."
     }
+  },
+  "login": {
+    "title": "Entrar",
+    "notARobot": "Não sou um robô",
+    "email": "E-mail",
+    "password": "Senha",
+    "confirm": "Confirmar"
   }
 }

@@ -53,13 +53,30 @@
     "submit": "Register",
     "cancel": "Cancel",
     "gender": "Gender",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
     "validation": {
       "firstName": "First name is required.",
       "lastName": "Last name is required.",
       "emailRequired": "Email is required.",
       "emailInvalid": "Enter a valid email.",
       "birthDate": "Birth date is required.",
-      "country": "Select a country."
+      "country": "Select a country.",
+      "passwordRequired": "Password is required.",
+      "passwordMin": "Password must be at least 8 characters.",
+      "passwordUpper": "Password must contain an uppercase letter.",
+      "passwordLower": "Password must contain a lowercase letter.",
+      "passwordNumber": "Password must contain a number.",
+      "passwordSymbol": "Password must contain a special character.",
+      "passwordMatch": "Passwords do not match.",
+      "passwordConfirm": "Password confirmation is required."
     }
+  },
+  "login": {
+    "title": "Login",
+    "notARobot": "I am not a robot",
+    "email": "Email",
+    "password": "Password",
+    "confirm": "Confirm"
   }
 }
