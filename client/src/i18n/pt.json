@@ -13,5 +13,26 @@
       "understood": "Entendi",
       "back": "Voltar"
     }
+  },
+  "footer": {
+    "copyright": "Todos os direitos reservados.",
+    "about": "Sobre",
+    "terms": "Termos",
+    "contact": "Contato"
+  },
+  "chat": {
+    "placeholder": "Digite sua mensagem...",
+    "send": "Enviar",
+    "startCall": "Iniciar ligação",
+    "endCall": "Encerrar ligação",
+    "youSaid": "Você disse:",
+    "warning": "A Serena AI pode cometer erros. Verifique as informações e consulte um especialista quando necessário.",
+    "goHome": "Voltar para a página inicial"
+  },
+  "sidebar": {
+    "newConversation": "Nova conversa",
+    "collapse": "Recolher",
+    "expand": "Expandir",
+    "delete": "Excluir conversa"
   }
 }

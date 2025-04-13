@@ -13,5 +13,26 @@
       "understood": "I understand",
       "back": "Back"
     }
+  },
+  "footer": {
+    "copyright": "All rights reserved.",
+    "about": "About",
+    "terms": "Terms",
+    "contact": "Contact"
+  },
+  "chat": {
+    "placeholder": "Type your message...",
+    "send": "Send",
+    "startCall": "Start call",
+    "endCall": "End call",
+    "youSaid": "You said:",
+    "warning": "Serena AI may make mistakes. Please verify information and consult a specialist when needed.",
+    "goHome": "Return to homepage"
+  },
+  "sidebar": {
+    "newConversation": "New conversation",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "delete": "Delete conversation"
   }
 }

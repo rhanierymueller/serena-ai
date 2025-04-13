@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n/I18nContext";
 import Modal from "../components/Modal";
 import Select from "../components/Select";
+import Footer from "../components/Footer";
 
 type Language = "pt" | "en" | "es";
 
@@ -16,6 +17,8 @@ const languageOptions: { value: Language; label: string }[] = [
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
+
   const { language, setLanguage } = useI18n();
 
   const { t } = useI18n();
@@ -50,7 +53,11 @@ const Home: React.FC = () => {
 
   const handleAcceptDisclaimer = () => {
     setShowDisclaimer(false);
-    navigate("/chat");
+    setTransitioning(true); // inicia a animação
+
+    setTimeout(() => {
+      navigate("/chat");
+    }, 600); // tempo da animação
   };
 
   const handleCloseModal = () => {
@@ -59,9 +66,12 @@ const Home: React.FC = () => {
 
   return (
     <>
+      {transitioning && (
+        <div className="fixed inset-0 z-50 bg-[#0d0d0d] animate-fadeOutToBlack pointer-events-none" />
+      )}
       <div
         ref={containerRef}
-        className="fixed inset-0 overflow-hidden bg-[#0d0d0d] text-white"
+        className="min-h-screen flex flex-col bg-[#0d0d0d] text-white overflow-hidden"
       >
         <div
           ref={blurRef}
@@ -77,7 +87,7 @@ const Home: React.FC = () => {
           />
         </div>
 
-        <div className="relative w-full h-full flex flex-col items-center justify-center z-10">
+        <div className="flex-1 flex flex-col items-center justify-center relative z-10">
           <div className="flex items-center gap-3 mb-8">
             <Bot size={40} className="text-green-500" />
             <h1 className="text-4xl font-bold font-sans">
@@ -108,6 +118,8 @@ const Home: React.FC = () => {
             </button>
           </div>
         </div>
+
+        <Footer />
       </div>
 
       {showDisclaimer && (
