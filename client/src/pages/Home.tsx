@@ -156,13 +156,13 @@ const Home: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setShowRegister(true)}
-                  className="bg-[#9ED9CC] hover:bg-[#6DAEDB] text-black px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                  className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black  px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
                   {t('register.title')}
                 </button>
                 <button
                   onClick={() => setShowLogin(true)}
-                  className="bg-[#9ED9CC] hover:bg-[#6DAEDB] text-black px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                  className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black  px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
                   {t('login.title')}
                 </button>

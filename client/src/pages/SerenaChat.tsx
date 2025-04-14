@@ -13,64 +13,137 @@ interface Message {
   text: string;
 }
 
-interface ApiMessage {
-  role: string;
-  content: string;
-}
-
 const SerenaChat: React.FC = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [plan, setPlan] = useState<'pro' | 'free'>('free');
   const [isTyping, setIsTyping] = useState(false);
+  const [isListening, setIsListening] = useState(false);
 
-  const [chatId, setChatId] = useState<string | null>(null);
+  const recognitionRef = useRef<any>(null);
   const chatRef = useRef<HTMLDivElement>(null);
+  const [chatId, setChatId] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const initChat = async () => {
-      const user = getUser();
-      if (!user) return;
-      setPlan(user.plan);
-      const chats = await getChats(user.id);
-      if (chats.length > 0) {
-        setChatId(chats[0].id);
-        const loadedMessages: ApiMessage[] = await getMessages(chats[0].id);
-        setMessages(
-          loadedMessages.map(
-            (m): Message => ({
-              sender: m.role === 'user' ? 'user' : 'bot',
-              text: m.content,
-            })
-          )
-        );
-      } else {
-        const newChat = await createChat(user.id);
-        setChatId(newChat.id);
-      }
-    };
+  const removeEmojis = (text: string) =>
+    text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD83C-\uDBFF\uDC00-\uDFFF])+/g, '');
 
-    initChat();
-  }, []);
+  const narrateText = (text: string) => {
+    if (!('speechSynthesis' in window)) return;
 
-  useEffect(() => {
-    const loadMessages = async () => {
-      if (!chatId) return;
-      const loadedMessages: ApiMessage[] = await getMessages(chatId);
-      setMessages(
-        loadedMessages.map(
-          (m): Message => ({
-            sender: m.role === 'user' ? 'user' : 'bot',
-            text: m.content,
-          })
-        )
+    const cleanText = removeEmojis(text);
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    let langCode = 'pt-BR'; // default
+    if (language === 'en') langCode = 'en-US';
+    if (language === 'es') langCode = 'es-ES';
+
+    utterance.lang = langCode;
+
+    const assignVoiceAndSpeak = () => {
+      const voices = speechSynthesis.getVoices();
+
+      const femaleVoiceNames = {
+        'pt-BR': [
+          'Luciana',
+          'Microsoft Maria Desktop',
+          'Google português do Brasil',
+          'pt-BR-Wavenet-F',
+        ],
+        'en-US': ['Samantha', 'Google US English', 'en-US-Wavenet-F'],
+        'es-ES': ['Conchita', 'Google español', 'es-ES-Wavenet-F'],
+      } as const;
+
+      type LangCode = keyof typeof femaleVoiceNames;
+
+      let langCode: LangCode = 'pt-BR';
+      if (language === 'en') langCode = 'en-US';
+      if (language === 'es') langCode = 'es-ES';
+
+      const preferredNames = femaleVoiceNames[langCode] || [];
+
+      let preferred = voices.find(voice =>
+        preferredNames.some((name: string) => voice.name.toLowerCase().includes(name.toLowerCase()))
       );
+
+      if (!preferred) {
+        preferred = voices.find(v => v.lang === langCode);
+      }
+
+      if (preferred) {
+        utterance.voice = preferred;
+        console.log('[🔊 Voz selecionada]', preferred.name);
+      }
+
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
     };
 
-    loadMessages();
-  }, [chatId]);
+    if (speechSynthesis.getVoices().length === 0) {
+      speechSynthesis.onvoiceschanged = () => {
+        assignVoiceAndSpeak();
+        speechSynthesis.onvoiceschanged = null;
+      };
+    } else {
+      assignVoiceAndSpeak();
+    }
+  };
+
+  const initSpeechRecognition = () => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert('Seu navegador não suporta reconhecimento de voz.');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'pt-BR';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      handleSend(transcript, true);
+    };
+
+    recognitionRef.current = recognition;
+  };
+
+  const handleSend = async (text: string, fromVoice: boolean = false) => {
+    if (!text.trim() || !chatId) return;
+
+    const userMsg: Message = { sender: 'user', text };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+
+    await sendMessage(chatId, 'user', text);
+
+    if (plan === 'free') {
+      setIsTyping(true);
+    }
+
+    try {
+      const botReply = await generateReply(chatId);
+      const botMsg: Message = { sender: 'bot', text: botReply.content };
+      setMessages(prev => [...prev, botMsg]);
+
+      if (fromVoice) {
+        narrateText(botReply.content);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar resposta:', error);
+    } finally {
+      setIsTyping(false);
+    }
+  };
 
   const scrollToBottom = () => {
     if (chatRef.current) {
@@ -82,32 +155,46 @@ const SerenaChat: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = async (text: string) => {
-    if (!text.trim() || !chatId) return;
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      speechSynthesis.getVoices();
 
-    const userMsg: Message = { sender: 'user', text };
-    setMessages(prev => [...prev, userMsg]);
-    setInput('');
-
-    await sendMessage(chatId, 'user', text);
-
-    if (plan === 'free') setIsTyping(true);
-
-    try {
-      const botReply = await generateReply(chatId);
-      const botMsg: Message = { sender: 'bot', text: botReply.content };
-      setMessages(prev => [...prev, botMsg]);
-    } catch (error) {
-      console.error('Erro ao buscar resposta:', error);
-    } finally {
-      setIsTyping(false);
+      if (speechSynthesis.onvoiceschanged === null) {
+        speechSynthesis.onvoiceschanged = () => {
+          speechSynthesis.getVoices();
+        };
+      }
     }
-  };
+  }, []);
 
   useEffect(() => {
-    if (!chatId) {
-      setMessages([]);
-    }
+    const initChat = async () => {
+      const user = getUser();
+      if (!user) return;
+
+      setPlan(user.plan);
+
+      const chats = await getChats(user.id);
+      if (chats.length > 0) {
+        setChatId(chats[0].id);
+        const loadedMessages = await getMessages(chats[0].id);
+        setMessages(
+          loadedMessages.map((m: { role: string; content: any }) => ({
+            sender: m.role === 'user' ? 'user' : 'bot',
+            text: m.content,
+          }))
+        );
+      } else {
+        const newChat = await createChat(user.id);
+        setChatId(newChat.id);
+      }
+    };
+
+    initChat();
+  }, []);
+
+  useEffect(() => {
+    if (!chatId) setMessages([]);
   }, [chatId]);
 
   return (
@@ -147,14 +234,14 @@ const SerenaChat: React.FC = () => {
             }`}
           >
             {t('chat.planLabel')}: {t(`chat.plan.${plan}`)}
-          </span>{' '}
+          </span>
         </div>
+
         <div className="flex-1 px-4 py-4">
           <div
             ref={chatRef}
             className="max-h-[60vh] overflow-y-auto space-y-4 scroll-smooth custom-scroll px-4 py-2"
           >
-            {' '}
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -184,19 +271,36 @@ const SerenaChat: React.FC = () => {
             <textarea
               value={input}
               onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend(input)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend(input);
+                }
+              }}
               maxLength={800}
               placeholder={t('chat.placeholder')}
               rows={2}
               className="flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
             />
-            <button
-              onClick={() => handleSend(input)}
-              className="bg-[#6DAEDB] hover:bg-[#4F91C3] p-3 rounded-xl text-black transition-colors"
-              title={t('chat.send')}
-            >
-              <Send size={20} />
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  if (!recognitionRef.current) initSpeechRecognition();
+                  recognitionRef.current?.start();
+                }}
+                className={`p-3 rounded-xl ${isListening ? 'bg-red-500' : 'bg-[#6DAEDB]'} transition`}
+                title={t('chat.startVoice')}
+              >
+                <Mic size={20} />
+              </button>
+              <button
+                onClick={() => handleSend(input)}
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] p-3 rounded-xl text-black transition"
+                title={t('chat.send')}
+              >
+                <Send size={20} />
+              </button>
+            </div>
           </div>
         </div>
 
