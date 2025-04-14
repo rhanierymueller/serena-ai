@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, MessageSquare, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Plus, MessageSquare, ChevronLeft, ChevronRight, X, LogOut } from 'lucide-react';
 
 import { useI18n } from '../i18n/I18nContext';
 import { getUser } from '../services/userSession';
 import { getChats, createChat, deleteChat } from '../services/chatService';
 import Modal from './Modal';
+import { useNavigate } from 'react-router-dom';
 
 interface ChatHistoryItem {
   id: string;
@@ -19,6 +20,7 @@ const ChatSidebar: React.FC<{
   onCloseMobileSidebar?: () => void;
 }> = ({ onSelectChat, onCreateNew, currentChatId, onCloseMobileSidebar }) => {
   const { t } = useI18n();
+  const navigate = useNavigate();
   const [history, setHistory] = useState<ChatHistoryItem[]>([]);
   const [collapsed, setCollapsed] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -61,7 +63,7 @@ const ChatSidebar: React.FC<{
     const userId = user?.id ?? null;
 
     try {
-      await deleteChat(chatToDelete, userId); // ✅ agora passando os dois argumentos
+      await deleteChat(chatToDelete, userId);
       setHistory(prev => prev.filter(chat => chat.id !== chatToDelete));
       if (chatToDelete === currentChatId) {
         onSelectChat('');
@@ -84,9 +86,9 @@ const ChatSidebar: React.FC<{
         <button
           onClick={() => {
             if (onCloseMobileSidebar) {
-              onCloseMobileSidebar(); // ✅ se vier do mobile
+              onCloseMobileSidebar();
             } else {
-              setCollapsed(!collapsed); // desktop
+              setCollapsed(!collapsed);
             }
           }}
           className="mb-6 self-end text-gray-400 hover:text-white"
@@ -136,6 +138,26 @@ const ChatSidebar: React.FC<{
             </div>
           </>
         )}
+
+        <div className="mt-auto pt-4 flex justify-center">
+          {!collapsed ? (
+            <button
+              onClick={() => navigate('/')}
+              className="w-full flex items-center gap-2 px-3 py-2 bg-[#6DAEDB] hover:bg-[#4F91C3] text-black rounded-lg text-sm transition"
+            >
+              <LogOut size={16} />
+              <span>Sair</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/')}
+              className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black p-2 rounded-full transition"
+              title="Sair"
+            >
+              <LogOut size={16} />
+            </button>
+          )}
+        </div>
       </aside>
 
       {showModal && (

@@ -227,7 +227,7 @@ const SerenaChat: React.FC = () => {
               currentChatId={chatId}
               onSelectChat={id => {
                 setChatId(id);
-                setShowSidebarMobile(false); // fecha ao selecionar
+                setShowSidebarMobile(false);
               }}
               onCreateNew={() => {
                 setMessages([]);
@@ -241,28 +241,6 @@ const SerenaChat: React.FC = () => {
       )}
 
       <div className="flex-1 flex flex-col">
-        {/* Header - Always visible */}
-        <div className="flex items-center justify-between border-b border-gray-700 px-4 py-6">
-          <div
-            onClick={() => navigate('/')}
-            className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity"
-            title={t('chat.goHome')}
-          >
-            <Bot size={32} className="text-[#6DAEDB]" />
-            <h1 className="text-2xl md:text-3xl font-bold font-sans text-white">
-              {t('header.title')}
-            </h1>
-          </div>
-
-          <button
-            onClick={() => navigate('/')}
-            className="text-gray-400 hover:text-white transition-transform hover:scale-110"
-            title={t('chat.goHome')}
-          >
-            <LogOut size={28} />
-          </button>
-        </div>
-
         <div className="sm:hidden px-4 pt-2">
           <button
             onClick={() => setShowSidebarMobile(true)}
