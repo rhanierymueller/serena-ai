@@ -52,7 +52,8 @@
     "deleteConfirmTitle": "¿Estás seguro?",
     "deleteConfirmDescription": "¿Estás seguro de que deseas eliminar esta conversación? Esta acción no se puede deshacer.",
     "deleteConfirmBtn": "Eliminar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "menu": "Menu"
   },
   "register": {
     "title": "Crear cuenta",

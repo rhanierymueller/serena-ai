@@ -51,7 +51,8 @@
     "deleteConfirmTitle": "Você tem certeza?",
     "deleteConfirmDescription": "Você tem certeza que deseja excluir essa conversa? Essa ação não poderá ser desfeita.",
     "deleteConfirmBtn": "Excluir",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "menu": "Menu"
   },
   "register": {
     "title": "Criar conta",

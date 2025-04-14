@@ -5,7 +5,6 @@ import { useI18n } from '../i18n/I18nContext';
 import { getUser } from '../services/userSession';
 import { getChats, createChat, deleteChat } from '../services/chatService';
 import Modal from './Modal';
-import { getOrCreateVisitorId } from '../utils/visitor';
 
 interface ChatHistoryItem {
   id: string;
@@ -17,7 +16,8 @@ const ChatSidebar: React.FC<{
   onSelectChat: (id: string) => void;
   onCreateNew: () => void;
   currentChatId: string | null;
-}> = ({ onSelectChat, onCreateNew, currentChatId }) => {
+  onCloseMobileSidebar?: () => void;
+}> = ({ onSelectChat, onCreateNew, currentChatId, onCloseMobileSidebar }) => {
   const { t } = useI18n();
   const [history, setHistory] = useState<ChatHistoryItem[]>([]);
   const [collapsed, setCollapsed] = useState(false);
@@ -28,10 +28,9 @@ const ChatSidebar: React.FC<{
     const fetchChats = async () => {
       const user = getUser();
       const userId = user?.id ?? null;
-      const visitorId = userId ? null : getOrCreateVisitorId();
 
       try {
-        const chats = await getChats(userId, visitorId);
+        const chats = await getChats(userId);
         setHistory(chats);
       } catch (err) {
         console.error('Erro ao buscar histórico de chats:', err);
@@ -83,7 +82,13 @@ const ChatSidebar: React.FC<{
         } bg-[#111] text-white h-screen p-4 border-r border-gray-800 flex flex-col transition-all duration-300`}
       >
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => {
+            if (onCloseMobileSidebar) {
+              onCloseMobileSidebar(); // ✅ se vier do mobile
+            } else {
+              setCollapsed(!collapsed); // desktop
+            }
+          }}
           className="mb-6 self-end text-gray-400 hover:text-white"
           title={collapsed ? t('sidebar.expand') : t('sidebar.collapse')}
         >

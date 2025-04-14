@@ -22,6 +22,7 @@ const SerenaChat: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isNarrating, setIsNarrating] = useState(false);
+  const [showSidebarMobile, setShowSidebarMobile] = useState(false);
 
   const recognitionRef = useRef<any>(null);
   const chatRef = useRef<HTMLDivElement>(null);
@@ -183,7 +184,7 @@ const SerenaChat: React.FC = () => {
 
       if (userId) setPlan(user.plan);
 
-      const chats = await getChats(userId, visitorId);
+      const chats = await getChats(userId);
 
       if (chats.length > 0) {
         setChatId(chats[0].id);
@@ -211,11 +212,33 @@ const SerenaChat: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-[#0d0d0d] text-white">
-      <ChatSidebar
-        currentChatId={chatId}
-        onSelectChat={id => setChatId(id)}
-        onCreateNew={() => setMessages([])}
-      />
+      <div className="hidden sm:block">
+        <ChatSidebar
+          currentChatId={chatId}
+          onSelectChat={id => setChatId(id)}
+          onCreateNew={() => setMessages([])}
+        />
+      </div>
+
+      {showSidebarMobile && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex">
+          <div className="w-64 bg-[#111] p-4 overflow-y-auto">
+            <ChatSidebar
+              currentChatId={chatId}
+              onSelectChat={id => {
+                setChatId(id);
+                setShowSidebarMobile(false); // fecha ao selecionar
+              }}
+              onCreateNew={() => {
+                setMessages([]);
+                setShowSidebarMobile(false);
+              }}
+              onCloseMobileSidebar={() => setShowSidebarMobile(false)}
+            />
+          </div>
+          <div className="flex-1" onClick={() => setShowSidebarMobile(false)} />
+        </div>
+      )}
 
       <div className="flex-1 flex flex-col">
         {/* Header - Always visible */}
@@ -237,6 +260,15 @@ const SerenaChat: React.FC = () => {
             title={t('chat.goHome')}
           >
             <LogOut size={28} />
+          </button>
+        </div>
+
+        <div className="sm:hidden px-4 pt-2">
+          <button
+            onClick={() => setShowSidebarMobile(true)}
+            className="text-white bg-[#6DAEDB] px-3 py-2 rounded-xl"
+          >
+            ☰ {t('sidebar.menu')}
           </button>
         </div>
 
@@ -264,7 +296,7 @@ const SerenaChat: React.FC = () => {
             <div className="w-full max-w-lg">
               {/* Input Area for Empty State */}
               <div className="border border-gray-700 rounded-2xl bg-[#1a1a1a] p-4">
-                <div className="w-full flex items-end gap-2">
+                <div className="w-full flex flex-col sm:flex-row sm:items-end gap-2">
                   <textarea
                     value={input}
                     onChange={e => setInput(e.target.value)}
@@ -277,7 +309,7 @@ const SerenaChat: React.FC = () => {
                     maxLength={800}
                     placeholder={t('chat.placeholder')}
                     rows={2}
-                    className="flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
+                    className="text-base sm:text-sm flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
                   />
                   <div className="flex gap-2">
                     <button
@@ -331,13 +363,13 @@ const SerenaChat: React.FC = () => {
               </div>
             </div>
 
-            <div className="border-t border-gray-700 p-4 bg-[#1a1a1a]">
+            <div className="border-t border-gray-700 p-2 sm:p-4 bg-[#1a1a1a]">
               {isTyping && (
                 <div className="text-xs text-gray-400 mb-2 ml-1 animate-pulse">
                   Serena está digitando...
                 </div>
               )}
-              <div className="w-full flex items-end gap-2">
+              <div className="w-full flex flex-col sm:flex-row sm:items-end gap-2">
                 <textarea
                   value={input}
                   onChange={e => setInput(e.target.value)}
@@ -350,7 +382,7 @@ const SerenaChat: React.FC = () => {
                   maxLength={800}
                   placeholder={t('chat.placeholder')}
                   rows={2}
-                  className="flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
+                  className="text-base sm:text-sm flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
                 />
                 <div className="flex gap-2">
                   <button
