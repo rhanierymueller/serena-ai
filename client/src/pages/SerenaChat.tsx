@@ -55,6 +55,23 @@ const SerenaChat: React.FC = () => {
     initChat();
   }, []);
 
+  useEffect(() => {
+    const loadMessages = async () => {
+      if (!chatId) return;
+      const loadedMessages: ApiMessage[] = await getMessages(chatId);
+      setMessages(
+        loadedMessages.map(
+          (m): Message => ({
+            sender: m.role === 'user' ? 'user' : 'bot',
+            text: m.content,
+          })
+        )
+      );
+    };
+
+    loadMessages();
+  }, [chatId]);
+
   const scrollToBottom = () => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -87,6 +104,12 @@ const SerenaChat: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (!chatId) {
+      setMessages([]);
+    }
+  }, [chatId]);
+
   return (
     <div className="flex min-h-screen bg-[#0d0d0d] text-white">
       <ChatSidebar
@@ -102,7 +125,7 @@ const SerenaChat: React.FC = () => {
             className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity"
             title={t('chat.goHome')}
           >
-            <Bot size={32} className="text-green-500" />
+            <Bot size={32} className="text-[#6DAEDB]" />
             <h1 className="text-2xl md:text-3xl font-bold font-sans text-white">
               {t('header.title')}
             </h1>
@@ -120,28 +143,35 @@ const SerenaChat: React.FC = () => {
         <div className="px-4 pt-2">
           <span
             className={`text-xs px-3 py-1 rounded-xl text-white ${
-              plan === 'pro' ? 'bg-blue-700' : 'bg-green-700'
+              plan === 'pro' ? 'bg-[#6DAEDB] text-black' : 'bg-[#2C3E50]'
             }`}
           >
-            Plano: {plan === 'pro' ? 'Pro' : 'Gratuito'}
-          </span>
+            {t('chat.planLabel')}: {t(`chat.plan.${plan}`)}
+          </span>{' '}
         </div>
-
-        <div ref={chatRef} className="flex-1 overflow-y-auto px-4 py-6 space-y-4 scroll-smooth">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
+        <div className="flex-1 px-4 py-4">
+          <div
+            ref={chatRef}
+            className="max-h-[60vh] overflow-y-auto space-y-4 scroll-smooth custom-scroll px-4 py-2"
+          >
+            {' '}
+            {messages.map((msg, index) => (
               <div
-                className={`max-w-[70%] px-4 py-2 rounded-xl text-sm whitespace-pre-line ${
-                  msg.sender === 'user' ? 'bg-green-700 text-white' : 'bg-gray-800 text-gray-200'
-                }`}
+                key={index}
+                className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                {msg.text}
+                <div
+                  className={`max-w-[70%] px-4 py-2 rounded-xl text-sm whitespace-pre-line ${
+                    msg.sender === 'user'
+                      ? 'bg-[#6DAEDB] text-black'
+                      : 'bg-[#2C3E50] text-[#E0ECF1]'
+                  }`}
+                >
+                  {msg.text}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         <div className="border-t border-gray-700 p-4 bg-[#1a1a1a]">
@@ -155,13 +185,14 @@ const SerenaChat: React.FC = () => {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend(input)}
+              maxLength={800}
               placeholder={t('chat.placeholder')}
               rows={2}
-              className="flex-1 bg-[#2a2a2a] border border-gray-700 text-white placeholder-gray-400 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-600 resize-none"
+              className="flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
             />
             <button
               onClick={() => handleSend(input)}
-              className="bg-green-600 hover:bg-green-500 p-3 rounded-xl text-white transition-colors"
+              className="bg-[#6DAEDB] hover:bg-[#4F91C3] p-3 rounded-xl text-black transition-colors"
               title={t('chat.send')}
             >
               <Send size={20} />

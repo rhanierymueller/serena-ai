@@ -16,6 +16,7 @@
     "logoutCancel": "Cancelar",
     "logoutConfirmBtn": "Sí, salir",
     "gender": "Género",
+    "plans": "Planes",
     "disclaimer": {
       "title": "Término de responsabilidad",
       "text": "Serena AI es un asistente virtual con fines informativos y de escucha empática. No reemplaza el acompañamiento profesional de psicólogos, terapeutas o psiquiatras. Si estás pasando por un momento difícil, busca ayuda médica especializada.",
@@ -36,13 +37,22 @@
     "endCall": "Finalizar llamada",
     "youSaid": "Dijiste:",
     "warning": "Serena AI puede cometer errores. Verifica la información y consulta a un especialista si es necesario.",
-    "goHome": "Volver a la página principal"
+    "goHome": "Volver a la página principal",
+    "planLabel": "Plan",
+    "plan": {
+      "pro": "Pro",
+      "free": "Gratuito"
+    }
   },
   "sidebar": {
     "newConversation": "Nueva conversación",
     "collapse": "Colapsar",
     "expand": "Expandir",
-    "delete": "Eliminar conversación"
+    "delete": "Eliminar conversación",
+    "deleteConfirmTitle": "¿Estás seguro?",
+    "deleteConfirmDescription": "¿Estás seguro de que deseas eliminar esta conversación? Esta acción no se puede deshacer.",
+    "deleteConfirmBtn": "Eliminar",
+    "cancel": "Cancelar"
   },
   "register": {
     "title": "Crear cuenta",
@@ -78,5 +88,45 @@
     "email": "Correo electrónico",
     "password": "Contraseña",
     "confirm": "Confirmar"
+  },
+  "plansPage": {
+    "title": "Elige tu plan",
+    "subtitle": "Disfruta lo mejor de Serena AI",
+    "free": {
+      "title": "Gratis",
+      "description": "Acceso limitado al chat",
+      "price": "R$ 0,00",
+      "button": "Continuar de graça"
+    },
+    "pro": {
+      "title": "Pro",
+      "description": "Respuestas rápidas, uso ilimitado",
+      "price": "R$ 29,90/mes",
+      "button": "Suscribirse ahora"
+    },
+    "form": {
+      "title": "Información de pago",
+      "name": "Nombre del titular",
+      "cpf": "CPF",
+      "cardNumber": "Número de tarjeta",
+      "expiry": "Vencimiento (MM/AA)",
+      "cvv": "CVV",
+      "flag": "Marca de tarjeta",
+      "confirm": "Suscribirse",
+      "cancel": "Cancelar",
+      "select": "Seleccionar"
+    },
+    "validation": {
+      "name": "Nombre obligatorio",
+      "cpfRequired": "CPF obligatorio",
+      "cpfInvalid": "CPF inválido",
+      "cardRequired": "Número de tarjeta obligatorio",
+      "cardInvalid": "Número inválido",
+      "expiryRequired": "Vencimiento obligatorio",
+      "expiryInvalid": "Formato inválido",
+      "cvvRequired": "CVV obligatorio",
+      "cvvInvalid": "CVV inválido",
+      "flag": "Marca de tarjeta obligatoria"
+    }
   }
 }

@@ -16,3 +16,15 @@ export async function getChats(userId: string) {
   if (!response.ok) throw new Error('Erro ao buscar chats');
   return response.json();
 }
+
+export const deleteChat = async (chatId: string) => {
+  const res = await fetch(`${API_URL}/${chatId}`, {
+    method: 'DELETE',
+  });
+
+  if (!res.ok) {
+    throw new Error('Erro ao deletar chat');
+  }
+
+  return res.json();
+};

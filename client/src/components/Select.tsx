@@ -30,7 +30,7 @@ const Select = <T extends string | number>({
         id={id}
         value={value}
         onChange={e => onChange(e.target.value as T)}
-        className="appearance-none bg-gray-700 text-white px-4 py-2 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
+        className="appearance-none bg-[#2C3E50] text-white px-4 py-2 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] transition"
       >
         {options.map(opt => (
           <option key={opt.value} value={opt.value}>
@@ -40,7 +40,7 @@ const Select = <T extends string | number>({
       </select>
       <ChevronDown
         size={18}
-        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white pointer-events-none"
+        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#AAB9C3] pointer-events-none"
       />
     </div>
   );

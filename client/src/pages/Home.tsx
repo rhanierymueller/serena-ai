@@ -84,7 +84,7 @@ const Home: React.FC = () => {
         <div
           className="absolute inset-0 z-0 pointer-events-none"
           style={{
-            backgroundImage: "url('/image/foto_egipcia.png')",
+            backgroundImage: "url('/image/ceu.png')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             WebkitMaskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
@@ -104,7 +104,15 @@ const Home: React.FC = () => {
         />
 
         <div className="absolute top-0 right-0 p-4 z-20 flex items-center gap-4">
+          <button
+            onClick={() => navigate('/planos')}
+            className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+          >
+            {t('home.plans')}
+          </button>
+
           <Select value={language} onChange={setLanguage} options={languageOptions} />
+
           {userName && (
             <button
               onClick={() => setShowLogoutModal(true)}
@@ -117,16 +125,16 @@ const Home: React.FC = () => {
 
         <div className="flex-1 flex flex-col items-center justify-center relative z-10">
           <div className="flex items-center gap-3 mb-8">
-            <Bot size={40} className="text-green-500" />
+            <Bot size={40} className="text-[#6DAEDB]" />{' '}
             <h1 className="text-4xl font-bold font-sans">{t('header.title')}</h1>
           </div>
 
-          <p className="text-center text-lg md:text-xl text-gray-300 max-w-xl mb-6">
+          <p className="text-center text-lg md:text-xl text-[#AAB9C3] max-w-xl mb-6">
             {t('header.subtitle')}
           </p>
 
           {userName && (
-            <div className="mt-4 mb-6 text-green-500 text-xl md:text-2xl font-bold">
+            <div className="mt-4 mb-6 text-[#6DAEDB] text-xl md:text-2xl font-bold">
               <TypingText
                 text={`${t(
                   `home.welcome${
@@ -142,19 +150,19 @@ const Home: React.FC = () => {
               <>
                 <button
                   onClick={handleTestClick}
-                  className="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                  className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
                   {t('home.testNow')}
                 </button>
                 <button
                   onClick={() => setShowRegister(true)}
-                  className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                  className="bg-[#9ED9CC] hover:bg-[#6DAEDB] text-black px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
                   {t('register.title')}
                 </button>
                 <button
                   onClick={() => setShowLogin(true)}
-                  className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                  className="bg-[#9ED9CC] hover:bg-[#6DAEDB] text-black px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
                   {t('login.title')}
                 </button>
@@ -162,7 +170,7 @@ const Home: React.FC = () => {
             ) : (
               <button
                 onClick={handleTestClick}
-                className="bg-green-600 hover:bg-green-500 text-white px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
               >
                 {t('home.testNow')}
               </button>

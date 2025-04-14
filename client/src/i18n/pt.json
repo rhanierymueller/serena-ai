@@ -15,6 +15,7 @@
     "logoutConfirm": "Tem certeza que deseja sair da Serena AI?",
     "logoutCancel": "Cancelar",
     "logoutConfirmBtn": "Sim, sair",
+    "plans": "Planos",
     "disclaimer": {
       "title": "Termo de responsabilidade",
       "text": "A Serena AI é um assistente virtual com fins informativos e de escuta empática. Ela não substitui atendimento profissional com psicólogos, terapeutas ou psiquiatras. Se você estiver passando por uma situação difícil, procure ajuda médica especializada.",
@@ -35,13 +36,22 @@
     "endCall": "Encerrar ligação",
     "youSaid": "Você disse:",
     "warning": "A Serena AI pode cometer erros. Verifique as informações e consulte um especialista quando necessário.",
-    "goHome": "Voltar para a página inicial"
+    "goHome": "Voltar para a página inicial",
+    "planLabel": "Plano",
+    "plan": {
+      "pro": "Pro",
+      "free": "Gratuito"
+    }
   },
   "sidebar": {
     "newConversation": "Nova conversa",
     "collapse": "Recolher",
     "expand": "Expandir",
-    "delete": "Excluir conversa"
+    "delete": "Excluir conversa",
+    "deleteConfirmTitle": "Você tem certeza?",
+    "deleteConfirmDescription": "Você tem certeza que deseja excluir essa conversa? Essa ação não poderá ser desfeita.",
+    "deleteConfirmBtn": "Excluir",
+    "cancel": "Cancelar"
   },
   "register": {
     "title": "Criar conta",
@@ -78,5 +88,44 @@
     "email": "E-mail",
     "password": "Senha",
     "confirm": "Confirmar"
+  },
+  "plansPage": {
+    "title": "Escolha seu plano",
+    "subtitle": "Aproveite o melhor da Serena AI",
+    "free": {
+      "title": "Gratuito",
+      "description": "Acesso limitado ao chat",
+      "price": "R$ 0,00",
+      "button": "Continuar de graça"
+    },
+    "pro": {
+      "title": "Pro",
+      "description": "Respostas rápidas, sem limite de uso",
+      "price": "R$ 99,90/mês",
+      "button": "Assinar agora"
+    },
+    "form": {
+      "title": "Informações de pagamento",
+      "name": "Nome do titular",
+      "cpf": "CPF",
+      "cardNumber": "Número do cartão",
+      "expiry": "Validade (MM/AA)",
+      "cvv": "CVV",
+      "flag": "Bandeira",
+      "confirm": "Assinar",
+      "cancel": "Cancelar"
+    },
+    "validation": {
+      "name": "Nome obrigatório",
+      "cpfRequired": "CPF obrigatório",
+      "cpfInvalid": "CPF inválido",
+      "cardRequired": "Número do cartão obrigatório",
+      "cardInvalid": "Número inválido",
+      "expiryRequired": "Validade obrigatória",
+      "expiryInvalid": "Formato inválido",
+      "cvvRequired": "CVV obrigatório",
+      "cvvInvalid": "CVV inválido",
+      "flag": "Bandeira obrigatória"
+    }
   }
 }

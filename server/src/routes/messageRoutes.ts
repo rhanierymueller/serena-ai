@@ -14,14 +14,27 @@ router.post("/", async (req: any, res: any) => {
     const chatExists = await prisma.chat.findUnique({
       where: { id: chatId },
     });
-    
     if (!chatExists) {
       return res.status(404).json({ error: "Chat não encontrado" });
     }
-    
     const message = await prisma.message.create({
       data: { chatId, role, content },
     });
+
+    if (role === "user") {
+      const count = await prisma.message.count({
+        where: { chatId, role: "user" },
+      });
+
+      if (count === 1) {
+        await prisma.chat.update({
+          where: { id: chatId },
+          data: {
+            title: content.slice(0, 50), 
+          },
+        });
+      }
+    }
 
     return res.status(201).json(message);
   } catch (error) {

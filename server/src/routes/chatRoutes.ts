@@ -39,4 +39,28 @@ router.get("/", async (req: any, res: any) => {
   }
 });
 
+router.delete("/:id", async (req: any, res: any) => {
+  const { id } = req.params;
+
+  const chat = await prisma.chat.findUnique({ where: { id } });
+  if (!chat) {
+    return res.status(404).json({ error: "Chat não encontrado" });
+  }
+
+  try {
+    await prisma.message.deleteMany({
+      where: { chatId: id },
+    });
+
+    await prisma.chat.delete({
+      where: { id },
+    });
+
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("Erro ao deletar chat:", error);
+    return res.status(500).json({ error: "Erro ao deletar chat" });
+  }
+});
+
 export default router;

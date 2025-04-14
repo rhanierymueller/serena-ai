@@ -35,13 +35,13 @@ const Modal: React.FC<ModalProps> = ({
         <div className="flex justify-end gap-3">
           <button
             onClick={onCancel}
-            className="px-4 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white transition-all"
+            className="px-4 py-2 rounded-xl bg-[#2C3E50] hover:bg-[#34495E] text-white transition-all"
           >
             {cancelText}
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-500 text-white transition-all font-semibold"
+            className="px-4 py-2 rounded-xl bg-[#6DAEDB] hover:bg-[#4F91C3] text-black transition-all font-semibold"
           >
             {confirmText}
           </button>
