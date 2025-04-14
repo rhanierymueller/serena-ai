@@ -1,7 +1,7 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
-import translations from ".";
+import React, { createContext, useState, useContext, ReactNode } from 'react';
+import translations from '.';
 
-type Language = "pt" | "en" | "es";
+type Language = 'pt' | 'en' | 'es';
 
 interface I18nContextProps {
   language: Language;
@@ -10,18 +10,16 @@ interface I18nContextProps {
 }
 
 const I18nContext = createContext<I18nContextProps>({
-  language: "pt",
+  language: 'pt',
   setLanguage: () => {},
-  t: () => "",
+  t: () => '',
 });
 
-export const I18nProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [language, setLanguage] = useState<Language>("pt");
+export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [language, setLanguage] = useState<Language>('pt');
 
   const t = (path: string) => {
-    const keys = path.split(".");
+    const keys = path.split('.');
     let result: any = translations[language];
     for (const key of keys) {
       if (result && key in result) {
@@ -30,13 +28,11 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({
         return path;
       }
     }
-    return typeof result === "string" ? result : path;
+    return typeof result === 'string' ? result : path;
   };
 
   return (
-    <I18nContext.Provider value={{ language, setLanguage, t }}>
-      {children}
-    </I18nContext.Provider>
+    <I18nContext.Provider value={{ language, setLanguage, t }}>{children}</I18nContext.Provider>
   );
 };
 

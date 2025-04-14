@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
-import {
-  Plus,
-  MessageSquare,
-  ChevronLeft,
-  ChevronRight,
-  X,
-} from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { Plus, MessageSquare, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
-import { useI18n } from "../i18n/I18nContext";
+import { useI18n } from '../i18n/I18nContext';
+import { getUser } from '../services/userSession';
+import { getChats, createChat, deleteChat } from '../services/chatService';
+import Modal from './Modal';
 
 interface ChatHistoryItem {
   id: string;
-  title: string;
   createdAt: string;
+  title: string;
 }
 
 const ChatSidebar: React.FC<{
@@ -21,92 +18,131 @@ const ChatSidebar: React.FC<{
   currentChatId: string | null;
 }> = ({ onSelectChat, onCreateNew, currentChatId }) => {
   const { t } = useI18n();
-
   const [history, setHistory] = useState<ChatHistoryItem[]>([]);
   const [collapsed, setCollapsed] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [chatToDelete, setChatToDelete] = useState<string | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem("serena_chat_history");
-    if (stored) setHistory(JSON.parse(stored));
+    const fetchChats = async () => {
+      const user = getUser();
+      if (!user) return;
+
+      try {
+        const chats = await getChats(user.id);
+        setHistory(chats);
+      } catch (err) {
+        console.error('Erro ao buscar histórico de chats:', err);
+      }
+    };
+
+    fetchChats();
   }, []);
 
-  const handleNewChat = () => {
-    const newId = Date.now().toString();
-    const newItem: ChatHistoryItem = {
-      id: newId,
-      title: t("sidebar.newConversation"),
-      createdAt: new Date().toISOString(),
-    };
-    const updated = [newItem, ...history];
-    setHistory(updated);
-    localStorage.setItem("serena_chat_history", JSON.stringify(updated));
-    onCreateNew();
-    onSelectChat(newId);
+  const handleNewChat = async () => {
+    const user = getUser();
+    if (!user) return;
+
+    try {
+      const newChat = await createChat(user.id);
+      setHistory(prev => [newChat, ...prev]);
+      onCreateNew();
+      onSelectChat(newChat.id);
+    } catch (err) {
+      console.error('Erro ao criar novo chat:', err);
+    }
+  };
+
+  const handleDeleteChat = async () => {
+    if (!chatToDelete) return;
+
+    try {
+      await deleteChat(chatToDelete);
+      setHistory(prev => prev.filter(chat => chat.id !== chatToDelete));
+      if (chatToDelete === currentChatId) {
+        onSelectChat('');
+      }
+    } catch (err) {
+      console.error('Erro ao deletar chat:', err);
+    } finally {
+      setShowModal(false);
+      setChatToDelete(null);
+    }
   };
 
   return (
-    <aside
-      className={`${
-        collapsed ? "w-12" : "w-64"
-      } bg-[#111] text-white h-screen p-4 border-r border-gray-800 flex flex-col transition-all duration-300`}
-    >
-      <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="mb-6 self-end text-gray-400 hover:text-white"
-        title={collapsed ? t("sidebar.expand") : t("sidebar.collapse")}
+    <>
+      <aside
+        className={`${
+          collapsed ? 'w-12' : 'w-64'
+        } bg-[#111] text-white h-screen p-4 border-r border-gray-800 flex flex-col transition-all duration-300`}
       >
-        {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-      </button>
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="mb-6 self-end text-gray-400 hover:text-white"
+          title={collapsed ? t('sidebar.expand') : t('sidebar.collapse')}
+        >
+          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+        </button>
 
-      {!collapsed && (
-        <>
-          <button
-            onClick={handleNewChat}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-xl mb-6 font-semibold"
-          >
-            <Plus size={18} /> {t("sidebar.newConversation")}
-          </button>
+        {!collapsed && (
+          <>
+            <button
+              onClick={handleNewChat}
+              className="flex items-center gap-2 bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl mb-6 font-semibold"
+            >
+              <Plus size={18} /> {t('sidebar.newConversation')}
+            </button>
 
-          <div className="flex-1 overflow-y-auto space-y-2">
-            {history.map((item) => (
-              <div key={item.id} className="relative group">
-                <button
-                  onClick={() => onSelectChat(item.id)}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-left hover:bg-gray-800 transition ${
-                    currentChatId === item.id ? "bg-gray-800" : "bg-transparent"
-                  }`}
-                >
-                  <MessageSquare size={16} />
-                  <span className="flex-1 truncate">
-                    {item.title === "Nova conversa" ||
-                    item.title === "New conversation" ||
-                    item.title === "Nueva conversación"
-                      ? t("sidebar.newConversation")
-                      : item.title}
-                  </span>
-                </button>
+            <div className="flex-1 overflow-y-auto space-y-2">
+              {history.map(item => (
+                <div key={item.id} className="relative group">
+                  <button
+                    onClick={() => onSelectChat(item.id)}
+                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-left hover:bg-[#1f2d36] transition ${
+                      currentChatId === item.id ? 'bg-[#1f2d36]' : 'bg-transparent'
+                    }`}
+                  >
+                    <MessageSquare size={16} />
+                    <span className="flex-1 truncate">
+                      {item?.title?.length > 0
+                        ? item.title.slice(0, 8) + (item.title.length > 8 ? '...' : '')
+                        : t('sidebar.newConversation')}
+                    </span>
+                  </button>
 
-                <button
-                  onClick={() => {
-                    const updated = history.filter((h) => h.id !== item.id);
-                    setHistory(updated);
-                    localStorage.setItem(
-                      "serena_chat_history",
-                      JSON.stringify(updated),
-                    );
-                    if (item.id === currentChatId) onSelectChat("");
-                  }}
-                  className="absolute right-2 top-2 p-1 text-gray-400 hover:text-red-400 transition-opacity opacity-0 group-hover:opacity-100"
-                  title={t("sidebar.delete")}
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            ))}
-          </div>
-        </>
+                  <button
+                    onClick={() => {
+                      setChatToDelete(item.id);
+                      setShowModal(true);
+                    }}
+                    className="absolute right-2 top-2 p-1 text-gray-400 hover:text-[#6DAEDB] transition-opacity opacity-0 group-hover:opacity-100"
+                    title={t('sidebar.delete')}
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </aside>
+
+      {showModal && (
+        <Modal
+          title={t('sidebar.deleteConfirmTitle')}
+          description={t('sidebar.deleteConfirmDescription')}
+          onConfirm={handleDeleteChat}
+          onCancel={() => {
+            setShowModal(false);
+            setChatToDelete(null);
+          }}
+          confirmText={t('sidebar.deleteConfirmBtn')}
+          cancelText={t('sidebar.cancel')}
+          size="sm"
+        />
       )}
-    </aside>
+    </>
   );
 };
 

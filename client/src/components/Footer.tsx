@@ -1,5 +1,5 @@
-import React from "react";
-import { useI18n } from "../i18n/I18nContext";
+import React from 'react';
+import { useI18n } from '../i18n/I18nContext';
 
 const Footer: React.FC = () => {
   const { t } = useI18n();
@@ -10,18 +10,18 @@ const Footer: React.FC = () => {
         <div className="text-white font-semibold">Serena AI</div>
 
         <div className="text-xs text-gray-600 text-center md:text-left">
-          &copy; {new Date().getFullYear()} Serena AI. {t("footer.copyright")}
+          &copy; {new Date().getFullYear()} Serena AI. {t('footer.copyright')}
         </div>
 
         <div className="flex gap-4 text-xs md:text-sm justify-center md:justify-end">
           <a href="#" className="hover:text-white transition-colors">
-            {t("footer.about")}
+            {t('footer.about')}
           </a>
           <a href="#" className="hover:text-white transition-colors">
-            {t("footer.terms")}
+            {t('footer.terms')}
           </a>
           <a href="#" className="hover:text-white transition-colors">
-            {t("footer.contact")}
+            {t('footer.contact')}
           </a>
         </div>
       </div>

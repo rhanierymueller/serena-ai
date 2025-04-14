@@ -7,6 +7,16 @@
     "testNow": "Probar ahora",
     "register": "Registrar",
     "welcome": "¡Bienvenido(a)!",
+    "welcomeMale": "Bienvenido",
+    "welcomeFemale": "Bienvenida",
+    "welcomeOther": "Bienvenidx",
+    "logout": "Salir",
+    "logoutTitle": "¿Deseas salir?",
+    "logoutConfirm": "¿Estás seguro de que deseas salir de Serena AI?",
+    "logoutCancel": "Cancelar",
+    "logoutConfirmBtn": "Sí, salir",
+    "gender": "Género",
+    "plans": "Planes",
     "disclaimer": {
       "title": "Término de responsabilidad",
       "text": "Serena AI es un asistente virtual con fines informativos y de escucha empática. No reemplaza el acompañamiento profesional de psicólogos, terapeutas o psiquiatras. Si estás pasando por un momento difícil, busca ayuda médica especializada.",
@@ -27,12 +37,96 @@
     "endCall": "Finalizar llamada",
     "youSaid": "Dijiste:",
     "warning": "Serena AI puede cometer errores. Verifica la información y consulta a un especialista si es necesario.",
-    "goHome": "Volver a la página principal"
+    "goHome": "Volver a la página principal",
+    "planLabel": "Plan",
+    "plan": {
+      "pro": "Pro",
+      "free": "Gratuito"
+    }
   },
   "sidebar": {
     "newConversation": "Nueva conversación",
     "collapse": "Colapsar",
     "expand": "Expandir",
-    "delete": "Eliminar conversación"
+    "delete": "Eliminar conversación",
+    "deleteConfirmTitle": "¿Estás seguro?",
+    "deleteConfirmDescription": "¿Estás seguro de que deseas eliminar esta conversación? Esta acción no se puede deshacer.",
+    "deleteConfirmBtn": "Eliminar",
+    "cancel": "Cancelar"
+  },
+  "register": {
+    "title": "Crear cuenta",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "birthDate": "Fecha de nacimiento",
+    "country": "País",
+    "submit": "Registrar",
+    "cancel": "Cancelar",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "validation": {
+      "firstName": "El nombre es obligatorio.",
+      "lastName": "El apellido es obligatorio.",
+      "emailRequired": "El correo es obligatorio.",
+      "emailInvalid": "Ingresa un correo válido.",
+      "birthDate": "La fecha de nacimiento es obligatoria.",
+      "country": "Selecciona un país.",
+      "passwordRequired": "La contraseña es obligatoria.",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres.",
+      "passwordUpper": "La contraseña debe contener una letra mayúscula.",
+      "passwordLower": "La contraseña debe contener una letra minúscula.",
+      "passwordNumber": "La contraseña debe contener un número.",
+      "passwordSymbol": "La contraseña debe contener un carácter especial.",
+      "passwordMatch": "Las contraseñas no coinciden.",
+      "passwordConfirm": "Se requiere la confirmación de la contraseña."
+    }
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "notARobot": "No soy un robot",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirm": "Confirmar"
+  },
+  "plansPage": {
+    "title": "Elige tu plan",
+    "subtitle": "Disfruta lo mejor de Serena AI",
+    "free": {
+      "title": "Gratis",
+      "description": "Acceso limitado al chat",
+      "price": "R$ 0,00",
+      "button": "Continuar de graça"
+    },
+    "pro": {
+      "title": "Pro",
+      "description": "Respuestas rápidas, uso ilimitado",
+      "price": "R$ 29,90/mes",
+      "button": "Suscribirse ahora"
+    },
+    "form": {
+      "title": "Información de pago",
+      "name": "Nombre del titular",
+      "cpf": "CPF",
+      "cardNumber": "Número de tarjeta",
+      "expiry": "Vencimiento (MM/AA)",
+      "cvv": "CVV",
+      "flag": "Marca de tarjeta",
+      "confirm": "Suscribirse",
+      "cancel": "Cancelar",
+      "select": "Seleccionar"
+    },
+    "validation": {
+      "name": "Nombre obligatorio",
+      "cpfRequired": "CPF obligatorio",
+      "cpfInvalid": "CPF inválido",
+      "cardRequired": "Número de tarjeta obligatorio",
+      "cardInvalid": "Número inválido",
+      "expiryRequired": "Vencimiento obligatorio",
+      "expiryInvalid": "Formato inválido",
+      "cvvRequired": "CVV obligatorio",
+      "cvvInvalid": "CVV inválido",
+      "flag": "Marca de tarjeta obligatoria"
+    }
   }
 }
