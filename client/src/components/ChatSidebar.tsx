@@ -5,6 +5,7 @@ import { useI18n } from '../i18n/I18nContext';
 import { getUser } from '../services/userSession';
 import { getChats, createChat, deleteChat } from '../services/chatService';
 import Modal from './Modal';
+import { getOrCreateVisitorId } from '../utils/visitor';
 
 interface ChatHistoryItem {
   id: string;
@@ -26,10 +27,11 @@ const ChatSidebar: React.FC<{
   useEffect(() => {
     const fetchChats = async () => {
       const user = getUser();
-      if (!user) return;
+      const userId = user?.id ?? null;
+      const visitorId = userId ? null : getOrCreateVisitorId();
 
       try {
-        const chats = await getChats(user.id);
+        const chats = await getChats(userId, visitorId);
         setHistory(chats);
       } catch (err) {
         console.error('Erro ao buscar histórico de chats:', err);
@@ -41,10 +43,10 @@ const ChatSidebar: React.FC<{
 
   const handleNewChat = async () => {
     const user = getUser();
-    if (!user) return;
+    const userId = user?.id ?? null;
 
     try {
-      const newChat = await createChat(user.id);
+      const newChat = await createChat(userId);
       setHistory(prev => [newChat, ...prev]);
       onCreateNew();
       onSelectChat(newChat.id);
@@ -56,8 +58,11 @@ const ChatSidebar: React.FC<{
   const handleDeleteChat = async () => {
     if (!chatToDelete) return;
 
+    const user = getUser();
+    const userId = user?.id ?? null;
+
     try {
-      await deleteChat(chatToDelete);
+      await deleteChat(chatToDelete, userId); // ✅ agora passando os dois argumentos
       setHistory(prev => prev.filter(chat => chat.id !== chatToDelete));
       if (chatToDelete === currentChatId) {
         onSelectChat('');

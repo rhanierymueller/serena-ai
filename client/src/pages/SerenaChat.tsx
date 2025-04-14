@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Mic, Send, AlertTriangle, LogOut } from 'lucide-react';
+import { Bot, Mic, Send, AlertTriangle, LogOut, Square } from 'lucide-react';
 import ChatSidebar from '../components/ChatSidebar';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
@@ -7,6 +7,7 @@ import { createChat, getChats } from '../services/chatService';
 import { getMessages, sendMessage } from '../services/messageService';
 import { getUser } from '../services/userSession';
 import { generateReply } from '../services/llmService';
+import { getOrCreateVisitorId } from '../utils/visitor';
 
 interface Message {
   sender: 'user' | 'bot';
@@ -20,6 +21,7 @@ const SerenaChat: React.FC = () => {
   const [plan, setPlan] = useState<'pro' | 'free'>('free');
   const [isTyping, setIsTyping] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [isNarrating, setIsNarrating] = useState(false);
 
   const recognitionRef = useRef<any>(null);
   const chatRef = useRef<HTMLDivElement>(null);
@@ -78,6 +80,7 @@ const SerenaChat: React.FC = () => {
         console.log('[🔊 Voz selecionada]', preferred.name);
       }
 
+      setIsNarrating(true);
       speechSynthesis.cancel();
       speechSynthesis.speak(utterance);
     };
@@ -90,6 +93,11 @@ const SerenaChat: React.FC = () => {
     } else {
       assignVoiceAndSpeak();
     }
+  };
+
+  const stopNarration = () => {
+    speechSynthesis.cancel();
+    setIsNarrating(false);
   };
 
   const initSpeechRecognition = () => {
@@ -170,11 +178,13 @@ const SerenaChat: React.FC = () => {
   useEffect(() => {
     const initChat = async () => {
       const user = getUser();
-      if (!user) return;
+      const userId = user?.id ?? null;
+      const visitorId = userId ? null : getOrCreateVisitorId();
 
-      setPlan(user.plan);
+      if (userId) setPlan(user.plan);
 
-      const chats = await getChats(user.id);
+      const chats = await getChats(userId, visitorId);
+
       if (chats.length > 0) {
         setChatId(chats[0].id);
         const loadedMessages = await getMessages(chats[0].id);
@@ -185,7 +195,7 @@ const SerenaChat: React.FC = () => {
           }))
         );
       } else {
-        const newChat = await createChat(user.id);
+        const newChat = await createChat(userId);
         setChatId(newChat.id);
       }
     };
@@ -197,6 +207,8 @@ const SerenaChat: React.FC = () => {
     if (!chatId) setMessages([]);
   }, [chatId]);
 
+  const isEmpty = messages.length === 0;
+
   return (
     <div className="flex min-h-screen bg-[#0d0d0d] text-white">
       <ChatSidebar
@@ -206,6 +218,7 @@ const SerenaChat: React.FC = () => {
       />
 
       <div className="flex-1 flex flex-col">
+        {/* Header - Always visible */}
         <div className="flex items-center justify-between border-b border-gray-700 px-4 py-6">
           <div
             onClick={() => navigate('/')}
@@ -227,6 +240,7 @@ const SerenaChat: React.FC = () => {
           </button>
         </div>
 
+        {/* Plan Label - Always visible */}
         <div className="px-4 pt-2">
           <span
             className={`text-xs px-3 py-1 rounded-xl text-white ${
@@ -237,73 +251,142 @@ const SerenaChat: React.FC = () => {
           </span>
         </div>
 
-        <div className="flex-1 px-4 py-4">
-          <div
-            ref={chatRef}
-            className="max-h-[60vh] overflow-y-auto space-y-4 scroll-smooth custom-scroll px-4 py-2"
-          >
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[70%] px-4 py-2 rounded-xl text-sm whitespace-pre-line ${
-                    msg.sender === 'user'
-                      ? 'bg-[#6DAEDB] text-black'
-                      : 'bg-[#2C3E50] text-[#E0ECF1]'
-                  }`}
-                >
-                  {msg.text}
+        {isEmpty ? (
+          /* Empty State - Centered Content */
+          <div className="flex-1 flex flex-col items-center justify-center px-4">
+            <div className="flex items-center gap-3 mb-8">
+              <Bot size={56} className="text-[#6DAEDB]" />
+              <h1 className="text-3xl md:text-4xl font-bold font-sans text-white">
+                {t('header.title')}
+              </h1>
+            </div>
+
+            <div className="w-full max-w-lg">
+              {/* Input Area for Empty State */}
+              <div className="border border-gray-700 rounded-2xl bg-[#1a1a1a] p-4">
+                <div className="w-full flex items-end gap-2">
+                  <textarea
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSend(input);
+                      }
+                    }}
+                    maxLength={800}
+                    placeholder={t('chat.placeholder')}
+                    rows={2}
+                    className="flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        if (!recognitionRef.current) initSpeechRecognition();
+                        recognitionRef.current?.start();
+                      }}
+                      className={`p-3 rounded-xl ${
+                        isListening ? 'bg-red-500' : 'bg-[#6DAEDB]'
+                      } transition`}
+                      title={t('chat.startVoice')}
+                    >
+                      <Mic size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleSend(input)}
+                      className="bg-[#6DAEDB] hover:bg-[#4F91C3] p-3 rounded-xl text-black transition"
+                      title={t('chat.send')}
+                    >
+                      <Send size={20} />
+                    </button>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="border-t border-gray-700 p-4 bg-[#1a1a1a]">
-          {isTyping && (
-            <div className="text-xs text-gray-400 mb-2 ml-1 animate-pulse">
-              Serena está digitando...
-            </div>
-          )}
-          <div className="w-full flex items-end gap-2">
-            <textarea
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend(input);
-                }
-              }}
-              maxLength={800}
-              placeholder={t('chat.placeholder')}
-              rows={2}
-              className="flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
-            />
-            <div className="flex gap-2">
-              <button
-                onClick={() => {
-                  if (!recognitionRef.current) initSpeechRecognition();
-                  recognitionRef.current?.start();
-                }}
-                className={`p-3 rounded-xl ${isListening ? 'bg-red-500' : 'bg-[#6DAEDB]'} transition`}
-                title={t('chat.startVoice')}
-              >
-                <Mic size={20} />
-              </button>
-              <button
-                onClick={() => handleSend(input)}
-                className="bg-[#6DAEDB] hover:bg-[#4F91C3] p-3 rounded-xl text-black transition"
-                title={t('chat.send')}
-              >
-                <Send size={20} />
-              </button>
             </div>
           </div>
-        </div>
+        ) : (
+          /* Regular Chat View - When Messages Exist */
+          <>
+            <div className="flex-1 px-4 py-4">
+              <div
+                ref={chatRef}
+                className="max-h-[60vh] overflow-y-auto space-y-4 scroll-smooth custom-scroll px-4 py-2"
+              >
+                {messages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[70%] px-4 py-2 rounded-xl text-sm whitespace-pre-line ${
+                        msg.sender === 'user'
+                          ? 'bg-[#6DAEDB] text-black'
+                          : 'bg-[#2C3E50] text-[#E0ECF1]'
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
+            <div className="border-t border-gray-700 p-4 bg-[#1a1a1a]">
+              {isTyping && (
+                <div className="text-xs text-gray-400 mb-2 ml-1 animate-pulse">
+                  Serena está digitando...
+                </div>
+              )}
+              <div className="w-full flex items-end gap-2">
+                <textarea
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend(input);
+                    }
+                  }}
+                  maxLength={800}
+                  placeholder={t('chat.placeholder')}
+                  rows={2}
+                  className="flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      if (!recognitionRef.current) initSpeechRecognition();
+                      recognitionRef.current?.start();
+                    }}
+                    className={`p-3 rounded-xl ${isListening ? 'bg-red-500' : 'bg-[#6DAEDB]'} transition`}
+                    title={t('chat.startVoice')}
+                  >
+                    <Mic size={20} />
+                  </button>
+
+                  {/** Botão de parar fala */}
+                  <button
+                    onClick={stopNarration}
+                    className={`p-3 rounded-xl ${isNarrating ? 'bg-yellow-500' : 'bg-gray-700'} transition`}
+                    title="Parar fala"
+                  >
+                    <Square size={20} />
+                  </button>
+
+                  <button
+                    onClick={() => handleSend(input)}
+                    className="bg-[#6DAEDB] hover:bg-[#4F91C3] p-3 rounded-xl text-black transition"
+                    title={t('chat.send')}
+                  >
+                    <Send size={20} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Footer Warning - Always visible */}
         <div className="bg-[#111] text-xs text-gray-400 text-center px-4 py-3 border-t border-gray-800 flex items-center justify-center gap-2">
           <AlertTriangle size={16} className="text-yellow-400" />
           <span>{t('chat.warning')}</span>
