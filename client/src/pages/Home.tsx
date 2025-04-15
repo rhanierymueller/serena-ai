@@ -127,6 +127,17 @@ const Home: React.FC = () => {
         />
 
         <div className="absolute top-0 right-0 p-4 z-20 flex items-center gap-4">
+          {userName && (
+            <>
+              <button
+                onClick={() => navigate('/perfil')}
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+              >
+                Meu Perfil
+              </button>
+            </>
+          )}
+
           <button
             onClick={() => navigate('/planos')}
             className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"

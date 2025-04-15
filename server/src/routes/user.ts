@@ -79,4 +79,22 @@ router.get("/users", async (req: any, res: any) => {
   }
 });
 
+router.put("/users/:id", async (req: any, res: any) => {
+  const { id } = req.params;
+  const { name, gender, plan } = req.body;
+
+  try {
+    const updated = await prisma.user.update({
+      where: { id },
+      data: { name, gender, plan },
+    });
+
+    const { password: _, ...userWithoutPassword } = updated;
+    return res.json(userWithoutPassword);
+  } catch (err) {
+    console.error("Erro ao atualizar usuário:", err);
+    return res.status(400).json({ error: "Erro ao atualizar usuário." });
+  }
+});
+
 export default router;
