@@ -1,6 +1,4 @@
-//const API_URL = 'http://localhost:4000/api/llm';
-
-const API_URL = 'http://192.168.1.2:4000/api/llm';
+const API_URL = 'http://localhost:4000/api/llm';
 
 export async function generateReply(chatId: string) {
   const response = await fetch(API_URL, {

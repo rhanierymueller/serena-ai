@@ -1,8 +1,6 @@
 import { getOrCreateVisitorId } from '../utils/visitor';
 
-const API_URL = 'http://192.168.1.2:4000/api/chats';
-
-//const API_URL = 'http://localhost:4000/api/chats';
+const API_URL = 'http://localhost:4000/api/chats';
 
 export async function createChat(userId: string | null) {
   const visitorId = userId ? null : getOrCreateVisitorId();

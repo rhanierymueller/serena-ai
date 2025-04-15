@@ -6,32 +6,32 @@ import bcrypt from "bcrypt";
 const router = Router();
 
 router.post("/users", async (req: any, res: any) => {
-  const { name, email, gender, password } = req.body;
+  const { name, email, gender, password, provider = 'credentials' } = req.body;
 
-  if (!name || !email || !gender || !password) {
-    return res.status(400).json({ error: "Campos obrigatórios ausentes." });
+  if (!name || !email) {
+    return res.status(400).json({ error: "Nome e email são obrigatórios." });
   }
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
+
     const user = await prisma.user.create({
       data: {
         name,
         email,
         gender,
         password: hashedPassword,
+        provider,
       },
     });
 
     const { password: _, ...userWithoutPassword } = user;
-
     return res.status(201).json(userWithoutPassword);
   } catch (err) {
     console.error("Erro ao criar usuário:", err);
     return res.status(400).json({ error: "Erro ao criar usuário." });
   }
 });
-
 
 router.post("/login", async (req: any, res: any) => {
   const { email, password } = req.body;

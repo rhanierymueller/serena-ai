@@ -11,9 +11,10 @@ model User {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
-  gender    String
+  gender    String?
   plan      String   @default("free")
-  password  String  
+  password  String?             
+  provider  String   @default("credentials")
   createdAt DateTime @default(now())
   chats     Chat[]
 }

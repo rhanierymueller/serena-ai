@@ -6,10 +6,7 @@
   "home": {
     "testNow": "Testar agora",
     "register": "Registrar",
-    "welcome": "Bem-vindo(a)!",
-    "welcomeMale": "Bem-vindo",
-    "welcomeFemale": "Bem-vinda",
-    "welcomeOther": "Bem-vindx",
+    "welcome": "Olá! Como você esta?",
     "logout": "Sair",
     "logoutTitle": "Deseja sair?",
     "logoutConfirm": "Tem certeza que deseja sair da Serena AI?",
