@@ -18,7 +18,6 @@ const PlansPage: React.FC = () => {
         <p className="text-gray-400 mb-10">{t('plansPage.subtitle')}</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Plano Gratuito */}
           <div className="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-700 shadow-md">
             <h2 className="text-2xl font-semibold mb-2">{t('plansPage.free.title')}</h2>
             <p className="text-gray-400 mb-4">{t('plansPage.free.description')}</p>
@@ -31,7 +30,6 @@ const PlansPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Plano Pro */}
           <div className="bg-[#1a1a1a] p-6 rounded-2xl border border-[#6DAEDB] shadow-md">
             <h2 className="text-2xl font-semibold mb-2">{t('plansPage.pro.title')}</h2>
             <p className="text-gray-400 mb-4">{t('plansPage.pro.description')}</p>

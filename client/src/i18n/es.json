@@ -126,5 +126,14 @@
       "cvvInvalid": "CVV inválido",
       "flag": "Marca de tarjeta obligatoria"
     }
+  },
+  "terms": {
+    "title": "Términos de Uso",
+    "intro": "Bienvenido a Serena AI. Al utilizar nuestros servicios, aceptas los siguientes términos de uso. Por favor, léelos con atención antes de continuar.",
+    "noMedical": "Serena AI es una asistente virtual enfocada en el apoyo emocional y reflexiones guiadas. No ofrecemos diagnósticos médicos ni reemplazamos a profesionales de salud mental.",
+    "privacy": "Todas las interacciones pueden ser registradas para fines de mejora continua, respetando tu privacidad según nuestra Política de Privacidad.",
+    "agreement": "El uso del servicio implica la aceptación total de estos términos. Si no estás de acuerdo, por favor no utilices Serena AI.",
+    "changes": "Nos reservamos el derecho de actualizar los términos en cualquier momento. Consulta esta página periódicamente para estar al tanto de los cambios.",
+    "lastUpdate": "Última actualización: Abril de 2025."
   }
 }

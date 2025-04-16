@@ -1,4 +1,3 @@
-// src/pages/modals/LoginModal.tsx
 import React, { useState } from 'react';
 import Modal from '../../components/Modal';
 import { useFormik } from 'formik';

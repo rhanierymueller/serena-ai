@@ -5,7 +5,7 @@ export async function callOpenRouter(messages: { role: string; content: string }
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "deepseek/deepseek-chat:free", // ou outro que você configurou
+        model: "deepseek/deepseek-chat:free",
         messages: [
           { role: "system", content: "Você é uma terapeuta empática e acolhedora." },
           ...messages,

@@ -84,7 +84,6 @@ const Home: React.FC = () => {
     } catch (err) {
       console.error('Falha ao verificar login:', err);
 
-      // Fallback: tenta recuperar do localStorage
       const stored = getUser();
       if (stored?.name) {
         const [firstName] = stored.name.split(' ');
@@ -100,42 +99,15 @@ const Home: React.FC = () => {
         <div className="fixed inset-0 z-50 bg-[#0d0d0d] animate-fadeOutToBlack pointer-events-none" />
       )}
 
-      <div
-        ref={containerRef}
-        className="min-h-screen flex flex-col bg-black text-white overflow-x-hidden relative"
-      >
-        <div
-          className="absolute inset-0 z-0 pointer-events-none"
-          style={{
-            backgroundImage: "url('/image/ceu.png')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            WebkitMaskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
-            maskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
-            transition: 'mask-image 0.2s ease, -webkit-mask-image 0.2s ease',
-          }}
-        />
-
-        <div
-          ref={blurRef}
-          className="pointer-events-none absolute w-64 h-64 rounded-full z-10"
-          style={{
-            filter: 'blur(40px)',
-            transform: `translate(${mouse.x - 128}px, ${mouse.y - 128}px)`,
-            transition: 'transform 0.05s linear',
-          }}
-        />
-
+      <div className="min-h-screen flex flex-col bg-black text-white overflow-x-hidden relative">
         <div className="absolute top-0 right-0 p-4 z-20 flex items-center gap-4">
           {userName && (
-            <>
-              <button
-                onClick={() => navigate('/perfil')}
-                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"
-              >
-                Meu Perfil
-              </button>
-            </>
+            <button
+              onClick={() => navigate('/perfil')}
+              className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+            >
+              Meu Perfil
+            </button>
           )}
 
           <button
@@ -157,23 +129,49 @@ const Home: React.FC = () => {
           )}
         </div>
 
-        <div className="flex-1 flex flex-col items-center justify-center relative z-10">
-          <div className="flex items-center gap-3 mb-8">
-            <Bot size={40} className="text-[#6DAEDB]" />{' '}
+        <div
+          className="flex-1 flex flex-col items-center justify-center relative z-10"
+          ref={containerRef}
+        >
+          <div
+            className="absolute inset-0 z-0 pointer-events-none"
+            style={{
+              backgroundImage: "url('/image/ceu.png')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              WebkitMaskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
+              maskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
+              transition: 'mask-image 0.2s ease, -webkit-mask-image 0.2s ease',
+            }}
+          />
+
+          <div
+            ref={blurRef}
+            className="pointer-events-none absolute w-64 h-64 rounded-full z-10"
+            style={{
+              filter: 'blur(40px)',
+              transform: `translate(${mouse.x - 128}px, ${mouse.y - 128}px)`,
+              transition: 'transform 0.05s linear',
+            }}
+          />
+
+          {/* Conteúdo principal */}
+          <div className="flex items-center gap-3 mb-8 z-10">
+            <Bot size={40} className="text-[#6DAEDB]" />
             <h1 className="text-4xl font-bold font-sans">{t('header.title')}</h1>
           </div>
 
-          <p className="text-center text-lg md:text-xl text-[#AAB9C3] max-w-xl mb-6">
+          <p className="text-center text-lg md:text-xl text-[#AAB9C3] max-w-xl mb-6 z-10">
             {t('header.subtitle')}
           </p>
 
           {userName && (
-            <div className="mt-4 mb-6 text-[#6DAEDB] text-xl md:text-2xl font-bold">
-              <TypingText text={`${t(`home.welcome`)} ${userName}`} />
+            <div className="mt-4 mb-6 text-[#6DAEDB] text-xl md:text-2xl font-bold z-10">
+              <TypingText text={`${t('home.welcome')} ${userName}`} />
             </div>
           )}
 
-          <div className="flex gap-4">
+          <div className="flex gap-4 z-10">
             {!userName ? (
               <>
                 <button
@@ -184,13 +182,13 @@ const Home: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setShowRegister(true)}
-                  className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black  px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                  className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
                   {t('register.title')}
                 </button>
                 <button
                   onClick={() => setShowLogin(true)}
-                  className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black  px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                  className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
                   {t('login.title')}
                 </button>
