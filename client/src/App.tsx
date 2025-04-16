@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import SerenaChat from './pages/SerenaChat';
 import Home from './pages/Home';
-import PlansPage from './pages/modals/PlansPage';
+import PlansPage from './pages/PlansPage';
 import ProfilePage from './pages/ProfilePage';
 
 const App = () => {

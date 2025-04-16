@@ -1,17 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getUser, saveUser } from '../services/userSession';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import PageLayout from '../components/PageLayout';
 
 const ProfilePage: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'info' | 'test'>('info');
   const navigate = useNavigate();
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const blurRef = useRef<HTMLDivElement>(null);
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const userData = getUser();
@@ -21,17 +17,6 @@ const ProfilePage: React.FC = () => {
     }
     setUser(userData);
     setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      setMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -50,52 +35,18 @@ const ProfilePage: React.FC = () => {
 
       const updated = await res.json();
       saveUser(updated);
-      alert('Perfil atualizado com sucesso!');
+      setUser(updated);
+      navigate('/');
     } catch (err) {
-      alert('Erro ao salvar perfil.');
-      console.error(err);
+      console.error('Erro ao salvar usuário:', err);
     }
   };
 
   if (loading || !user) return <div className="text-white p-4">Carregando...</div>;
 
   return (
-    <div
-      ref={containerRef}
-      className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden"
-    >
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          backgroundImage: "url('/image/ceu.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          WebkitMaskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
-          maskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
-          transition: 'mask-image 0.2s ease, -webkit-mask-image 0.2s ease',
-        }}
-      />
-
-      <div
-        ref={blurRef}
-        className="pointer-events-none absolute w-64 h-64 rounded-full z-10"
-        style={{
-          filter: 'blur(40px)',
-          transform: `translate(${mouse.x - 128}px, ${mouse.y - 128}px)`,
-          transition: 'transform 0.05s linear',
-        }}
-      />
-
-      {/* Botão Voltar */}
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute top-4 left-4 z-30 flex items-center gap-2 bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-md font-semibold transition"
-      >
-        <ArrowLeft size={18} />
-        Voltar
-      </button>
-
-      <div className="z-20 bg-black/80 p-6 sm:p-8 rounded-2xl border border-gray-700 max-w-4xl w-full shadow-lg">
+    <PageLayout title="Meu Perfil" backTo="/">
+      <div className="bg-black/80 p-6 sm:p-8 rounded-2xl border border-gray-700 max-w-4xl w-full min-w-[620px] sm:min-w-[600px] shadow-lg mx-auto">
         <h1 className="text-3xl font-bold mb-6 text-center">Meu Perfil</h1>
 
         <div className="flex gap-4 mb-6 border-b border-gray-700">
@@ -117,7 +68,7 @@ const ProfilePage: React.FC = () => {
                 : 'text-gray-400 hover:text-white'
             }`}
           >
-            Testes
+            Meu plano
           </button>
         </div>
 
@@ -165,6 +116,7 @@ const ProfilePage: React.FC = () => {
                 value={user.plan}
                 onChange={handleChange}
                 className="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-600"
+                disabled
               />
             </div>
             <button
@@ -178,20 +130,49 @@ const ProfilePage: React.FC = () => {
 
         {activeTab === 'test' && (
           <div className="text-gray-300">
-            <h2 className="text-xl font-semibold mb-4">Aba de Testes</h2>
-            <p className="text-sm">
-              Aqui você pode experimentar novas funcionalidades ou visualizar dados em
-              desenvolvimento.
-            </p>
-            <div className="mt-4">
-              <pre className="bg-gray-800 p-4 rounded-md text-xs overflow-auto">
-                {JSON.stringify(user, null, 2)}
-              </pre>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div
+                onClick={() => {
+                  if (user.plan === 'free') return;
+                  const updatedUser = { ...user, plan: 'free' };
+                  setUser(updatedUser);
+                }}
+                className={`cursor-pointer p-6 rounded-2xl border shadow-md transition-all ${
+                  user.plan === 'free'
+                    ? 'border-[#6DAEDB] bg-[#111]'
+                    : 'border-gray-700 bg-[#1a1a1a] hover:border-[#6DAEDB]'
+                }`}
+              >
+                <h3 className="text-2xl font-semibold mb-2">Plano Gratuito</h3>
+                <p className="text-gray-400 mb-4">
+                  Ideal para quem quer experimentar com recursos limitados.
+                </p>
+                <span className="block text-2xl font-bold mb-4">R$ 0/mês</span>
+              </div>
+
+              <div
+                onClick={() => {
+                  if (user.plan === 'pro') return;
+                  const updatedUser = { ...user, plan: 'pro' };
+                  //setUser(updatedUser);
+                }}
+                className={`cursor-pointer p-6 rounded-2xl border shadow-md transition-all ${
+                  user.plan === 'Pro'
+                    ? 'border-[#6DAEDB] bg-[#111]'
+                    : 'border-gray-700 bg-[#1a1a1a] hover:border-[#6DAEDB]'
+                }`}
+              >
+                <h3 className="text-2xl font-semibold mb-2">Plano Pro</h3>
+                <p className="text-gray-400 mb-4">
+                  Acesso completo, respostas mais rápidas e suporte prioritário.
+                </p>
+                <span className="block text-2xl font-bold mb-4">R$ 29,90/mês</span>
+              </div>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

@@ -7,7 +7,6 @@ import { createChat, getChats } from '../services/chatService';
 import { getMessages, sendMessage } from '../services/messageService';
 import { getUser } from '../services/userSession';
 import { generateReply } from '../services/llmService';
-import { getOrCreateVisitorId } from '../utils/visitor';
 
 interface Message {
   sender: 'user' | 'bot';
@@ -180,7 +179,6 @@ const SerenaChat: React.FC = () => {
     const initChat = async () => {
       const user = getUser();
       const userId = user?.id ?? null;
-      const visitorId = userId ? null : getOrCreateVisitorId();
 
       if (userId) setPlan(user.plan);
 
@@ -250,7 +248,6 @@ const SerenaChat: React.FC = () => {
           </button>
         </div>
 
-        {/* Plan Label - Always visible */}
         <div className="px-4 pt-2">
           <span
             className={`text-xs px-3 py-1 rounded-xl text-white ${
@@ -262,7 +259,6 @@ const SerenaChat: React.FC = () => {
         </div>
 
         {isEmpty ? (
-          /* Empty State - Centered Content */
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <div className="flex items-center gap-3 mb-8">
               <Bot size={56} className="text-[#6DAEDB]" />
@@ -272,7 +268,6 @@ const SerenaChat: React.FC = () => {
             </div>
 
             <div className="w-full max-w-lg">
-              {/* Input Area for Empty State */}
               <div className="border border-gray-700 rounded-2xl bg-[#1a1a1a] p-4">
                 <div className="w-full flex flex-col sm:flex-row sm:items-end gap-2">
                   <textarea
@@ -315,7 +310,6 @@ const SerenaChat: React.FC = () => {
             </div>
           </div>
         ) : (
-          /* Regular Chat View - When Messages Exist */
           <>
             <div className="flex-1 px-4 py-4">
               <div
@@ -344,7 +338,7 @@ const SerenaChat: React.FC = () => {
             <div className="border-t border-gray-700 p-2 sm:p-4 bg-[#1a1a1a]">
               {isTyping && (
                 <div className="text-xs text-gray-400 mb-2 ml-1 animate-pulse">
-                  Serena está digitando...
+                  Serena está pensando...
                 </div>
               )}
               <div className="w-full flex flex-col sm:flex-row sm:items-end gap-2">
@@ -374,7 +368,6 @@ const SerenaChat: React.FC = () => {
                     <Mic size={20} />
                   </button>
 
-                  {/** Botão de parar fala */}
                   <button
                     onClick={stopNarration}
                     className={`p-3 rounded-xl ${isNarrating ? 'bg-yellow-500' : 'bg-gray-700'} transition`}
@@ -396,7 +389,6 @@ const SerenaChat: React.FC = () => {
           </>
         )}
 
-        {/* Footer Warning - Always visible */}
         <div className="bg-[#111] text-xs text-gray-400 text-center px-4 py-3 border-t border-gray-800 flex items-center justify-center gap-2">
           <AlertTriangle size={16} className="text-yellow-400" />
           <span>{t('chat.warning')}</span>
