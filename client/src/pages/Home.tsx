@@ -7,7 +7,7 @@ import Select from '../components/Select';
 import Footer from '../components/Footer';
 import RegisterModal from './modals/RegisterModal';
 import { TypingText } from '../components/TypingText';
-import { clearUser, getUser } from '../services/userSession';
+import { clearUser, getUser, saveUser } from '../services/userSession';
 import LoginModal from './modals/LoginModal';
 
 type Language = 'pt' | 'en' | 'es';
@@ -62,12 +62,35 @@ const Home: React.FC = () => {
     setTimeout(() => navigate('/chat'), 600);
   };
 
-  const updateUserState = () => {
-    const user = getUser();
-    if (user) {
-      const [firstName] = user.name.split(' ');
-      setUserName(firstName);
-      setGender(user.gender || 'other');
+  const updateUserState = async () => {
+    try {
+      const res = await fetch('http://localhost:4000/api/auth/me', {
+        credentials: 'include',
+      });
+
+      if (!res.ok) throw new Error('Não autenticado');
+
+      const user = await res.json();
+      console.log('[auth/me] usuário retornado:', user);
+
+      saveUser(user);
+
+      if (user.name) {
+        const [firstName] = user.name.split(' ');
+        setUserName(firstName);
+      }
+
+      setGender(user.gender || 'male');
+    } catch (err) {
+      console.error('Falha ao verificar login:', err);
+
+      // Fallback: tenta recuperar do localStorage
+      const stored = getUser();
+      if (stored?.name) {
+        const [firstName] = stored.name.split(' ');
+        setUserName(firstName);
+        setGender(stored.gender || 'male');
+      }
     }
   };
 
@@ -104,6 +127,17 @@ const Home: React.FC = () => {
         />
 
         <div className="absolute top-0 right-0 p-4 z-20 flex items-center gap-4">
+          {userName && (
+            <>
+              <button
+                onClick={() => navigate('/perfil')}
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+              >
+                Meu Perfil
+              </button>
+            </>
+          )}
+
           <button
             onClick={() => navigate('/planos')}
             className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"
@@ -135,13 +169,7 @@ const Home: React.FC = () => {
 
           {userName && (
             <div className="mt-4 mb-6 text-[#6DAEDB] text-xl md:text-2xl font-bold">
-              <TypingText
-                text={`${t(
-                  `home.welcome${
-                    gender === 'female' ? 'Female' : gender === 'male' ? 'Male' : 'Other'
-                  }`
-                )}, ${userName}!`}
-              />
+              <TypingText text={`${t(`home.welcome`)} ${userName}`} />
             </div>
           )}
 
@@ -156,13 +184,13 @@ const Home: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setShowRegister(true)}
-                  className="bg-[#9ED9CC] hover:bg-[#6DAEDB] text-black px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                  className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black  px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
                   {t('register.title')}
                 </button>
                 <button
                   onClick={() => setShowLogin(true)}
-                  className="bg-[#9ED9CC] hover:bg-[#6DAEDB] text-black px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
+                  className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black  px-6 py-3 rounded-2xl text-lg font-semibold transition-all"
                 >
                   {t('login.title')}
                 </button>

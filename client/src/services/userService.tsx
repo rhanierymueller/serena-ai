@@ -1,8 +1,8 @@
 export interface CreateUserInput {
   name: string;
   email: string;
-  gender: string;
-  password: string;
+  gender?: string;
+  password?: string;
 }
 
 export async function createUser(data: CreateUserInput) {

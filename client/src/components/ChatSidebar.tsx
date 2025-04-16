@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, MessageSquare, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Plus, MessageSquare, ChevronLeft, ChevronRight, X, LogOut } from 'lucide-react';
 
 import { useI18n } from '../i18n/I18nContext';
 import { getUser } from '../services/userSession';
 import { getChats, createChat, deleteChat } from '../services/chatService';
 import Modal from './Modal';
+import { useNavigate } from 'react-router-dom';
 
 interface ChatHistoryItem {
   id: string;
@@ -16,8 +17,10 @@ const ChatSidebar: React.FC<{
   onSelectChat: (id: string) => void;
   onCreateNew: () => void;
   currentChatId: string | null;
-}> = ({ onSelectChat, onCreateNew, currentChatId }) => {
+  onCloseMobileSidebar?: () => void;
+}> = ({ onSelectChat, onCreateNew, currentChatId, onCloseMobileSidebar }) => {
   const { t } = useI18n();
+  const navigate = useNavigate();
   const [history, setHistory] = useState<ChatHistoryItem[]>([]);
   const [collapsed, setCollapsed] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -26,10 +29,10 @@ const ChatSidebar: React.FC<{
   useEffect(() => {
     const fetchChats = async () => {
       const user = getUser();
-      if (!user) return;
+      const userId = user?.id ?? null;
 
       try {
-        const chats = await getChats(user.id);
+        const chats = await getChats(userId);
         setHistory(chats);
       } catch (err) {
         console.error('Erro ao buscar histórico de chats:', err);
@@ -41,10 +44,10 @@ const ChatSidebar: React.FC<{
 
   const handleNewChat = async () => {
     const user = getUser();
-    if (!user) return;
+    const userId = user?.id ?? null;
 
     try {
-      const newChat = await createChat(user.id);
+      const newChat = await createChat(userId);
       setHistory(prev => [newChat, ...prev]);
       onCreateNew();
       onSelectChat(newChat.id);
@@ -56,8 +59,11 @@ const ChatSidebar: React.FC<{
   const handleDeleteChat = async () => {
     if (!chatToDelete) return;
 
+    const user = getUser();
+    const userId = user?.id ?? null;
+
     try {
-      await deleteChat(chatToDelete);
+      await deleteChat(chatToDelete, userId);
       setHistory(prev => prev.filter(chat => chat.id !== chatToDelete));
       if (chatToDelete === currentChatId) {
         onSelectChat('');
@@ -78,7 +84,13 @@ const ChatSidebar: React.FC<{
         } bg-[#111] text-white h-screen p-4 border-r border-gray-800 flex flex-col transition-all duration-300`}
       >
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => {
+            if (onCloseMobileSidebar) {
+              onCloseMobileSidebar();
+            } else {
+              setCollapsed(!collapsed);
+            }
+          }}
           className="mb-6 self-end text-gray-400 hover:text-white"
           title={collapsed ? t('sidebar.expand') : t('sidebar.collapse')}
         >
@@ -126,6 +138,26 @@ const ChatSidebar: React.FC<{
             </div>
           </>
         )}
+
+        <div className="mt-auto pt-4 flex justify-center">
+          {!collapsed ? (
+            <button
+              onClick={() => navigate('/')}
+              className="w-full flex items-center gap-2 px-3 py-2 bg-[#6DAEDB] hover:bg-[#4F91C3] text-black rounded-lg text-sm transition"
+            >
+              <LogOut size={16} />
+              <span>Sair</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/')}
+              className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black p-2 rounded-full transition"
+              title="Sair"
+            >
+              <LogOut size={16} />
+            </button>
+          )}
+        </div>
       </aside>
 
       {showModal && (

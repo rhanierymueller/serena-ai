@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useI18n } from '../../i18n/I18nContext';
-import Modal from '../../components/Modal';
-import CreditCardForm, { CardFormData } from '../../components/CreditCardForm';
+import { useI18n } from '../i18n/I18nContext';
+import Modal from '../components/Modal';
+import CreditCardForm from '../components/CreditCardForm';
+import PageLayout from '../components/PageLayout';
 
 const PlansPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -11,21 +12,13 @@ const PlansPage: React.FC = () => {
   const { t } = useI18n();
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-12">
+    <PageLayout title="Planos disponíveis" backTo="/">
       <div className="max-w-3xl mx-auto text-center">
-        <div className="mb-8 text-left">
-          <button
-            onClick={() => navigate('/')}
-            className="text-sm text-[#6DAEDB] hover:text-white underline transition-all"
-          >
-            ← {t('chat.goHome')}
-          </button>
-        </div>
-
         <h1 className="text-4xl font-bold mb-4">{t('plansPage.title')}</h1>
         <p className="text-gray-400 mb-10">{t('plansPage.subtitle')}</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Plano Gratuito */}
           <div className="bg-[#1a1a1a] p-6 rounded-2xl border border-gray-700 shadow-md">
             <h2 className="text-2xl font-semibold mb-2">{t('plansPage.free.title')}</h2>
             <p className="text-gray-400 mb-4">{t('plansPage.free.description')}</p>
@@ -38,6 +31,7 @@ const PlansPage: React.FC = () => {
             </button>
           </div>
 
+          {/* Plano Pro */}
           <div className="bg-[#1a1a1a] p-6 rounded-2xl border border-[#6DAEDB] shadow-md">
             <h2 className="text-2xl font-semibold mb-2">{t('plansPage.pro.title')}</h2>
             <p className="text-gray-400 mb-4">{t('plansPage.pro.description')}</p>
@@ -65,7 +59,7 @@ const PlansPage: React.FC = () => {
           size="md"
         />
       )}
-    </div>
+    </PageLayout>
   );
 };
 

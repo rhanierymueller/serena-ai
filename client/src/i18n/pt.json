@@ -6,10 +6,7 @@
   "home": {
     "testNow": "Testar agora",
     "register": "Registrar",
-    "welcome": "Bem-vindo(a)!",
-    "welcomeMale": "Bem-vindo",
-    "welcomeFemale": "Bem-vinda",
-    "welcomeOther": "Bem-vindx",
+    "welcome": "Olá,",
     "logout": "Sair",
     "logoutTitle": "Deseja sair?",
     "logoutConfirm": "Tem certeza que deseja sair da Serena AI?",
@@ -51,7 +48,8 @@
     "deleteConfirmTitle": "Você tem certeza?",
     "deleteConfirmDescription": "Você tem certeza que deseja excluir essa conversa? Essa ação não poderá ser desfeita.",
     "deleteConfirmBtn": "Excluir",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "menu": "Menu"
   },
   "register": {
     "title": "Criar conta",

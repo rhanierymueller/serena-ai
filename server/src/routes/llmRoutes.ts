@@ -25,20 +25,22 @@ router.post("/", async (req: any, res: any) => {
 
     let reply: string;
 
-    if (chat.user.plan === "pro") {
-      // GPT
+    const isPro = chat.user?.plan === "pro";
+
+    if (isPro) {
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages: [
-          { role: "system", content: "Você é uma terapeuta empática e acolhedora." },
-          ...history,
-        ],
-      });
+        { role: "system", content: "Você é uma terapeuta empática e acolhedora." },
+        ...history,
+      ],
+    });
 
-      reply = completion.choices[0].message.content || "Desculpe, não entendi.";
-    } else {
-      reply = await callOpenRouter(history);
-    }
+  reply = completion.choices[0].message.content || "Desculpe, não entendi.";
+} else {
+  // fallback OpenRouter (usuários FREE ou visitantes)
+  reply = await callOpenRouter(history);
+}
 
     const saved = await prisma.message.create({
       data: {
