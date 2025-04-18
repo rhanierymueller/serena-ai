@@ -2,8 +2,8 @@
 
 import express from "express";
 import type Stripe from "stripe";
-import { prisma } from "../lib/prisma"; // 👈 precisa importar o Prisma client
-import stripe from "../lib/stripe";
+import { prisma } from "../lib/prisma.js"; // 👈 precisa importar o Prisma client
+import stripe from "../lib/stripe.js";
 
 const router = express.Router();
 

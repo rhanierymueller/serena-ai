@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { prisma } from "../lib/prisma";
-import { openai } from "../lib/openai";
-import { callOpenRouter } from "../lib/openrouter";
+import { prisma } from "../lib/prisma.js";
+import { openai } from "../lib/openai.js";
+import { callOpenRouter } from "../lib/openrouter.js";
 import { ChatCompletionMessageParam } from "openai/resources/chat";
 
 const router = Router();

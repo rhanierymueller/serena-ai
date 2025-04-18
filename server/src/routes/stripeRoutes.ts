@@ -1,7 +1,7 @@
 // src/routes/stripeRoutes.ts
 import express from "express";
-import { prisma } from "../lib/prisma";
-import stripe from "../lib/stripe";
+import { prisma } from "../lib/prisma.js";
+import stripe from "../lib/stripe.js";
 
 const router = express.Router();
 
