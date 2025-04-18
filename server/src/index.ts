@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import session from "express-session";
 import passport from "passport";
 
-import './auth/google'; 
+import './auth/google.js'; 
 
 import userRoutes from "./routes/user";
 import chatRoutes from "./routes/chatRoutes";
