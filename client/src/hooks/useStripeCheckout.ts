@@ -1,11 +1,11 @@
-// src/hooks/useStripeCheckout.ts
 import { loadStripe } from '@stripe/stripe-js';
+import { BASE_URL } from '../config'; // 👈 novo
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUB_KEY!);
 
 export async function handleStripeSubscriptionCheckout(userId: string, email: string) {
   try {
-    const res = await fetch('http://localhost:4000/api/stripe/create-subscription-checkout', {
+    const res = await fetch(`${BASE_URL}/api/stripe/create-subscription-checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

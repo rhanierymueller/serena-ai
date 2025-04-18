@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getUser, saveUser } from '../services/userSession';
 import { useNavigate } from 'react-router-dom';
 import PageLayout from '../components/PageLayout';
+import { BASE_URL } from '../config';
 
 const ProfilePage: React.FC = () => {
   const [user, setUser] = useState<any>(null);
@@ -26,7 +27,7 @@ const ProfilePage: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/users/${user.id}`, {
+      const res = await fetch(`${BASE_URL}/api/users/${user.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

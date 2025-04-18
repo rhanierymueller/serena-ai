@@ -9,6 +9,7 @@ import RegisterModal from './modals/RegisterModal';
 import LoginModal from './modals/LoginModal';
 import { TypingText } from '../components/TypingText';
 import { clearUser, getUser, saveUser } from '../services/userSession';
+import { BASE_URL } from '../config';
 
 type Language = 'pt' | 'en' | 'es';
 
@@ -59,7 +60,7 @@ const Home: React.FC = () => {
 
   const updateUserState = async () => {
     try {
-      const res = await fetch('http://localhost:4000/api/auth/me', {
+      const res = await fetch(`${BASE_URL}/api/auth/me`, {
         credentials: 'include',
       });
 

@@ -1,4 +1,6 @@
-const API_URL = 'http://localhost:4000/api/messages';
+import { BASE_URL } from '../config';
+
+const API_URL = `${BASE_URL}/api/messages`;
 
 export async function sendMessage(chatId: string, role: 'user' | 'assistant', content: string) {
   const response = await fetch(API_URL, {

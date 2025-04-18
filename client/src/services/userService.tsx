@@ -1,3 +1,5 @@
+import { BASE_URL } from '../config';
+
 export interface CreateUserInput {
   name: string;
   email: string;
@@ -6,7 +8,7 @@ export interface CreateUserInput {
 }
 
 export async function createUser(data: CreateUserInput) {
-  const response = await fetch('http://localhost:4000/api/users', {
+  const response = await fetch(`${BASE_URL}/api/users`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -23,7 +25,7 @@ export async function createUser(data: CreateUserInput) {
 }
 
 export async function loginUser(data: { email: string; password: string }) {
-  const res = await fetch('http://localhost:4000/api/login', {
+  const res = await fetch(`${BASE_URL}/api/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

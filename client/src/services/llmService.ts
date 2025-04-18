@@ -1,4 +1,6 @@
-const API_URL = 'http://localhost:4000/api/llm';
+import { BASE_URL } from '../config';
+
+const API_URL = `${BASE_URL}/api/llm`;
 
 export async function generateReply(chatId: string) {
   const response = await fetch(API_URL, {
