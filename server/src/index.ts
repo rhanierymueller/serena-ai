@@ -6,12 +6,12 @@ import passport from "passport";
 
 import './auth/google.js'; 
 
-import userRoutes from "./routes/user";
-import chatRoutes from "./routes/chatRoutes";
-import messageRoutes from "./routes/messageRoutes";
-import llmRoutes from "./routes/llmRoutes";
-import authRoutes from "./routes/authRoutes";
-import stripeRoutes from "./routes/stripeRoutes";
+import userRoutes from "./routes/user.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
+import llmRoutes from "./routes/llmRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import stripeRoutes from "./routes/stripeRoutes.js";
 
 dotenv.config();
 
