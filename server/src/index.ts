@@ -11,6 +11,7 @@ import chatRoutes from "./routes/chatRoutes";
 import messageRoutes from "./routes/messageRoutes";
 import llmRoutes from "./routes/llmRoutes";
 import authRoutes from "./routes/authRoutes";
+import stripeRoutes from "./routes/stripeRoutes";
 
 dotenv.config();
 
@@ -18,7 +19,7 @@ const app = express();
 
 app.use(cors({
   origin: 'http://localhost:5173', // ou process.env.FRONTEND_URL
-  credentials: true, // 👈 necessário para cookies e sessão funcionarem
+  credentials: true,
 }));
 
 app.use(express.json());
@@ -41,12 +42,21 @@ app.use("/api/llm", llmRoutes);
 app.use("/api", authRoutes);
 
 app.get("/", (_, res) => {
-  res.send("Serena AI Backend rodando 🧠");
+  res.send("Serena AI Backend rodando");
 });
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
+app.use("/api/stripe", stripeRoutes);
 
 
 const PORT = parseInt(process.env.PORT || '4000', 10);
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🔥 Server on http://localhost:${PORT}`);
+  console.log(`Server on http://localhost:${PORT}`);
 });

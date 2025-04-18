@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
+    "@stripe/stripe-js": "^7.1.0",
     "cleave.js": "^1.6.0",
     "formik": "^2.4.6",
     "lucide-react": "^0.487.0",

@@ -3,7 +3,6 @@ import { prisma } from "../lib/prisma";
 
 const router = Router();
 
-// 🔹 Criação de chat: permite userId OU visitorId
 router.post("/", async (req: any, res: any) => {
   const { userId, visitorId } = req.body;
 
@@ -26,7 +25,6 @@ router.post("/", async (req: any, res: any) => {
   }
 });
 
-// 🔹 Busca de chats: aceita userId OU visitorId
 router.get("/", async (req: any, res: any) => {
   const { userId, visitorId } = req.query;
 
@@ -49,7 +47,6 @@ router.get("/", async (req: any, res: any) => {
   }
 });
 
-// 🔹 Deleção de chat: valida se pertence ao usuário ou visitante
 router.delete("/:id", async (req: any, res: any) => {
   const { id } = req.params;
   const { userId, visitorId } = req.query;
@@ -61,7 +58,6 @@ router.delete("/:id", async (req: any, res: any) => {
       return res.status(404).json({ error: "Chat não encontrado" });
     }
 
-    // valida se pertence ao user ou ao visitante
     if (chat.userId) {
       if (chat.userId !== userId) {
         return res.status(403).json({ error: "Acesso negado" });
@@ -74,7 +70,6 @@ router.delete("/:id", async (req: any, res: any) => {
       return res.status(403).json({ error: "Chat sem vínculo identificável" });
     }
 
-    // remove mensagens e chat
     await prisma.message.deleteMany({ where: { chatId: id } });
     await prisma.chat.delete({ where: { id } });
 

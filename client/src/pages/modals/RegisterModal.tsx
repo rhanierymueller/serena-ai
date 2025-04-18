@@ -102,7 +102,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
       title={t('register.title')}
       description={
         <div className="space-y-4 text-white">
-          {/* Botão Google */}
           <button
             onClick={() => {
               window.location.href = 'http://localhost:4000/api/signin/google';
@@ -130,9 +129,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
             <span>Entrar com Google</span>
           </button>
 
-          {/* Formulário manual */}
           <form onSubmit={formik.handleSubmit} className="space-y-4">
-            {/* Nome */}
             <div>
               <label className="text-sm block mb-1">
                 {t('register.firstName')} <span className="text-red-500">*</span>
@@ -149,7 +146,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
               )}
             </div>
 
-            {/* Email */}
             <div>
               <label className="text-sm block mb-1">
                 {t('register.email')} <span className="text-red-500">*</span>
@@ -166,7 +162,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
               )}
             </div>
 
-            {/* Senha */}
             <div className="relative">
               <label className="text-sm block mb-1">{t('register.password')}</label>
               <input
@@ -187,7 +182,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
               )}
             </div>
 
-            {/* Confirmar senha */}
             <div className="relative">
               <label className="text-sm block mb-1">{t('register.confirmPassword')}</label>
               <input
@@ -208,7 +202,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
               )}
             </div>
 
-            {/* Data + País */}
             <div className="flex gap-4">
               <div className="w-1/2">
                 <label className="text-sm block mb-1">{t('register.birthDate')}</label>
@@ -231,7 +224,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
               </div>
             </div>
 
-            {/* Gênero */}
             <div>
               <label className="text-sm block mb-1">{t('register.gender')}</label>
               <Select

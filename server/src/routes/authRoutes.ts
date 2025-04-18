@@ -13,8 +13,7 @@ router.get('/auth/google/callback',
     session: true,
   }),
   (req, res) => {
-    // Redireciona para o frontend após login
-    res.redirect('http://localhost:5173'); // ajuste para o seu frontend
+    res.redirect('http://localhost:5173');
   }
 );
 

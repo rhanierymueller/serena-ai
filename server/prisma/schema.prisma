@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  gender    String?
-  plan      String   @default("free")
-  password  String?             
-  provider  String   @default("credentials")
-  createdAt DateTime @default(now())
-  chats     Chat[]
+  id                 String   @id @default(uuid())
+  name               String
+  email              String   @unique
+  gender             String?
+  plan               String   @default("free")
+  password           String?             
+  provider           String   @default("credentials")
+  stripeCustomerId   String?
+  createdAt          DateTime @default(now())
+  chats              Chat[]
 }
 
 model Chat {

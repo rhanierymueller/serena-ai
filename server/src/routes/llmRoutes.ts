@@ -38,7 +38,6 @@ router.post("/", async (req: any, res: any) => {
 
   reply = completion.choices[0].message.content || "Desculpe, não entendi.";
 } else {
-  // fallback OpenRouter (usuários FREE ou visitantes)
   reply = await callOpenRouter(history);
 }
 
