@@ -18,7 +18,8 @@
     "openai": "^4.93.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "prisma": "^6.6.0"
+    "prisma": "^6.6.0",
+    "stripe": "^18.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

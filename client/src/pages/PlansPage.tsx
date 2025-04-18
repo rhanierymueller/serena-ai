@@ -1,15 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
-import Modal from '../components/Modal';
-import CreditCardForm from '../components/CreditCardForm';
 import PageLayout from '../components/PageLayout';
+import { getUser } from '../services/userSession';
+import { handleStripeSubscriptionCheckout } from '../hooks/useStripeCheckout';
 
 const PlansPage: React.FC = () => {
-  const [showModal, setShowModal] = useState(false);
-  const creditCardFormRef = useRef<{ submit: () => void }>(null);
   const navigate = useNavigate();
   const { t } = useI18n();
+
+  const user = getUser();
+  const isPro = user?.plan === 'pro';
+
+  const handleProCheckout = () => {
+    if (!user?.id || !user?.email) {
+      alert('Você precisa estar logado para assinar.');
+      return;
+    }
+
+    handleStripeSubscriptionCheckout(user.id, user.email);
+  };
 
   return (
     <PageLayout title="Planos disponíveis" backTo="/">
@@ -34,29 +44,29 @@ const PlansPage: React.FC = () => {
             <h2 className="text-2xl font-semibold mb-2">{t('plansPage.pro.title')}</h2>
             <p className="text-gray-400 mb-4">{t('plansPage.pro.description')}</p>
             <span className="block text-2xl font-bold mb-4">{t('plansPage.pro.price')}</span>
+
             <button
-              onClick={() => setShowModal(true)}
-              className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl font-semibold transition"
+              onClick={() => {
+                if (!isPro) {
+                  handleProCheckout();
+                }
+              }}
+              disabled={isPro}
+              className={`px-4 py-2 rounded-xl font-semibold transition ${
+                isPro
+                  ? 'bg-gray-600 text-white cursor-not-allowed'
+                  : 'bg-[#6DAEDB] hover:bg-[#4F91C3] text-black'
+              }`}
             >
-              {t('plansPage.pro.button')}
+              {isPro ? 'Você já é assinante PRO' : t('plansPage.pro.button')}
             </button>
+
+            {isPro && (
+              <p className="text-sm text-green-400 mt-2">Obrigado por apoiar o projeto! 💙</p>
+            )}
           </div>
         </div>
       </div>
-
-      {showModal && (
-        <Modal
-          title={t('plansPage.form.title')}
-          description={
-            <CreditCardForm ref={creditCardFormRef} onClose={() => setShowModal(false)} />
-          }
-          onCancel={() => setShowModal(false)}
-          onConfirm={() => creditCardFormRef.current?.submit()}
-          confirmText={t('plansPage.form.confirm')}
-          cancelText={t('plansPage.form.cancel')}
-          size="md"
-        />
-      )}
     </PageLayout>
   );
 };

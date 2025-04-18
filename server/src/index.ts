@@ -11,6 +11,7 @@ import chatRoutes from "./routes/chatRoutes";
 import messageRoutes from "./routes/messageRoutes";
 import llmRoutes from "./routes/llmRoutes";
 import authRoutes from "./routes/authRoutes";
+import stripeRoutes from "./routes/stripeRoutes";
 
 dotenv.config();
 
@@ -43,6 +44,15 @@ app.use("/api", authRoutes);
 app.get("/", (_, res) => {
   res.send("Serena AI Backend rodando");
 });
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
+app.use("/api/stripe", stripeRoutes);
 
 
 const PORT = parseInt(process.env.PORT || '4000', 10);
