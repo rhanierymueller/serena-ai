@@ -5,6 +5,7 @@ import PlansPage from './pages/PlansPage';
 import ProfilePage from './pages/ProfilePage';
 import TermsPage from './pages/Terms';
 import AboutPage from './pages/AboutPage';
+import AuthSuccess from './pages/AuthSuccess';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Route path="/perfil" element={<ProfilePage />} />
       <Route path="/termos" element={<TermsPage />} />
       <Route path="/sobre" element={<AboutPage />} />
+      <Route path="/auth-success" element={<AuthSuccess />} />
     </Routes>
   );
 };
