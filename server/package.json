@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "prestart": "prisma migrate deploy",
     "start": "node dist/index.js",
     "build": "tsc"
   },
