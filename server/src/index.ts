@@ -5,7 +5,7 @@ import session from "express-session";
 import passport from "passport";
 import Redis from "ioredis";
 // @ts-ignore
-import connectRedis from "connect-redis";
+import connectRedis from "connect-redis"; // sem `@ts-ignore`
 
 import './auth/google.js';
 
@@ -20,13 +20,14 @@ dotenv.config();
 
 const app = express();
 
-// 🌐 Domínios permitidos (CORS)
+// 🌐 Domínios permitidos para o frontend (local + produção)
 const allowedOrigins = [
   "http://localhost:5173",
   "https://serena-ai.vercel.app",
-  "https://serena-7wvz3len9-rhaniery-muellers-projects.vercel.app",
+  "https://serena-7wvz3len9-rhaniery-muellers-projects.vercel.app", // preview
 ];
 
+// ✅ CORS configurado antes de tudo
 app.use(cors({
   origin: (origin, callback) => {
     console.log("🌐 CORS request from:", origin);
@@ -41,8 +42,8 @@ app.use(cors({
 
 app.use(express.json());
 
-// 🧠 Sessão com Redis se disponível (Railway)
-let sessionOptions: session.SessionOptions = {
+// 🔐 Sessão com Redis se disponível
+const sessionOptions: session.SessionOptions = {
   secret: process.env.SESSION_SECRET || "fallback-secret",
   resave: false,
   saveUninitialized: false,
@@ -56,18 +57,19 @@ if (process.env.REDIS_URL) {
   const RedisStore = connectRedis(session);
   const redisClient = new Redis(process.env.REDIS_URL);
 
-  redisClient.on("error", (err) => console.error("❌ Redis error:", err));
   redisClient.on("connect", () => console.log("✅ Redis conectado"));
+  redisClient.on("error", (err) => console.error("❌ Redis error:", err));
 
   sessionOptions.store = new RedisStore({ client: redisClient });
 }
 
 app.use(session(sessionOptions));
 
+// 🔐 Auth
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Rotas
+// 🧩 Rotas
 app.use("/api", userRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/messages", messageRoutes);
@@ -75,19 +77,18 @@ app.use("/api/llm", llmRoutes);
 app.use("/api", authRoutes);
 app.use("/api/stripe", stripeRoutes);
 
-// Ping
+// 🩺 Health Check
 app.get("/", (_, res) => {
-  res.send("Serena AI Backend rodando");
+  res.send("✅ Serena AI Backend rodando");
 });
 
-// 🔥 Railway define PORT automaticamente
+// 🚀 Porta (Railway já injeta automaticamente)
 const PORT = Number(process.env.PORT) || 4000;
-
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
 
-// Logs de erro globais
+// 🚨 Captura de erros não tratados
 process.on("uncaughtException", (err) => {
   console.error("🔥 Uncaught Exception:", err);
 });
