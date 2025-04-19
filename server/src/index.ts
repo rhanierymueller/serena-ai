@@ -3,8 +3,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 import session from "express-session";
 import passport from "passport";
+import Redis from "ioredis";
+// @ts-ignore
+import connectRedis from "connect-redis";
 
-import './auth/google.js'; 
+import './auth/google.js';
 
 import userRoutes from "./routes/user.js";
 import chatRoutes from "./routes/chatRoutes.js";
@@ -17,66 +20,74 @@ dotenv.config();
 
 const app = express();
 
-// ✅ Lista de domínios permitidos
+// 🌐 Domínios permitidos (CORS)
 const allowedOrigins = [
   "http://localhost:5173",
   "https://serena-ai.vercel.app",
-  "https://serena-7wvz3len9-rhaniery-muellers-projects.vercel.app", // preview
+  "https://serena-7wvz3len9-rhaniery-muellers-projects.vercel.app",
 ];
 
-// ✅ Middleware de CORS flexível
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      console.log("CORS request from:", origin);
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: (origin, callback) => {
+    console.log("🌐 CORS request from:", origin);
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+}));
 
 app.use(express.json());
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "fallback-secret",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === "production", // 🔥 importante!
-      sameSite: "none", // 🔥 obrigatório para funcionar com domínio cruzado
-    }
-  })  
-);
+// 🧠 Sessão com Redis se disponível (Railway)
+let sessionOptions: session.SessionOptions = {
+  secret: process.env.SESSION_SECRET || "fallback-secret",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
+  },
+};
+
+if (process.env.REDIS_URL) {
+  const RedisStore = connectRedis(session);
+  const redisClient = new Redis(process.env.REDIS_URL);
+
+  redisClient.on("error", (err) => console.error("❌ Redis error:", err));
+  redisClient.on("connect", () => console.log("✅ Redis conectado"));
+
+  sessionOptions.store = new RedisStore({ client: redisClient });
+}
+
+app.use(session(sessionOptions));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Rotas
 app.use("/api", userRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/messages", messageRoutes);
-app.use("/api/llm", llmRoutes); 
+app.use("/api/llm", llmRoutes);
 app.use("/api", authRoutes);
 app.use("/api/stripe", stripeRoutes);
 
-// ✅ Removido o segundo `cors` duplicado
-// ✅ Mantido apenas um middleware de CORS (acima)
-
-// Teste de rota viva
+// Ping
 app.get("/", (_, res) => {
   res.send("Serena AI Backend rodando");
 });
 
-const PORT = Number(process.env.PORT);
- 
+// 🔥 Railway define PORT automaticamente
+const PORT = Number(process.env.PORT) || 4000;
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
 
+// Logs de erro globais
 process.on("uncaughtException", (err) => {
   console.error("🔥 Uncaught Exception:", err);
 });
