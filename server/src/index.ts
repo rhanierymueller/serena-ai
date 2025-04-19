@@ -71,12 +71,11 @@ app.get("/", (_, res) => {
   res.send("Serena AI Backend rodando");
 });
 
-const PORT = parseInt(process.env.PORT || '8000', 10);
-
+const PORT = Number(process.env.PORT);
+ 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server on http://localhost:${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
-
 
 process.on("uncaughtException", (err) => {
   console.error("🔥 Uncaught Exception:", err);
