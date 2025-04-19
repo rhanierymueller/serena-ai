@@ -12,7 +12,7 @@ export async function createChat(userId: string | null) {
     body: JSON.stringify({ userId, visitorId }),
   });
 
-  if (!response.ok) throw new Error('Erro ao criar chat');
+  if (!response.ok) throw new Error('Erro ao criar chat!');
   return response.json();
 }
 
