@@ -6,6 +6,7 @@ import passport from "passport";
 import Redis from "ioredis";
 // @ts-ignore
 import connectRedis from "connect-redis";
+import { URL } from "url";
 
 import './auth/google.js';
 
@@ -22,6 +23,9 @@ const app = express();
 
 // 🚦 confiar no proxy (Railway/Vercel) para req.secure funcionar
 app.set('trust proxy', 1);
+
+// determina domínio do front para o cookie
+const clientHost = new URL(process.env.CLIENT_URL!).hostname; // ex: "serena-ai.vercel.app"
 
 // 🌐 Domínios permitidos para o frontend (local + produção)
 const allowedOrigins = [
@@ -53,6 +57,8 @@ const sessionOptions: session.SessionOptions = {
   cookie: {
     secure: process.env.NODE_ENV === "production", // só envia cookie se for HTTPS
     sameSite: "none",
+    domain: clientHost,                              // cookie válido em serena-ai.vercel.app
+    path: "/",
   },
 };
 
