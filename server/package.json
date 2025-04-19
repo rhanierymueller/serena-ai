@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js"
+    "prestart": "prisma migrate deploy",
+    "start": "node dist/index.js",
+    "build": "tsc"
   },
   "dependencies": {
     "@auth/core": "^0.38.0",
