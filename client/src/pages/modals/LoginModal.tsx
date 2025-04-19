@@ -47,7 +47,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
             <button
               type="button"
               onClick={() => {
-                window.location.href = 'http://localhost:4000/api/signin/google';
+                window.location.href = `${import.meta.env.VITE_API_URL}/api/signin/google`;
               }}
               className="flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition"
             >
