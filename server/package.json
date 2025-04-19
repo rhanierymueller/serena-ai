@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
-    "postinstall": "npm ci --omit=dev"
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@auth/core": "^0.38.0",
