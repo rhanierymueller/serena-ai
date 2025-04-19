@@ -290,12 +290,8 @@ const SerenaChat: React.FC = () => {
               </div>
             </div>
             <div className="border-t border-gray-700 p-2 sm:p-4 bg-[#1a1a1a]">
-              {isTyping && (
-                <div className="text-xs text-gray-400 mb-2 ml-1 animate-pulse">
-                  Serena está pensando...
-                </div>
-              )}
-              <div className="w-full flex flex-row items-end gap-2">
+              <div className="w-full flex flex-col sm:flex-row gap-2 items-stretch sm:items-end">
+                {/* TEXTAREA */}
                 <textarea
                   value={input}
                   onChange={e => setInput(e.target.value)}
@@ -310,24 +306,31 @@ const SerenaChat: React.FC = () => {
                   rows={2}
                   className="flex-1 text-base sm:text-sm bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
                 />
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <button
-                    onClick={() => {
-                      if (!recognitionRef.current) initSpeechRecognition();
-                      recognitionRef.current?.start();
-                    }}
-                    className={`p-3 rounded-xl transition ${isListening ? 'bg-red-500' : 'bg-[#6DAEDB]'}`}
-                    title={t('chat.startVoice')}
-                  >
-                    <Mic size={20} />
-                  </button>
-                  <button
-                    onClick={stopNarration}
-                    className={`p-3 rounded-xl transition ${isNarrating ? 'bg-yellow-500' : 'bg-gray-700'}`}
-                    title="Parar fala"
-                  >
-                    <Square size={20} />
-                  </button>
+
+                {/* BOTÕES */}
+                <div className="flex flex-row justify-between sm:justify-start sm:items-end gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+                  {/* Grupo de botões: mic + stop */}
+                  <div className="flex flex-row gap-2">
+                    <button
+                      onClick={() => {
+                        if (!recognitionRef.current) initSpeechRecognition();
+                        recognitionRef.current?.start();
+                      }}
+                      className={`p-3 rounded-xl transition ${isListening ? 'bg-red-500' : 'bg-[#6DAEDB]'}`}
+                      title={t('chat.startVoice')}
+                    >
+                      <Mic size={20} />
+                    </button>
+                    <button
+                      onClick={stopNarration}
+                      className={`p-3 rounded-xl transition ${isNarrating ? 'bg-yellow-500' : 'bg-gray-700'}`}
+                      title="Parar fala"
+                    >
+                      <Square size={20} />
+                    </button>
+                  </div>
+
+                  {/* Botão enviar */}
                   <button
                     onClick={() => handleSend(input)}
                     className="p-3 rounded-xl bg-[#6DAEDB] hover:bg-[#4F91C3] text-black transition"

@@ -160,20 +160,20 @@ const Home: React.FC = () => {
             <>
               <button
                 onClick={handleTestClick}
-                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 y-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 py-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
               >
                 {t('home.testNow')}
               </button>
 
               <button
                 onClick={() => setShowRegister(true)}
-                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 y-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 py-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
               >
                 {t('register.title')}
               </button>
               <button
                 onClick={() => setShowLogin(true)}
-                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 y-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 py-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
               >
                 {t('login.title')}
               </button>
@@ -181,7 +181,7 @@ const Home: React.FC = () => {
           ) : (
             <button
               onClick={handleTestClick}
-              className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 y-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
+              className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 py-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
             >
               {t('home.testNow')}
             </button>
