@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://serena-ai-production.up.railway.app/api/:path*"
+    }
+  ]
+}

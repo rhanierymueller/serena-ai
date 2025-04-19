@@ -26,11 +26,16 @@ const Home: React.FC = () => {
   const [showRegister, setShowRegister] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [userName, setUserName] = useState<string | null>(null);
-  const [gender, setGender] = useState<'male' | 'female' | 'other'>('other');
+
+  const storedUser = getUser();
+  const [userName, setUserName] = useState<string | null>(
+    () => storedUser?.name.split(' ')[0] ?? null
+  );
+  const [gender, setGender] = useState<'male' | 'female' | 'other'>(
+    () => storedUser?.gender ?? 'other'
+  );
 
   const { language, setLanguage, t } = useI18n();
-  const blurRef = useRef<HTMLDivElement>(null);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
   useEffect(() => {

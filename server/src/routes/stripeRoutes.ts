@@ -32,7 +32,7 @@ router.post("/create-subscription-checkout", async (req: any, res: any) => {
       line_items: [{ price: priceId, quantity: 1 }],
       customer: customer.id,
       success_url: `${process.env.CLIENT_URL}/chat`,
-      cancel_url: `${process.env.CLIENT_URL}/plans`,
+      cancel_url: `${process.env.CLIENT_URL}/planos`,
       metadata: {
         userId,
         price: priceId,
