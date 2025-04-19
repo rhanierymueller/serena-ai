@@ -7,7 +7,7 @@ export default {
         fadeOutToBlack: 'fadeOutToBlack 0.6s ease-in-out forwards',
       },
       backgroundImage: {
-        'ancient-pattern': "url('/image/ceu.png')",
+        'ancient-pattern': "url('/image/ceu.webp')",
       },
       keyframes: {
         fadeOutToBlack: {

@@ -167,5 +167,10 @@
       },
       "thanks-for-the-suport": "Obrigado por apoiar o projeto!"
     }
+  },
+  "about": {
+    "title": "Sobre o Criador",
+    "description": "Olá! Me chamo Rhaniery Mueller, fundador da Mueller Solutions. Com anos de experiência como desenvolvedor fullstack, criei o Serena AI com o objetivo de aproximar tecnologia e bem-estar mental. Acredito no poder da empatia digital e no potencial dos assistentes de voz para tornar o cuidado emocional mais acessível a todos.",
+    "backHome": "Voltar para Início"
   }
 }

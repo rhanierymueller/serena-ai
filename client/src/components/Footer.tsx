@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="flex gap-4 text-xs md:text-sm justify-center md:justify-end">
-          <a href="#" className="hover:text-white transition-colors">
+          <a href="/sobre" className="hover:text-white transition-colors">
             {t('footer.about')}
           </a>
           <a href="/termos" className="hover:text-white transition-colors">
