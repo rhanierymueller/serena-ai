@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Bot, Mic, Send, AlertTriangle, LogOut, Square } from 'lucide-react';
 import ChatSidebar from '../components/ChatSidebar';
-import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
 import { createChat, getChats } from '../services/chatService';
 import { getMessages, sendMessage } from '../services/messageService';
@@ -26,7 +25,6 @@ const SerenaChat: React.FC = () => {
   const recognitionRef = useRef<any>(null);
   const chatRef = useRef<HTMLDivElement>(null);
   const [chatId, setChatId] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   const removeEmojis = (text: string) =>
     text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD83C-\uDBFF\uDC00-\uDFFF])+/g, '');
@@ -158,7 +156,6 @@ const SerenaChat: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-[#0d0d0d] text-white">
-      {/* Sidebar desktop */}
       <div className="hidden sm:block">
         <ChatSidebar
           currentChatId={chatId}
@@ -167,7 +164,6 @@ const SerenaChat: React.FC = () => {
         />
       </div>
 
-      {/* Sidebar mobile overlay */}
       {showSidebarMobile && (
         <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex">
           <div className="w-64 bg-[#111] flex flex-col h-full">
@@ -188,9 +184,7 @@ const SerenaChat: React.FC = () => {
         </div>
       )}
 
-      {/* Main chat area */}
       <div className="flex-1 flex flex-col">
-        {/* Mobile menu button */}
         <div className="sm:hidden px-4 pt-2">
           <button
             onClick={() => setShowSidebarMobile(true)}
@@ -200,7 +194,6 @@ const SerenaChat: React.FC = () => {
           </button>
         </div>
 
-        {/* Plan label */}
         <div className="px-4 pt-2">
           <span
             className={`text-xs px-3 py-1 rounded-xl text-white ${
@@ -213,7 +206,6 @@ const SerenaChat: React.FC = () => {
         </div>
 
         {isEmpty ? (
-          /* Empty state */
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <div className="flex items-center gap-3 mb-8">
               <Bot size={56} className="text-[#6DAEDB]" />
@@ -223,7 +215,6 @@ const SerenaChat: React.FC = () => {
             </div>
             <div className="w-full max-w-lg">
               <div className="border border-gray-700 rounded-2xl bg-[#1a1a1a] p-4">
-                {/* input area empty state */}
                 <div className="w-full flex flex-row items-end gap-2">
                   <textarea
                     value={input}
@@ -263,7 +254,6 @@ const SerenaChat: React.FC = () => {
             </div>
           </div>
         ) : (
-          /* Active chat */
           <>
             <div className="flex-1 px-4 py-4">
               <div
@@ -291,7 +281,6 @@ const SerenaChat: React.FC = () => {
             </div>
             <div className="border-t border-gray-700 p-2 sm:p-4 bg-[#1a1a1a]">
               <div className="w-full flex flex-col sm:flex-row gap-2 items-stretch sm:items-end">
-                {/* TEXTAREA */}
                 <textarea
                   value={input}
                   onChange={e => setInput(e.target.value)}
@@ -307,9 +296,7 @@ const SerenaChat: React.FC = () => {
                   className="flex-1 text-base sm:text-sm bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
                 />
 
-                {/* BOTÕES */}
                 <div className="flex flex-row justify-between sm:justify-start sm:items-end gap-2 w-full sm:w-auto mt-2 sm:mt-0">
-                  {/* Grupo de botões: mic + stop */}
                   <div className="flex flex-row gap-2">
                     <button
                       onClick={() => {
@@ -330,7 +317,6 @@ const SerenaChat: React.FC = () => {
                     </button>
                   </div>
 
-                  {/* Botão enviar */}
                   <button
                     onClick={() => handleSend(input)}
                     className="p-3 rounded-xl bg-[#6DAEDB] hover:bg-[#4F91C3] text-black transition"
@@ -344,7 +330,6 @@ const SerenaChat: React.FC = () => {
           </>
         )}
 
-        {/* Warning */}
         <div className="bg-[#111] text-xs text-gray-400 text-center px-4 py-3 border-t border-gray-800 flex items-center justify-center gap-2">
           <AlertTriangle size={16} className="text-yellow-400" />
           <span>{t('chat.warning')}</span>

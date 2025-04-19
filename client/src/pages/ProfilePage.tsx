@@ -3,12 +3,14 @@ import { getUser, saveUser } from '../services/userSession';
 import { useNavigate } from 'react-router-dom';
 import PageLayout from '../components/PageLayout';
 import { BASE_URL } from '../config';
+import { useI18n } from '../i18n/I18nContext';
 
 const ProfilePage: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'info' | 'test'>('info');
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   useEffect(() => {
     const userData = getUser();
@@ -43,13 +45,11 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  if (loading || !user) return <div className="text-white p-4">Carregando...</div>;
+  if (loading || !user) return <div className="text-white p-4">{t('profile.loading')}</div>;
 
   return (
-    <PageLayout title="Meu Perfil" backTo="/">
+    <PageLayout title={t('profile.title')} backTo="/">
       <div className="bg-black/80 p-6 sm:p-8 rounded-2xl border border-gray-700 max-w-4xl w-full min-w-[620px] sm:min-w-[600px] shadow-lg mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">Meu Perfil</h1>
-
         <div className="flex gap-4 mb-6 border-b border-gray-700">
           <button
             onClick={() => setActiveTab('info')}
@@ -59,7 +59,7 @@ const ProfilePage: React.FC = () => {
                 : 'text-gray-400 hover:text-white'
             }`}
           >
-            Informações
+            {t('profile.infoTab')}
           </button>
           <button
             onClick={() => setActiveTab('test')}
@@ -69,14 +69,14 @@ const ProfilePage: React.FC = () => {
                 : 'text-gray-400 hover:text-white'
             }`}
           >
-            Meu plano
+            {t('profile.planTab')}
           </button>
         </div>
 
         {activeTab === 'info' && (
           <div className="space-y-4">
             <div>
-              <label className="block mb-1">Nome</label>
+              <label className="block mb-1">{t('profile.name')}</label>
               <input
                 type="text"
                 name="name"
@@ -86,7 +86,7 @@ const ProfilePage: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block mb-1">Email</label>
+              <label className="block mb-1">{t('profile.email')}</label>
               <input
                 type="email"
                 name="email"
@@ -96,21 +96,21 @@ const ProfilePage: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block mb-1">Gênero</label>
+              <label className="block mb-1">{t('profile.gender')}</label>
               <select
                 name="gender"
                 value={user.gender || ''}
                 onChange={handleChange}
                 className="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-600"
               >
-                <option value="">Selecionar</option>
-                <option value="male">Masculino</option>
-                <option value="female">Feminino</option>
-                <option value="other">Outro</option>
+                <option value="">{t('profile.genderOptions.select')}</option>
+                <option value="male">{t('profile.genderOptions.male')}</option>
+                <option value="female">{t('profile.genderOptions.female')}</option>
+                <option value="other">{t('profile.genderOptions.other')}</option>
               </select>
             </div>
             <div>
-              <label className="block mb-1">Plano</label>
+              <label className="block mb-1">{t('profile.plan')}</label>
               <input
                 type="text"
                 name="plan"
@@ -124,7 +124,7 @@ const ProfilePage: React.FC = () => {
               onClick={handleSave}
               className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-xl font-semibold transition-all w-full"
             >
-              Salvar Alterações
+              {t('profile.saveChanges')}
             </button>
           </div>
         )}
@@ -144,11 +144,11 @@ const ProfilePage: React.FC = () => {
                     : 'border-gray-700 bg-[#1a1a1a] hover:border-[#6DAEDB]'
                 }`}
               >
-                <h3 className="text-2xl font-semibold mb-2">Plano Gratuito</h3>
-                <p className="text-gray-400 mb-4">
-                  Ideal para quem quer experimentar com recursos limitados.
-                </p>
-                <span className="block text-2xl font-bold mb-4">R$ 0/mês</span>
+                <h3 className="text-2xl font-semibold mb-2">{t('profile.plans.free.title')}</h3>
+                <p className="text-gray-400 mb-4">{t('profile.plans.free.description')}</p>
+                <span className="block text-2xl font-bold mb-4">
+                  {t('profile.plans.free.price')}
+                </span>
               </div>
 
               <div
@@ -163,11 +163,11 @@ const ProfilePage: React.FC = () => {
                     : 'border-gray-700 bg-[#1a1a1a] hover:border-[#6DAEDB]'
                 }`}
               >
-                <h3 className="text-2xl font-semibold mb-2">Plano Pro</h3>
-                <p className="text-gray-400 mb-4">
-                  Acesso completo, respostas mais rápidas e suporte prioritário.
-                </p>
-                <span className="block text-2xl font-bold mb-4">R$ 29,90/mês</span>
+                <h3 className="text-2xl font-semibold mb-2">{t('profile.plans.pro.title')}</h3>
+                <p className="text-gray-400 mb-4">{t('profile.plans.pro.description')}</p>
+                <span className="block text-2xl font-bold mb-4">
+                  {t('profile.plans.pro.price')}
+                </span>
               </div>
             </div>
           </div>

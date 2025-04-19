@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import translations from '.';
 
 type Language = 'pt' | 'en' | 'es';
@@ -15,8 +15,28 @@ const I18nContext = createContext<I18nContextProps>({
   t: () => '',
 });
 
+const getDefaultLanguage = (): Language => {
+  const saved = localStorage.getItem('language') as Language | null;
+  if (saved) return saved;
+
+  const browserLang = navigator.language.slice(0, 2);
+  if (['pt', 'en', 'es'].includes(browserLang)) {
+    return browserLang as Language;
+  }
+
+  return 'pt';
+};
+
 export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('pt');
+  const [language, setLanguageState] = useState<Language>(getDefaultLanguage);
+
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+  };
 
   const t = (path: string) => {
     const keys = path.split('.');

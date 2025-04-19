@@ -62,7 +62,9 @@ const PlansPage: React.FC = () => {
             </button>
 
             {isPro && (
-              <p className="text-sm text-green-400 mt-2">Obrigado por apoiar o projeto! 💙</p>
+              <p className="text-sm text-green-400 mt-2">
+                {t('plansPage.thanks-for-the-suport')} 💙
+              </p>
             )}
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useI18n } from '../i18n/I18nContext';
 
 interface HeaderProps {
   title?: string;
@@ -10,6 +11,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ title, backTo, fixed = false }) => {
   const navigate = useNavigate();
+  const { t } = useI18n();
 
   return (
     <div
@@ -24,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ title, backTo, fixed = false }) => {
         className="flex items-center gap-2 bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-md font-semibold transition"
       >
         <ArrowLeft size={18} />
-        Voltar
+        {t('home.disclaimer.back')}
       </button>
 
       {title && <h2 className="text-lg font-semibold text-white">{title}</h2>}
