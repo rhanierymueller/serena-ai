@@ -24,18 +24,16 @@ export async function createUser(data: CreateUserInput) {
   return await response.json();
 }
 
-export async function loginUser(data: { email: string; password: string }) {
-  const res = await fetch(`${BASE_URL}/api/login`, {
+export async function loginUser({ email, password }: { email: string; password: string }) {
+  const res = await fetch('/api/auth/login', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
   });
-
   if (!res.ok) {
-    throw new Error('Erro ao fazer login');
+    const err = await res.json();
+    throw new Error(err.message || 'Falha no login');
   }
-
-  return await res.json();
+  return res.json();
 }
