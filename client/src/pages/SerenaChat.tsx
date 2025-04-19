@@ -39,15 +39,13 @@ const SerenaChat: React.FC = () => {
     utterance.rate = 1;
     utterance.pitch = 1;
 
-    let langCode = 'pt-BR'; // default
+    let langCode = 'pt-BR';
     if (language === 'en') langCode = 'en-US';
     if (language === 'es') langCode = 'es-ES';
-
     utterance.lang = langCode;
 
     const assignVoiceAndSpeak = () => {
       const voices = speechSynthesis.getVoices();
-
       const femaleVoiceNames = {
         'pt-BR': [
           'Luciana',
@@ -59,22 +57,16 @@ const SerenaChat: React.FC = () => {
         'es-ES': ['Conchita', 'Google español', 'es-ES-Wavenet-F'],
       } as const;
 
-      type LangCode = keyof typeof femaleVoiceNames;
+      type Lang = keyof typeof femaleVoiceNames;
+      let lc: Lang = 'pt-BR';
+      if (language === 'en') lc = 'en-US';
+      if (language === 'es') lc = 'es-ES';
 
-      let langCode: LangCode = 'pt-BR';
-      if (language === 'en') langCode = 'en-US';
-      if (language === 'es') langCode = 'es-ES';
-
-      const preferredNames = femaleVoiceNames[langCode] || [];
-
-      let preferred = voices.find(voice =>
-        preferredNames.some((name: string) => voice.name.toLowerCase().includes(name.toLowerCase()))
+      const names = femaleVoiceNames[lc] || [];
+      let preferred = voices.find(v =>
+        names.some(n => v.name.toLowerCase().includes(n.toLowerCase()))
       );
-
-      if (!preferred) {
-        preferred = voices.find(v => v.lang === langCode);
-      }
-
+      if (!preferred) preferred = voices.find(v => v.lang === lc);
       if (preferred) {
         utterance.voice = preferred;
         console.log('[🔊 Voz selecionada]', preferred.name);
@@ -103,113 +95,70 @@ const SerenaChat: React.FC = () => {
   const initSpeechRecognition = () => {
     const SpeechRecognition =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
     if (!SpeechRecognition) {
       alert('Seu navegador não suporta reconhecimento de voz.');
       return;
     }
-
     const recognition = new SpeechRecognition();
     recognition.lang = 'pt-BR';
     recognition.continuous = false;
     recognition.interimResults = false;
-
     recognition.onstart = () => setIsListening(true);
     recognition.onend = () => setIsListening(false);
-
-    recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      handleSend(transcript, true);
-    };
-
+    recognition.onresult = (e: any) => handleSend(e.results[0][0].transcript, true);
     recognitionRef.current = recognition;
   };
 
-  const handleSend = async (text: string, fromVoice: boolean = false) => {
+  const handleSend = async (text: string, fromVoice = false) => {
     if (!text.trim() || !chatId) return;
-
     const userMsg: Message = { sender: 'user', text };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
-
     await sendMessage(chatId, 'user', text);
-
-    if (plan === 'free') {
-      setIsTyping(true);
-    }
-
+    if (plan === 'free') setIsTyping(true);
     try {
       const botReply = await generateReply(chatId);
       const botMsg: Message = { sender: 'bot', text: botReply.content };
       setMessages(prev => [...prev, botMsg]);
-
-      if (fromVoice) {
-        narrateText(botReply.content);
-      }
-    } catch (error) {
-      console.error('Erro ao buscar resposta:', error);
+      if (fromVoice) narrateText(botReply.content);
+    } catch (err) {
+      console.error('Erro ao buscar resposta:', err);
     } finally {
       setIsTyping(false);
     }
   };
 
-  const scrollToBottom = () => {
-    if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
-  };
-
   useEffect(() => {
-    scrollToBottom();
+    if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
   }, [messages]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      speechSynthesis.getVoices();
-
-      if (speechSynthesis.onvoiceschanged === null) {
-        speechSynthesis.onvoiceschanged = () => {
-          speechSynthesis.getVoices();
-        };
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const initChat = async () => {
+    const init = async () => {
       const user = getUser();
-      const userId = user?.id ?? null;
-
-      if (userId) setPlan(user.plan);
-
-      const chats = await getChats(userId);
-
-      if (chats.length > 0) {
+      if (user?.plan) setPlan(user.plan);
+      const chats = await getChats(user?.id ?? null);
+      if (chats.length) {
         setChatId(chats[0].id);
-        const loadedMessages = await getMessages(chats[0].id);
+        const msgs = await getMessages(chats[0].id);
         setMessages(
-          loadedMessages.map((m: { role: string; content: any }) => ({
+          msgs.map((m: { role: string; content: any }) => ({
             sender: m.role === 'user' ? 'user' : 'bot',
             text: m.content,
           }))
         );
       } else {
-        const newChat = await createChat(userId);
+        const newChat = await createChat(user?.id ?? null);
         setChatId(newChat.id);
       }
     };
-
-    initChat();
+    init();
   }, []);
-
-  useEffect(() => {
-    if (!chatId) setMessages([]);
-  }, [chatId]);
 
   const isEmpty = messages.length === 0;
 
   return (
     <div className="flex min-h-screen bg-[#0d0d0d] text-white">
+      {/* Sidebar desktop */}
       <div className="hidden sm:block">
         <ChatSidebar
           currentChatId={chatId}
@@ -218,9 +167,10 @@ const SerenaChat: React.FC = () => {
         />
       </div>
 
+      {/* Sidebar mobile overlay */}
       {showSidebarMobile && (
         <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex">
-          <div className="w-64 bg-[#111] p-4 overflow-y-auto">
+          <div className="w-64 bg-[#111] flex flex-col h-full">
             <ChatSidebar
               currentChatId={chatId}
               onSelectChat={id => {
@@ -238,7 +188,9 @@ const SerenaChat: React.FC = () => {
         </div>
       )}
 
+      {/* Main chat area */}
       <div className="flex-1 flex flex-col">
+        {/* Mobile menu button */}
         <div className="sm:hidden px-4 pt-2">
           <button
             onClick={() => setShowSidebarMobile(true)}
@@ -248,17 +200,20 @@ const SerenaChat: React.FC = () => {
           </button>
         </div>
 
+        {/* Plan label */}
         <div className="px-4 pt-2">
           <span
             className={`text-xs px-3 py-1 rounded-xl text-white ${
               plan === 'pro' ? 'bg-[#6DAEDB] text-black' : 'bg-[#2C3E50]'
-            }`}
+            }
+          `}
           >
             {t('chat.planLabel')}: {t(`chat.plan.${plan}`)}
           </span>
         </div>
 
         {isEmpty ? (
+          /* Empty state */
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <div className="flex items-center gap-3 mb-8">
               <Bot size={56} className="text-[#6DAEDB]" />
@@ -266,10 +221,10 @@ const SerenaChat: React.FC = () => {
                 {t('header.title')}
               </h1>
             </div>
-
             <div className="w-full max-w-lg">
               <div className="border border-gray-700 rounded-2xl bg-[#1a1a1a] p-4">
-                <div className="w-full flex flex-col sm:flex-row sm:items-end gap-2">
+                {/* input area empty state */}
+                <div className="w-full flex flex-row items-end gap-2">
                   <textarea
                     value={input}
                     onChange={e => setInput(e.target.value)}
@@ -282,24 +237,22 @@ const SerenaChat: React.FC = () => {
                     maxLength={800}
                     placeholder={t('chat.placeholder')}
                     rows={2}
-                    className="text-base sm:text-sm flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
+                    className="flex-1 text-base sm:text-sm bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
                   />
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <button
                       onClick={() => {
                         if (!recognitionRef.current) initSpeechRecognition();
                         recognitionRef.current?.start();
                       }}
-                      className={`p-3 rounded-xl ${
-                        isListening ? 'bg-red-500' : 'bg-[#6DAEDB]'
-                      } transition`}
+                      className={`p-3 rounded-xl transition ${isListening ? 'bg-red-500' : 'bg-[#6DAEDB]'}`}
                       title={t('chat.startVoice')}
                     >
                       <Mic size={20} />
                     </button>
                     <button
                       onClick={() => handleSend(input)}
-                      className="bg-[#6DAEDB] hover:bg-[#4F91C3] p-3 rounded-xl text-black transition"
+                      className="p-3 rounded-xl bg-[#6DAEDB] hover:bg-[#4F91C3] text-black transition"
                       title={t('chat.send')}
                     >
                       <Send size={20} />
@@ -310,15 +263,16 @@ const SerenaChat: React.FC = () => {
             </div>
           </div>
         ) : (
+          /* Active chat */
           <>
             <div className="flex-1 px-4 py-4">
               <div
                 ref={chatRef}
                 className="max-h-[60vh] overflow-y-auto space-y-4 scroll-smooth custom-scroll px-4 py-2"
               >
-                {messages.map((msg, index) => (
+                {messages.map((msg, idx) => (
                   <div
-                    key={index}
+                    key={idx}
                     className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
@@ -328,20 +282,20 @@ const SerenaChat: React.FC = () => {
                           : 'bg-[#2C3E50] text-[#E0ECF1]'
                       }`}
                     >
-                      {msg.text}
+                      {' '}
+                      {msg.text}{' '}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-
             <div className="border-t border-gray-700 p-2 sm:p-4 bg-[#1a1a1a]">
               {isTyping && (
                 <div className="text-xs text-gray-400 mb-2 ml-1 animate-pulse">
                   Serena está pensando...
                 </div>
               )}
-              <div className="w-full flex flex-col sm:flex-row sm:items-end gap-2">
+              <div className="w-full flex flex-row items-end gap-2">
                 <textarea
                   value={input}
                   onChange={e => setInput(e.target.value)}
@@ -354,31 +308,29 @@ const SerenaChat: React.FC = () => {
                   maxLength={800}
                   placeholder={t('chat.placeholder')}
                   rows={2}
-                  className="text-base sm:text-sm flex-1 bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
+                  className="flex-1 text-base sm:text-sm bg-[#1f2d36] border border-[#2a3b47] text-white placeholder-[#AAB9C3] rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] resize-none"
                 />
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <button
                     onClick={() => {
                       if (!recognitionRef.current) initSpeechRecognition();
                       recognitionRef.current?.start();
                     }}
-                    className={`p-3 rounded-xl ${isListening ? 'bg-red-500' : 'bg-[#6DAEDB]'} transition`}
+                    className={`p-3 rounded-xl transition ${isListening ? 'bg-red-500' : 'bg-[#6DAEDB]'}`}
                     title={t('chat.startVoice')}
                   >
                     <Mic size={20} />
                   </button>
-
                   <button
                     onClick={stopNarration}
-                    className={`p-3 rounded-xl ${isNarrating ? 'bg-yellow-500' : 'bg-gray-700'} transition`}
+                    className={`p-3 rounded-xl transition ${isNarrating ? 'bg-yellow-500' : 'bg-gray-700'}`}
                     title="Parar fala"
                   >
                     <Square size={20} />
                   </button>
-
                   <button
                     onClick={() => handleSend(input)}
-                    className="bg-[#6DAEDB] hover:bg-[#4F91C3] p-3 rounded-xl text-black transition"
+                    className="p-3 rounded-xl bg-[#6DAEDB] hover:bg-[#4F91C3] text-black transition"
                     title={t('chat.send')}
                   >
                     <Send size={20} />
@@ -389,6 +341,7 @@ const SerenaChat: React.FC = () => {
           </>
         )}
 
+        {/* Warning */}
         <div className="bg-[#111] text-xs text-gray-400 text-center px-4 py-3 border-t border-gray-800 flex items-center justify-center gap-2">
           <AlertTriangle size={16} className="text-yellow-400" />
           <span>{t('chat.warning')}</span>
