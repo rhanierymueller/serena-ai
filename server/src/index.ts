@@ -5,7 +5,7 @@ import session from "express-session";
 import passport from "passport";
 import Redis from "ioredis";
 // @ts-ignore
-import connectRedis from "connect-redis"; // sem `@ts-ignore`
+import connectRedis from "connect-redis";
 
 import './auth/google.js';
 
@@ -20,11 +20,14 @@ dotenv.config();
 
 const app = express();
 
+// 🚦 confiar no proxy (Railway/Vercel) para req.secure funcionar
+app.set('trust proxy', 1);
+
 // 🌐 Domínios permitidos para o frontend (local + produção)
 const allowedOrigins = [
   "http://localhost:5173",
   "https://serena-ai.vercel.app",
-  "https://serena-7wvz3len9-rhaniery-muellers-projects.vercel.app", // preview
+  "https://serena-7wvz3len9-rhaniery-muellers-projects.vercel.app",
 ];
 
 // ✅ CORS configurado antes de tudo
@@ -48,7 +51,7 @@ const sessionOptions: session.SessionOptions = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production", // só envia cookie se for HTTPS
     sameSite: "none",
   },
 };
