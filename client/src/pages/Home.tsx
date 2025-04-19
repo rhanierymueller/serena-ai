@@ -100,11 +100,10 @@ const Home: React.FC = () => {
         <div className="fixed inset-0 z-50 bg-[#0d0d0d] animate-fadeOutToBlack pointer-events-none" />
       )}
 
-      {/* Fundo animado fixo */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: "url('/image/ceu.png')",
+          backgroundImage: "url('/image/ceu.webp')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           WebkitMaskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
@@ -119,7 +118,7 @@ const Home: React.FC = () => {
             onClick={() => navigate('/perfil')}
             className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"
           >
-            Meu Perfil
+            {t('home.myProfile')}
           </button>
         )}
         <button

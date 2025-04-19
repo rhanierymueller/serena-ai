@@ -69,7 +69,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
                   d="M43.611 20.083H42V20H24v8h11.283c-1.003 2.803-3.02 5.146-5.602 6.499.001-.001 6.351 5.407 6.351 5.407C40.926 36.725 44 30.909 44 24c0-1.341-.138-2.65-.389-3.917z"
                 />
               </svg>
-              <span>Entrar com Google</span>
+              <span>{t('login.googleAuth')}</span>
             </button>
           </div>
           <div>

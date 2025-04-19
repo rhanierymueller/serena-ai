@@ -13,6 +13,7 @@
     "logoutCancel": "Cancel",
     "logoutConfirmBtn": "Yes, logout",
     "plans": "Plans",
+    "myProfile": "My profile",
     "disclaimer": {
       "title": "Disclaimer",
       "text": "Serena AI is a virtual assistant for informational and empathetic listening purposes. It does not replace professional care from psychologists, therapists, or psychiatrists. If you are going through a difficult time, please seek specialized medical help.",
@@ -49,7 +50,8 @@
     "deleteConfirmDescription": "Are you sure you want to delete this conversation? This action cannot be undone.",
     "deleteConfirmBtn": "Delete",
     "cancel": "Cancel",
-    "menu": "Menu"
+    "menu": "Menu",
+    "exit": "Exit"
   },
   "register": {
     "title": "Create Account",
@@ -85,7 +87,8 @@
     "notARobot": "I am not a robot",
     "email": "Email",
     "password": "Password",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "googleAuth": "Enter with Google"
   },
   "plansPage": {
     "title": "Choose your plan",
@@ -135,5 +138,40 @@
     "agreement": "Using the service implies full acceptance of these terms. If you do not agree, please do not use Serena AI.",
     "changes": "We reserve the right to update the terms at any time. Check this page periodically to stay informed about changes.",
     "lastUpdate": "Last updated: April 2025."
+  },
+  "profile": {
+    "title": "My Profile",
+    "infoTab": "Information",
+    "planTab": "My Plan",
+    "name": "Name",
+    "email": "Email",
+    "gender": "Gender",
+    "genderOptions": {
+      "select": "Select",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "plan": "Plan",
+    "saveChanges": "Save Changes",
+    "loading": "Loading...",
+    "plans": {
+      "free": {
+        "title": "Free Plan",
+        "description": "Ideal for those who want to try with limited features.",
+        "price": "R$ 0/month"
+      },
+      "pro": {
+        "title": "Pro Plan",
+        "description": "Full access, faster responses, and priority support.",
+        "price": "R$ 29.90/month"
+      },
+      "thanks-for-the-suport": "Thank you for supporting the project!"
+    }
+  },
+  "about": {
+    "title": "About the Creator",
+    "description": "Hi! My name is Rhaniery Mueller, founder of Mueller Solutions. With years of experience as a fullstack developer, I created Serena AI to bring technology and mental well-being closer together. I believe in the power of digital empathy and the potential of voice assistants to make emotional care more accessible to everyone.",
+    "backHome": "Back to Home"
   }
 }
