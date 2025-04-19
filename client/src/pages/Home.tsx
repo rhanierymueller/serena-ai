@@ -100,11 +100,10 @@ const Home: React.FC = () => {
         <div className="fixed inset-0 z-50 bg-[#0d0d0d] animate-fadeOutToBlack pointer-events-none" />
       )}
 
-      {/* Fundo animado fixo */}
       <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: "url('/image/ceu.png')",
+          backgroundImage: "url('/image/ceu.webp')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           WebkitMaskImage: `radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, white 0%, transparent 100%)`,
