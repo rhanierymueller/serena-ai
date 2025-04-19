@@ -56,8 +56,7 @@ const sessionOptions: session.SessionOptions = {
   saveUninitialized: false,
   cookie: {
     secure: process.env.NODE_ENV === "production", // só envia cookie se for HTTPS
-    sameSite: "none",
-    domain: clientHost,                              // cookie válido em serena-ai.vercel.app
+    sameSite: "none",                            // cookie válido em serena-ai.vercel.app
     path: "/",
   },
 };
