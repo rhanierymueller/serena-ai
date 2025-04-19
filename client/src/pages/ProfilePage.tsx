@@ -27,7 +27,7 @@ const ProfilePage: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      const res = await fetch(`/api/users/${user.id}`, {
+      const res = await fetch(`${BASE_URL}/api/users/${user.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
