@@ -272,14 +272,18 @@ const SerenaChat: React.FC = () => {
                           : 'bg-[#2C3E50] text-[#E0ECF1]'
                       }`}
                     >
-                      {' '}
-                      {msg.text}{' '}
+                      {msg.text}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
             <div className="border-t border-gray-700 p-2 sm:p-4 bg-[#1a1a1a]">
+              {isTyping && (
+                <div className="text-xs text-gray-400 mb-2 ml-1 animate-pulse">
+                  {t('chat.typing')}
+                </div>
+              )}
               <div className="w-full flex flex-col sm:flex-row gap-2 items-stretch sm:items-end">
                 <textarea
                   value={input}
