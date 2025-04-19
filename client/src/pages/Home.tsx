@@ -65,7 +65,7 @@ const Home: React.FC = () => {
 
   const updateUserState = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/me`, {
+      const res = await fetch('/api/auth/me', {
         credentials: 'include',
       });
 
