@@ -3,15 +3,19 @@ import { BASE_URL } from '../config'; // 👈 novo
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUB_KEY!);
 
-export async function handleStripeSubscriptionCheckout(userId: string, email: string) {
+export async function handleStripeSubscriptionCheckout(
+  userId: string,
+  email: string,
+  tokenAmount: number
+) {
   try {
-    const res = await fetch(`${BASE_URL}/api/stripe/create-subscription-checkout`, {
+    const res = await fetch(`${BASE_URL}/api/stripe/create-token-checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        priceId: 'price_1RFKKN2ckL60RGGGQDkXBHt8',
         userId,
         userEmail: email,
+        tokenAmount,
       }),
     });
 

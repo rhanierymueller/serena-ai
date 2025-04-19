@@ -3,6 +3,7 @@ import { prisma } from "../lib/prisma.js";
 import { openai } from "../lib/openai.js";
 import { callOpenRouter } from "../lib/openrouter.js";
 import { ChatCompletionMessageParam } from "openai/resources/chat";
+import { canUseTokens, consumeTokens } from "../lib/token.js";
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.post("/", async (req: any, res: any) => {
 
     if (!chat) return res.status(404).json({ error: "Chat não encontrado" });
 
-    const history: ChatCompletionMessageParam[] = chat.messages.map((m) => ({
+    const history: ChatCompletionMessageParam[] = chat.messages.map((m: { role: string; content: any; }) => ({
       role: m.role === "assistant" ? "assistant" : "user",
       content: typeof m.content === "string" ? m.content : "[mensagem inválida]",
     }));
@@ -29,24 +30,38 @@ router.post("/", async (req: any, res: any) => {
       ...history,
     ];
 
-    let reply: string;
-
     const isPro = chat.user?.plan === "pro";
 
+    let reply: string;
+
     if (isPro) {
+      if (!chat.user) {
+        return res.status(401).json({ error: "Usuário não encontrado para este chat." });
+      }
+    
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
         messages,
       });
-
-  reply = completion.choices[0].message.content || "Desculpe, não entendi.";
-} else {
-  reply = await callOpenRouter(
-    history.map(m => ({
-      role: m.role,
-      content: typeof m.content === "string" ? m.content : "[mensagem não suportada]",
-    }))
-  );}
+    
+      const used = completion.usage?.total_tokens || 0;
+    
+      const allowed = await canUseTokens(chat.user.id, used);
+      if (!allowed) {
+        return res.status(403).json({ error: "Você atingiu o limite de tokens do plano" });
+      }
+    
+      await consumeTokens(chat.user.id, used);
+    
+      reply = completion.choices[0].message.content || "Desculpe, não entendi.";
+    } else {
+      reply = await callOpenRouter(
+        history.map(m => ({
+          role: m.role,
+          content: typeof m.content === "string" ? m.content : "[mensagem não suportada]",
+        }))
+      );
+    }
 
     const saved = await prisma.message.create({
       data: {

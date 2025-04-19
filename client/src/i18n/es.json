@@ -41,7 +41,8 @@
     "plan": {
       "pro": "Pro",
       "free": "Gratuito"
-    }
+    },
+    "tokensRemaining": "Tokens restantes"
   },
   "sidebar": {
     "newConversation": "Nueva conversación",
@@ -93,7 +94,17 @@
   },
   "plansPage": {
     "title": "Elige tu plan",
-    "subtitle": "Disfruta lo mejor de Serena AI",
+    "subtitle": "Tokens para usar Serena AI como quieras",
+    "tokens": "tokens",
+    "validFor": "Válido hasta que se usen.",
+    "tokenBasedUsage": "Uso basado en créditos de IA",
+    "buyNow": "Comprar ahora",
+    "loginRequired": "Debes iniciar sesión para comprar.",
+    "currentPlan": "Tu plan actual",
+    "youHave": "Tienes",
+    "tokensLeft": "tokens restantes",
+    "freePlan": "Plan gratuito (uso limitado)",
+    "tokenBased": "uso basado en créditos",
     "free": {
       "title": "Gratis",
       "description": "Acceso limitado al chat",

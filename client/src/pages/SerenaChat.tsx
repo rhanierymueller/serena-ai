@@ -6,6 +6,7 @@ import { createChat, getChats } from '../services/chatService';
 import { getMessages, sendMessage } from '../services/messageService';
 import { getUser } from '../services/userSession';
 import { generateReply } from '../services/llmService';
+import { useUserTokens } from '../hooks/useUserTokens';
 
 interface Message {
   sender: 'user' | 'bot';
@@ -14,6 +15,8 @@ interface Message {
 
 const SerenaChat: React.FC = () => {
   const { t, language } = useI18n();
+  const { total, used, refetchTokens } = useUserTokens();
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [plan, setPlan] = useState<'pro' | 'free'>('free');
@@ -118,6 +121,7 @@ const SerenaChat: React.FC = () => {
       const botReply = await generateReply(chatId);
       const botMsg: Message = { sender: 'bot', text: botReply.content };
       setMessages(prev => [...prev, botMsg]);
+      await refetchTokens();
       if (fromVoice) narrateText(botReply.content);
     } catch (err) {
       console.error('Erro ao buscar resposta:', err);
@@ -204,6 +208,16 @@ const SerenaChat: React.FC = () => {
             {t('chat.planLabel')}: {t(`chat.plan.${plan}`)}
           </span>
         </div>
+
+        {plan === 'pro' && (
+          <div className="px-4 mt-2">
+            <div className="flex items-center gap-2 text-xs bg-[#1f2d36] border border-[#2a3b47] text-[#AAB9C3] rounded-xl px-3 py-2 w-fit shadow-sm">
+              <span className="font-medium">{t('chat.tokensRemaining')}:</span>
+              <span className="text-white font-bold">{total - used}</span>
+              <span className="text-[#AAB9C3]">/ {total}</span>
+            </div>
+          </div>
+        )}
 
         {isEmpty ? (
           <div className="flex-1 flex flex-col items-center justify-center px-4">

@@ -8,34 +8,44 @@ datasource db {
 }
 
 model User {
-  id                 String   @id @default(uuid())
-  name               String
-  email              String   @unique
-  gender             String?
-  plan               String   @default("free")
-  password           String?             
-  provider           String   @default("credentials")
-  stripeCustomerId   String?
-  createdAt          DateTime @default(now())
-  chats              Chat[]
+  id               String   @id @default(uuid())
+  name             String
+  email            String   @unique
+  gender           String?
+  createdAt        DateTime @default(now())
+  password         String?
+  plan             String   @default("free")
+  provider         String   @default("credentials")
+  stripeCustomerId String?
+  chats            Chat[]
+  token            UserToken?
+}
+
+model UserToken {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique
+  total     Int
+  used      Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Chat {
-  id         String     @id @default(uuid())
-  user       User?      @relation(fields: [userId], references: [id])
-  userId     String?   
-  visitorId  String?   
-  title      String?    @default("Nova conversa")
-  messages   Message[]
-  createdAt  DateTime   @default(now())
+  id        String    @id @default(uuid())
+  userId    String?
+  createdAt DateTime  @default(now())
+  title     String?   @default("Nova conversa")
+  visitorId String?
+  user      User?     @relation(fields: [userId], references: [id])
+  messages  Message[]
 }
-
 
 model Message {
   id        String   @id @default(uuid())
-  chat      Chat     @relation(fields: [chatId], references: [id])
   chatId    String
   role      String
   content   String
   createdAt DateTime @default(now())
+  chat      Chat     @relation(fields: [chatId], references: [id])
 }

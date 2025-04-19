@@ -1,8 +1,6 @@
-// src/routes/stripeWebhook.ts
-
 import express from "express";
 import type Stripe from "stripe";
-import { prisma } from "../lib/prisma.js"; // 👈 precisa importar o Prisma client
+import { prisma } from "../lib/prisma.js";
 import stripe from "../lib/stripe.js";
 
 const router = express.Router();
@@ -28,60 +26,54 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req: a
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // 🔁 Eventos tratados
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
 
       const userId = session.metadata?.userId;
-      const subscriptionId = session.subscription?.toString();
+      const tokenAmount = Number(session.metadata?.tokenAmount);
 
-      if (!userId) {
-        console.warn("⚠️ userId não encontrado na metadata do checkout");
+      if (!userId || !tokenAmount) {
+        console.warn("⚠️ Metadata ausente na sessão:", session.metadata);
         break;
       }
-  
-      console.log("✅ Assinatura criada com sucesso:", {
+
+      console.log("💳 Compra concluída - adicionando tokens:", {
         userId,
-        subscriptionId,
+        tokenAmount,
       });
 
       try {
-        await prisma.user.update({
-          where: { id: userId },
-          data: {
-            plan: "pro",
-          },
+        // Verifica se o usuário já tem entrada de tokens
+        const existing = await prisma.userToken.findUnique({
+          where: { userId },
         });
+
+        if (existing) {
+          await prisma.userToken.update({
+            where: { userId },
+            data: { total: existing.total + tokenAmount },
+          });
+        } else {
+          await prisma.userToken.create({
+            data: {
+              userId,
+              total: tokenAmount,
+              used: 0,
+            },
+          });
+        }
+
+        console.log("✅ Tokens adicionados com sucesso.");
       } catch (err) {
-        console.error("Erro ao atualizar plano do usuário:", err);
-      }
-
-      break;
-    }
-
-    case "customer.subscription.deleted": {
-      const subscription = event.data.object as Stripe.Subscription;
-      const customerId = subscription.customer as string;
-
-      console.log("🚫 Assinatura cancelada:", customerId);
-
-      try {
-        await prisma.user.updateMany({
-          where: { stripeCustomerId: customerId },
-          data: {
-            plan: "free",
-          },
-        });
-      } catch (err) {
-        console.error("Erro ao rebaixar plano do usuário:", err);
+        console.error("❌ Erro ao adicionar tokens:", err);
       }
 
       break;
     }
 
     default:
-      console.log(`ℹ️ Evento não tratado: ${event.type}`);
+      console.log(`ℹ️ Evento ignorado: ${event.type}`);
   }
 
   res.status(200).json({ received: true });

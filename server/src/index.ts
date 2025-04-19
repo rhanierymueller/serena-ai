@@ -16,6 +16,7 @@ import messageRoutes from "./routes/messageRoutes.js";
 import llmRoutes from "./routes/llmRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import stripeRoutes from "./routes/stripeRoutes.js";
+import tokenRoutes from "./routes/tokenRoutes.js";
 
 dotenv.config();
 
@@ -84,6 +85,7 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/llm", llmRoutes);
 app.use("/api", authRoutes);
 app.use("/api/stripe", stripeRoutes);
+app.use("/api/tokens", tokenRoutes);
 
 // 🩺 Health Check
 app.get("/", (_, res) => {

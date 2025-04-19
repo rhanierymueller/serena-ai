@@ -40,7 +40,8 @@
     "plan": {
       "pro": "Pro",
       "free": "Free"
-    }
+    },
+    "tokensRemaining": "Tokens remaining"
   },
   "sidebar": {
     "newConversation": "New conversation",
@@ -93,7 +94,19 @@
   },
   "plansPage": {
     "title": "Choose your plan",
-    "subtitle": "Enjoy the best of Serena AI",
+    "subtitle": "Tokens to use Serena AI however you want",
+    "tokens": "tokens",
+    "validFor": "Valid until used.",
+    "tokenBasedUsage": "Usage based on AI credits",
+    "buyNow": "Buy now",
+    "loginRequired": "You need to be logged in to purchase.",
+    "currentPlan": "Your current plan",
+    "youHave": "You have",
+    "tokensLeft": "tokens left",
+    "freePlan": "Free plan (limited use)",
+    "subscriptionPlan": "Assinatura Pro",
+    "unlimitedUsage": "uso ilimitado",
+    "tokenBased": "usage based on credits",
     "free": {
       "title": "Free",
       "description": "Limited access to the chat",
