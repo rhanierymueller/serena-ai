@@ -5,7 +5,7 @@ import session from "express-session";
 import passport from "passport";
 import Redis from "ioredis";
 // @ts-ignore
-import connectRedis from "connect-redis/esm.js";
+import connectRedis from "connect-redis";
 
 import './auth/google.js';
 
