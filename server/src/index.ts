@@ -17,12 +17,23 @@ dotenv.config();
 
 const app = express();
 
+// ✅ Lista de domínios permitidos
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://serena-ai.vercel.app",
+  "https://serena-7wvz3len9-rhaniery-muellers-projects.vercel.app", // preview
+];
+
+// ✅ Middleware de CORS flexível
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://serena-ai.vercel.app",
-    ],
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
@@ -45,20 +56,15 @@ app.use("/api/chats", chatRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/llm", llmRoutes); 
 app.use("/api", authRoutes);
+app.use("/api/stripe", stripeRoutes);
 
+// ✅ Removido o segundo `cors` duplicado
+// ✅ Mantido apenas um middleware de CORS (acima)
+
+// Teste de rota viva
 app.get("/", (_, res) => {
   res.send("Serena AI Backend rodando");
 });
-
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
-
-app.use("/api/stripe", stripeRoutes);
-
 
 const PORT = parseInt(process.env.PORT || '4000', 10);
 
