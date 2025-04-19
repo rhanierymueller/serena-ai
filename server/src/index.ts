@@ -13,14 +13,6 @@ import llmRoutes from "./routes/llmRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import stripeRoutes from "./routes/stripeRoutes.js";
 
-process.on("uncaughtException", (err) => {
-  console.error("🔥 Uncaught Exception:", err);
-});
-
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("🔥 Unhandled Rejection:", reason);
-});
-
 dotenv.config();
 
 const app = express();
@@ -79,8 +71,17 @@ app.get("/", (_, res) => {
   res.send("Serena AI Backend rodando");
 });
 
-const PORT = parseInt(process.env.PORT || '4000', 10);
+const PORT = parseInt(process.env.PORT || '8000', 10);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server on http://localhost:${PORT}`);
+});
+
+
+process.on("uncaughtException", (err) => {
+  console.error("🔥 Uncaught Exception:", err);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("💥 Unhandled Rejection:", reason);
 });
