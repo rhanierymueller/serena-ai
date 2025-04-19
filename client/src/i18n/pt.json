@@ -13,6 +13,7 @@
     "logoutCancel": "Cancelar",
     "logoutConfirmBtn": "Sim, sair",
     "plans": "Planos",
+    "myProfile": "Meu perfil",
     "disclaimer": {
       "title": "Termo de responsabilidade",
       "text": "A Serena AI é um assistente virtual com fins informativos e de escuta empática. Ela não substitui atendimento profissional com psicólogos, terapeutas ou psiquiatras. Se você estiver passando por uma situação difícil, procure ajuda médica especializada.",
@@ -49,7 +50,8 @@
     "deleteConfirmDescription": "Você tem certeza que deseja excluir essa conversa? Essa ação não poderá ser desfeita.",
     "deleteConfirmBtn": "Excluir",
     "cancel": "Cancelar",
-    "menu": "Menu"
+    "menu": "Menu",
+    "exit": "Salir"
   },
   "register": {
     "title": "Criar conta",
@@ -85,7 +87,8 @@
     "notARobot": "Não sou um robô",
     "email": "E-mail",
     "password": "Senha",
-    "confirm": "Confirmar"
+    "confirm": "Confirmar",
+    "googleAuth": "Entrar com o Google"
   },
   "plansPage": {
     "title": "Escolha seu plano",
@@ -134,5 +137,35 @@
     "agreement": "O uso do serviço implica na aceitação integral destes termos. Caso não concorde, por favor, não utilize o Serena AI.",
     "changes": "Reservamo-nos o direito de atualizar os termos a qualquer momento. Verifique esta página periodicamente para estar ciente de mudanças.",
     "lastUpdate": "Última atualização: Abril de 2025."
+  },
+  "profile": {
+    "title": "Meu Perfil",
+    "infoTab": "Informações",
+    "planTab": "Meu plano",
+    "name": "Nome",
+    "email": "Email",
+    "gender": "Gênero",
+    "genderOptions": {
+      "select": "Selecionar",
+      "male": "Masculino",
+      "female": "Feminino",
+      "other": "Outro"
+    },
+    "plan": "Plano",
+    "saveChanges": "Salvar Alterações",
+    "loading": "Carregando...",
+    "plans": {
+      "free": {
+        "title": "Plano Gratuito",
+        "description": "Ideal para quem quer experimentar com recursos limitados.",
+        "price": "R$ 0/mês"
+      },
+      "pro": {
+        "title": "Plano Pro",
+        "description": "Acesso completo, respostas mais rápidas e suporte prioritário.",
+        "price": "R$ 29,90/mês"
+      },
+      "thanks-for-the-suport": "Obrigado por apoiar o projeto!"
+    }
   }
 }

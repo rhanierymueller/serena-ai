@@ -119,7 +119,7 @@ const Home: React.FC = () => {
             onClick={() => navigate('/perfil')}
             className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"
           >
-            Meu Perfil
+            {t('home.myProfile')}
           </button>
         )}
         <button
