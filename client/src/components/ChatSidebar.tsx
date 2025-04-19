@@ -146,13 +146,13 @@ const ChatSidebar: React.FC<{
               className="w-full flex items-center gap-2 px-3 py-2 bg-[#6DAEDB] hover:bg-[#4F91C3] text-black rounded-lg text-sm transition"
             >
               <LogOut size={16} />
-              <span>Sair</span>
+              <span>{t('sidebar.exit')}</span>
             </button>
           ) : (
             <button
               onClick={() => navigate('/')}
               className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black p-2 rounded-full transition"
-              title="Sair"
+              title={t('sidebar.exit')}
             >
               <LogOut size={16} />
             </button>
