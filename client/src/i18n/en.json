@@ -13,6 +13,8 @@
     "logoutCancel": "Cancel",
     "logoutConfirmBtn": "Yes, logout",
     "plans": "Plans",
+    "moodTracker": "Mood Journal",
+    "breathing": "Guided Breathing",
     "myProfile": "My profile",
     "disclaimer": {
       "title": "Disclaimer",
@@ -196,5 +198,34 @@
     "title": "About the Creator",
     "description": "Hi! My name is Rhaniery Mueller, founder of Mueller Solutions. With years of experience as a fullstack developer, I created Serena AI to bring technology and mental well-being closer together. I believe in the power of digital empathy and the potential of voice assistants to make emotional care more accessible to everyone.",
     "backHome": "Back to Home"
+  },
+  "moodTracker": {
+    "title": "Mood Journal",
+    "subtitle": "Track how you're feeling daily.",
+    "howDoYouFeel": "How are you feeling today?",
+    "intensity": "Intensity",
+    "notePlaceholder": "Want to express something?",
+    "save": "Save",
+    "saving": "Saving...",
+    "historyTitle": "Emotional History",
+    "select": "Select",
+    "moods": {
+      "happy": "Happy",
+      "sad": "Sad",
+      "anxious": "Anxious",
+      "calm": "Calm",
+      "angry": "Angry",
+      "tired": "Tired",
+      "motivated": "Motivated",
+      "stressed": "Stressed"
+    }
+  },
+  "breathing": {
+    "start": "Start",
+    "stop": "Stop",
+    "title": "Breathing Exercise",
+    "inhale": "Breathe in deeply",
+    "hold": "Hold your breath",
+    "exhale": "Breathe out slowly"
   }
 }

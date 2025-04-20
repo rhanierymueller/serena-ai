@@ -15,6 +15,8 @@
     "gender": "Género",
     "plans": "Planes",
     "myProfile": "Mi perfil",
+    "moodTracker": "Diario Emocional",
+    "breathing": "Respiración Guiada",
     "disclaimer": {
       "title": "Término de responsabilidad",
       "text": "Serena AI es un asistente virtual con fines informativos y de escucha empática. No reemplaza el acompañamiento profesional de psicólogos, terapeutas o psiquiatras. Si estás pasando por un momento difícil, busca ayuda médica especializada.",
@@ -195,5 +197,34 @@
     "title": "Sobre el Creador",
     "description": "¡Hola! Me llamo Rhaniery Mueller, fundador de Mueller Solutions. Con años de experiencia como desarrollador fullstack, creé Serena AI con el objetivo de acercar la tecnología al bienestar mental. Creo en el poder de la empatía digital y en el potencial de los asistentes de voz para hacer que el cuidado emocional sea más accesible para todos.",
     "backHome": "Volver al Inicio"
+  },
+  "moodTracker": {
+    "title": "Diario Emocional",
+    "subtitle": "Registra cómo te sientes cada día.",
+    "howDoYouFeel": "¿Cómo te sientes hoy?",
+    "intensity": "Intensidad",
+    "notePlaceholder": "¿Quieres expresarte?",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "historyTitle": "Historial Emocional",
+    "select": "Seleccionar",
+    "moods": {
+      "happy": "Feliz",
+      "sad": "Triste",
+      "anxious": "Ansioso",
+      "calm": "Tranquilo",
+      "angry": "Enojado",
+      "tired": "Cansado",
+      "motivated": "Motivado",
+      "stressed": "Estresado"
+    }
+  },
+  "breathing": {
+    "start": "Iniciar",
+    "stop": "Detener",
+    "title": "Ejercicio de Respiración",
+    "inhale": "Inhala profundamente",
+    "hold": "Sostén la respiración",
+    "exhale": "Exhala lentamente"
   }
 }

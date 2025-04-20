@@ -8,17 +8,28 @@ datasource db {
 }
 
 model User {
-  id               String   @id @default(uuid())
+  id               String        @id @default(uuid())
   name             String
-  email            String   @unique
+  email            String        @unique
   gender           String?
-  createdAt        DateTime @default(now())
+  createdAt        DateTime      @default(now())
   password         String?
-  plan             String   @default("free")
-  provider         String   @default("credentials")
+  plan             String        @default("free")
+  provider         String        @default("credentials")
   stripeCustomerId String?
   chats            Chat[]
   token            UserToken?
+  moodEntries      MoodEntry[]
+}
+
+model MoodEntry {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  mood      String
+  intensity Int
+  note      String?
+  createdAt DateTime @default(now())
 }
 
 model UserToken {
