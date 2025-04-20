@@ -1,30 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bot } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
 import Modal from '../components/Modal';
-import Select from '../components/Select';
 import Footer from '../components/Footer';
 import RegisterModal from './modals/RegisterModal';
 import LoginModal from './modals/LoginModal';
 import { TypingText } from '../components/TypingText';
-import { clearUser, getUser, saveUser } from '../services/userSession';
+import { getUser, saveUser } from '../services/userSession';
 import { BASE_URL } from '../config';
-
-type Language = 'pt' | 'en' | 'es';
-
-const languageOptions: { value: Language; label: string }[] = [
-  { value: 'pt', label: 'Português' },
-  { value: 'en', label: 'English' },
-  { value: 'es', label: 'Español' },
-];
+import Header from '../components/Header';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
   const storedUser = getUser();
@@ -35,7 +27,6 @@ const Home: React.FC = () => {
     () => storedUser?.gender ?? 'other'
   );
 
-  const { language, setLanguage, t } = useI18n();
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -112,31 +103,7 @@ const Home: React.FC = () => {
         }}
       />
 
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-4">
-        {userName && (
-          <button
-            onClick={() => navigate('/perfil')}
-            className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"
-          >
-            {t('home.myProfile')}
-          </button>
-        )}
-        <button
-          onClick={() => navigate('/planos')}
-          className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl text-sm font-semibold transition-all"
-        >
-          {t('home.plans')}
-        </button>
-        <Select value={language} onChange={setLanguage} options={languageOptions} />
-        {userName && (
-          <button
-            onClick={() => setShowLogoutModal(true)}
-            className="text-sm text-gray-400 hover:text-white transition"
-          >
-            {t('home.logout')}
-          </button>
-        )}
-      </div>
+      <Header fixed showMenu onLogoutSuccess={() => setUserName(null)} />
 
       <main className="flex-1 flex flex-col items-center justify-center z-10 px-4">
         <div className="flex items-center gap-3 mb-8">
@@ -159,20 +126,21 @@ const Home: React.FC = () => {
             <>
               <button
                 onClick={handleTestClick}
-                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 py-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
               >
                 {t('home.testNow')}
               </button>
 
               <button
                 onClick={() => setShowRegister(true)}
-                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 py-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
               >
                 {t('register.title')}
               </button>
+
               <button
                 onClick={() => setShowLogin(true)}
-                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 py-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
               >
                 {t('login.title')}
               </button>
@@ -180,7 +148,7 @@ const Home: React.FC = () => {
           ) : (
             <button
               onClick={handleTestClick}
-              className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-3 sm:px-6 py-2 sm:py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
+              className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
             >
               {t('home.testNow')}
             </button>
@@ -205,22 +173,6 @@ const Home: React.FC = () => {
       )}
 
       {showRegister && <RegisterModal onClose={handleRegisterSuccess} />}
-
-      {showLogoutModal && (
-        <Modal
-          title={t('home.logoutTitle')}
-          description={t('home.logoutConfirm')}
-          onCancel={() => setShowLogoutModal(false)}
-          onConfirm={() => {
-            clearUser();
-            setUserName(null);
-            setShowLogoutModal(false);
-          }}
-          cancelText={t('home.logoutCancel')}
-          confirmText={t('home.logoutConfirmBtn')}
-          size="sm"
-        />
-      )}
 
       {showLogin && (
         <LoginModal

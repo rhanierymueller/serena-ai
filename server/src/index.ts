@@ -17,6 +17,7 @@ import llmRoutes from "./routes/llmRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import stripeRoutes from "./routes/stripeRoutes.js";
 import tokenRoutes from "./routes/tokenRoutes.js";
+import moodRoutes from "./routes/moodRoutes.js";
 
 dotenv.config();
 
@@ -56,8 +57,8 @@ const sessionOptions: session.SessionOptions = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === "production", // só envia cookie se for HTTPS
-    sameSite: "none",                            // cookie válido em serena-ai.vercel.app
+    secure: false, //process.env.NODE_ENV === "production", // só envia cookie se for HTTPS
+    sameSite: "lax",                            // cookie válido em serena-ai.vercel.app
     path: "/",
   },
 };
@@ -86,6 +87,8 @@ app.use("/api/llm", llmRoutes);
 app.use("/api", authRoutes);
 app.use("/api/stripe", stripeRoutes);
 app.use("/api/tokens", tokenRoutes);
+app.use("/api/mood", moodRoutes);
+
 
 // 🩺 Health Check
 app.get("/", (_, res) => {
