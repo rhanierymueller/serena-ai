@@ -182,7 +182,7 @@ const MoodTracker: React.FC = () => {
           </button>
         </div>
 
-        {user?.plan === 'pro' && data.length > 0 && (
+        {data.length > 0 && (
           <div ref={chartRef} className="mt-10">
             <h2 className="text-xl font-bold text-[#6DAEDB] mb-4 flex items-center gap-2">
               <ChartIcon className="w-5 h-5" />

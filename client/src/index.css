@@ -2,26 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🎨 Scrollbar customizada escura para combinar com o layout */
-.custom-scroll::-webkit-scrollbar {
-  width: 8px;
-}
+@layer utilities {
+  /* 🎨 Scrollbar customizada escura para combinar com o layout */
+  .custom-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+  .custom-scroll::-webkit-scrollbar-track {
+    background: #1a1a1a;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 8px;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb:hover {
+    background: #666;
+  }
 
-.custom-scroll::-webkit-scrollbar-track {
-  background: #1a1a1a;
-}
+  /* Firefox */
+  .custom-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #444 #1a1a1a;
+  }
 
-.custom-scroll::-webkit-scrollbar-thumb {
-  background-color: #444;
-  border-radius: 8px;
-}
-
-.custom-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: #666;
-}
-
-/* Firefox */
-.custom-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: #444 #1a1a1a;
+  input[type='range'] {
+    -webkit-appearance: auto;
+    appearance: auto;
+    accent-color: #6daedb;
+  }
 }
