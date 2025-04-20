@@ -53,7 +53,7 @@
     "deleteConfirmBtn": "Excluir",
     "cancel": "Cancelar",
     "menu": "Menu",
-    "exit": "Salir"
+    "exit": "Sair"
   },
   "register": {
     "title": "Criar conta",
@@ -103,6 +103,9 @@
     "currentPlan": "Seu plano atual",
     "subscriptionPlan": "Pacote ativo",
     "tokenBased": "uso baseado em créditos",
+    "youHave": "Você tem",
+    "tokensLeft": "tokens restantes",
+    "freePlan": "Plano gratuito (uso limitado)",
     "free": {
       "title": "Gratuito",
       "description": "Acesso limitado ao chat",

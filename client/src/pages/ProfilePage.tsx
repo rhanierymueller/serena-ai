@@ -4,10 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import PageLayout from '../components/PageLayout';
 import { BASE_URL } from '../config';
 import { useI18n } from '../i18n/I18nContext';
+import { useUserTokens } from '../hooks/useUserTokens';
 
 const ProfilePage: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const { total, used } = useUserTokens();
+
   const [activeTab, setActiveTab] = useState<'info' | 'test'>('info');
   const navigate = useNavigate();
   const { t } = useI18n();
@@ -131,44 +134,42 @@ const ProfilePage: React.FC = () => {
 
         {activeTab === 'test' && (
           <div className="text-gray-300">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div
-                onClick={() => {
-                  if (user.plan === 'free') return;
-                  const updatedUser = { ...user, plan: 'free' };
-                  setUser(updatedUser);
-                }}
-                className={`cursor-pointer p-6 rounded-2xl border shadow-md transition-all ${
-                  user.plan === 'free'
-                    ? 'border-[#6DAEDB] bg-[#111]'
-                    : 'border-gray-700 bg-[#1a1a1a] hover:border-[#6DAEDB]'
-                }`}
-              >
-                <h3 className="text-2xl font-semibold mb-2">{t('profile.plans.free.title')}</h3>
-                <p className="text-gray-400 mb-4">{t('profile.plans.free.description')}</p>
-                <span className="block text-2xl font-bold mb-4">
-                  {t('profile.plans.free.price')}
-                </span>
-              </div>
+            <div className="mb-6 text-center">
+              <h3 className="text-xl font-semibold text-[#6DAEDB] mb-2">
+                {t('profile.plans.thanks-for-the-suport')}
+              </h3>
+              <p className="text-sm text-[#AAB9C3]">
+                {t('plansPage.youHave')} <strong>{total - used}</strong> {t('plansPage.tokensLeft')}{' '}
+                ({total} {t('plansPage.tokens')} {t('plansPage.validFor')})
+              </p>
+            </div>
 
-              <div
-                onClick={() => {
-                  if (user.plan === 'pro') return;
-                  const updatedUser = { ...user, plan: 'pro' };
-                  //setUser(updatedUser);
-                }}
-                className={`cursor-pointer p-6 rounded-2xl border shadow-md transition-all ${
-                  user.plan === 'Pro'
-                    ? 'border-[#6DAEDB] bg-[#111]'
-                    : 'border-gray-700 bg-[#1a1a1a] hover:border-[#6DAEDB]'
-                }`}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[2000, 5000, 10000].map(tokens => (
+                <div
+                  key={tokens}
+                  className="p-6 rounded-2xl border border-[#6DAEDB] bg-[#1a1a1a] text-center shadow-md"
+                >
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    {tokens} {t('plansPage.tokens')}
+                  </h3>
+                  <p className="text-[#AAB9C3] text-sm mb-4">{t('plansPage.tokenBasedUsage')}</p>
+                  <span className="block text-lg font-semibold text-white">
+                    {tokens === 2000 && 'R$ 49,90'}
+                    {tokens === 5000 && 'R$ 99,00'}
+                    {tokens === 10000 && 'R$ 149,90'}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 text-center">
+              <button
+                onClick={() => navigate('/planos')}
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-xl font-semibold transition-all"
               >
-                <h3 className="text-2xl font-semibold mb-2">{t('profile.plans.pro.title')}</h3>
-                <p className="text-gray-400 mb-4">{t('profile.plans.pro.description')}</p>
-                <span className="block text-2xl font-bold mb-4">
-                  {t('profile.plans.pro.price')}
-                </span>
-              </div>
+                {t('plansPage.buyNow')}
+              </button>
             </div>
           </div>
         )}
