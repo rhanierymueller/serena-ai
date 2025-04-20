@@ -63,19 +63,15 @@ const Home: React.FC = () => {
       if (!res.ok) throw new Error('Não autenticado');
 
       const user = await res.json();
-      console.log('[auth/me] usuário retornado:', user);
-
       saveUser(user);
 
       if (user.name) {
         const [firstName] = user.name.split(' ');
         setUserName(firstName);
       }
-
       setGender(user.gender || 'male');
     } catch (err) {
       console.error('Falha ao verificar login:', err);
-
       const stored = getUser();
       if (stored?.name) {
         const [firstName] = stored.name.split(' ');
@@ -130,14 +126,12 @@ const Home: React.FC = () => {
               >
                 {t('home.testNow')}
               </button>
-
               <button
                 onClick={() => setShowRegister(true)}
                 className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
               >
                 {t('register.title')}
               </button>
-
               <button
                 onClick={() => setShowLogin(true)}
                 className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
@@ -171,9 +165,7 @@ const Home: React.FC = () => {
           size="md"
         />
       )}
-
       {showRegister && <RegisterModal onClose={handleRegisterSuccess} />}
-
       {showLogin && (
         <LoginModal
           onClose={() => setShowLogin(false)}

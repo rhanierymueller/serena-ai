@@ -1,7 +1,10 @@
 {
   "header": {
     "title": "Serena AI",
-    "subtitle": "Una experiencia de conversación empática con inteligencia artificial."
+    "subtitle": "Una experiencia de conversación empática con inteligencia artificial.",
+    "selfCare": "Cuidado personal",
+    "account": "Cuenta",
+    "chatTitle": "Serena Chat"
   },
   "home": {
     "testNow": "Probar ahora",
