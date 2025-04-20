@@ -9,6 +9,7 @@
     "welcome": "Olá,",
     "logout": "Sair",
     "logoutTitle": "Deseja sair?",
+    "motivation": "Frase Motivacional",
     "logoutConfirm": "Tem certeza que deseja sair da Serena AI?",
     "logoutCancel": "Cancelar",
     "logoutConfirmBtn": "Sim, sair",
@@ -225,5 +226,13 @@
     "inhale": "Inspire profundamente",
     "hold": "Segure a respiração",
     "exhale": "Expire lentamente"
+  },
+  "motivational": {
+    "title": "Frase da Motivação",
+    "heading": "Gire para receber sua inspiração do dia!",
+    "description": "Clique no botão abaixo e receba uma frase positiva e motivadora gerada por IA.",
+    "spin": "Girar frase",
+    "listen": "Ouvir frase",
+    "loading": "Gerando motivação..."
   }
 }

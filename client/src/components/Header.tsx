@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { ArrowLeft, BadgeDollarSign, LogOut, NotebookPen, User, Wind, Menu, X } from 'lucide-react';
+import {
+  ArrowLeft,
+  BadgeDollarSign,
+  LogOut,
+  NotebookPen,
+  User,
+  Wind,
+  Menu,
+  X,
+  Sparkles,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
 import Select from './Select';
@@ -90,6 +100,13 @@ const Header: React.FC<HeaderProps> = ({
               {userName && (
                 <>
                   <button
+                    onClick={() => navigate('/motivacional')}
+                    className="flex items-center gap-2 text-sm text-white px-4 py-2 hover:bg-[#2C3E50] rounded-xl transition"
+                  >
+                    <Sparkles size={18} className="text-[#6DAEDB]" />
+                    <span>{t('home.motivation')}</span>
+                  </button>
+                  <button
                     onClick={() => navigate('/mood-tracker')}
                     className="flex items-center gap-2 text-sm text-white px-4 py-2 hover:bg-[#2C3E50] rounded-xl transition"
                   >
@@ -161,6 +178,15 @@ const Header: React.FC<HeaderProps> = ({
                 className="block w-full text-left text-white py-2"
               >
                 {t('home.moodTracker')}
+              </button>
+              <button
+                onClick={() => {
+                  navigate('/motivacional');
+                  setMenuOpen(false);
+                }}
+                className="block w-full text-left text-white py-2"
+              >
+                {t('home.motivation')}
               </button>
               <button
                 onClick={() => {

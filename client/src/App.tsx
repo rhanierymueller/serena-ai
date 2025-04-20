@@ -7,6 +7,7 @@ import TermsPage from './pages/Terms';
 import AboutPage from './pages/AboutPage';
 import MoodTracker from './pages/MoodTracker';
 import BreathingPage from './pages/BreathingPage';
+import MotivationalSpin from './pages/MotivationalSpin';
 
 const App = () => {
   return (
@@ -18,7 +19,8 @@ const App = () => {
       <Route path="/termos" element={<TermsPage />} />
       <Route path="/sobre" element={<AboutPage />} />
       <Route path="/mood-tracker" element={<MoodTracker />} />
-      <Route path="/respiracao" element={<BreathingPage />} /> {/* ✅ nova rota */}
+      <Route path="/respiracao" element={<BreathingPage />} />
+      <Route path="/motivacional" element={<MotivationalSpin />} />
     </Routes>
   );
 };
