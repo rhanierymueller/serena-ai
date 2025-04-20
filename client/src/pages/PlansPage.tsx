@@ -79,6 +79,34 @@ const PlansPage: React.FC = () => {
             </div>
           ))}
         </div>
+
+        {/* 🎁 Benefícios */}
+        <div className="mt-16 text-left text-white max-w-4xl mx-auto space-y-10">
+          <h2 className="text-2xl font-bold text-[#6DAEDB] mb-2">{t('plansPage.benefitsTitle')}</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-[#1a1a1a] p-4 rounded-xl border border-[#2a3b47] shadow text-center">
+              <h3 className="text-lg font-semibold text-[#6DAEDB] mb-2">
+                {t('plansPage.benefits.breathingTitle')}
+              </h3>
+              <p className="text-sm text-[#AAB9C3]">{t('plansPage.benefits.breathingDesc')}</p>
+            </div>
+
+            <div className="bg-[#1a1a1a] p-4 rounded-xl border border-[#2a3b47] shadow text-center">
+              <h3 className="text-lg font-semibold text-[#6DAEDB] mb-2">
+                {t('plansPage.benefits.journalTitle')}
+              </h3>
+              <p className="text-sm text-[#AAB9C3]">{t('plansPage.benefits.journalDesc')}</p>
+            </div>
+
+            <div className="bg-[#1a1a1a] p-4 rounded-xl border border-[#2a3b47] shadow text-center">
+              <h3 className="text-lg font-semibold text-[#6DAEDB] mb-2">
+                {t('plansPage.benefits.chatTitle')}
+              </h3>
+              <p className="text-sm text-[#AAB9C3]">{t('plansPage.benefits.chatDesc')}</p>
+            </div>
+          </div>
+        </div>
       </div>
     </PageLayout>
   );

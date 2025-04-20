@@ -142,6 +142,15 @@
       "cvvRequired": "CVV is required",
       "cvvInvalid": "Invalid CVV",
       "flag": "Card brand is required"
+    },
+    "benefitsTitle": "Why upgrade to the Pro plan?",
+    "benefits": {
+      "breathingTitle": "Guided Breathing",
+      "breathingDesc": "Practice breathing techniques with a calm voice and ambient music to ease anxiety.",
+      "journalTitle": "Emotional Journal",
+      "journalDesc": "Track how you feel over time with visual charts and emotional insights.",
+      "chatTitle": "Faster and more empathetic chat",
+      "chatDesc": "Talk with quicker, more empathetic, and emotionally deeper responses."
     }
   },
   "terms": {

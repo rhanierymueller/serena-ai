@@ -105,6 +105,7 @@
     "tokensLeft": "tokens restantes",
     "freePlan": "Plan gratuito (uso limitado)",
     "tokenBased": "uso basado en créditos",
+    "subscriptionPlan": "Suscripción activa",
     "free": {
       "title": "Gratis",
       "description": "Acceso limitado al chat",
@@ -140,6 +141,15 @@
       "cvvRequired": "CVV obligatorio",
       "cvvInvalid": "CVV inválido",
       "flag": "Marca de tarjeta obligatoria"
+    },
+    "benefitsTitle": "¿Por qué suscribirse al plan Pro?",
+    "benefits": {
+      "breathingTitle": "Respiración Guiada",
+      "breathingDesc": "Practica técnicas de respiración con voz tranquila y música ambiental para aliviar la ansiedad.",
+      "journalTitle": "Diario Emocional",
+      "journalDesc": "Registra cómo te sientes a lo largo del tiempo con gráficos e ideas emocionales.",
+      "chatTitle": "Chat más rápido y empático",
+      "chatDesc": "Conversaciones con respuestas más rápidas, empáticas y con mayor profundidad emocional."
     }
   },
   "terms": {

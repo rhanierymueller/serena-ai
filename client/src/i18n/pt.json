@@ -140,6 +140,15 @@
       "cvvRequired": "CVV obrigatório",
       "cvvInvalid": "CVV inválido",
       "flag": "Bandeira obrigatória"
+    },
+    "benefitsTitle": "Por que assinar o plano Pro?",
+    "benefits": {
+      "breathingTitle": "Respiração Guiada",
+      "breathingDesc": "Pratique técnicas de respiração com voz calma e música ambiente para aliviar a ansiedade.",
+      "journalTitle": "Diário Emocional",
+      "journalDesc": "Registre e acompanhe como você está se sentindo ao longo dos dias com gráficos e insights.",
+      "chatTitle": "Chat mais rápido e empático",
+      "chatDesc": "Converse com respostas mais rápidas, empáticas e com maior profundidade emocional."
     }
   },
   "terms": {

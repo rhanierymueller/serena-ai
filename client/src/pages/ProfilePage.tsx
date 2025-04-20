@@ -52,7 +52,7 @@ const ProfilePage: React.FC = () => {
 
   return (
     <PageLayout title={t('profile.title')} backTo="/">
-      <div className="bg-black/80 p-6 sm:p-8 rounded-2xl border border-gray-700 max-w-4xl w-full min-w-[620px] sm:min-w-[600px] shadow-lg mx-auto">
+      <div className="bg-black/80 p-6 sm:p-8 rounded-2xl border border-gray-700 w-full max-w-2xl shadow-lg mx-auto">
         <div className="flex gap-4 mb-6 border-b border-gray-700">
           <button
             onClick={() => setActiveTab('info')}
