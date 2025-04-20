@@ -58,11 +58,17 @@ const sessionOptions: session.SessionOptions = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, //process.env.NODE_ENV === "production", // só envia cookie se for HTTPS
-    sameSite: "lax",                            // cookie válido em serena-ai.vercel.app
+    // em produção, o cookie só é enviado via HTTPS e em chamadas cross‑site
+    secure: process.env.NODE_ENV === "production",
+    // em produção, permite envio em requisições cross‑site (fetch/XHR)
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    httpOnly: true,
     path: "/",
   },
+  // se você usa Redis, continue incluindo o store aqui
+  // store: new RedisStore({ client: redisClient }),
 };
+
 
 if (process.env.REDIS_URL) {
   const RedisStore = connectRedis(session);
