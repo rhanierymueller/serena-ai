@@ -97,15 +97,15 @@ const Header: React.FC<HeaderProps> = ({
           {/* Menu desktop */}
           {showMenu && (
             <div className="hidden md:flex items-center gap-4 ml-4">
+              <button
+                onClick={() => navigate('/motivacional')}
+                className="flex items-center gap-2 text-sm text-white px-4 py-2 hover:bg-[#2C3E50] rounded-xl transition"
+              >
+                <Sparkles size={18} className="text-[#6DAEDB]" />
+                <span>{t('home.motivation')}</span>
+              </button>
               {userName && (
                 <>
-                  <button
-                    onClick={() => navigate('/motivacional')}
-                    className="flex items-center gap-2 text-sm text-white px-4 py-2 hover:bg-[#2C3E50] rounded-xl transition"
-                  >
-                    <Sparkles size={18} className="text-[#6DAEDB]" />
-                    <span>{t('home.motivation')}</span>
-                  </button>
                   <button
                     onClick={() => navigate('/mood-tracker')}
                     className="flex items-center gap-2 text-sm text-white px-4 py-2 hover:bg-[#2C3E50] rounded-xl transition"
@@ -168,26 +168,17 @@ const Header: React.FC<HeaderProps> = ({
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden bg-[#111] border-t border-[#2a3b47] px-4 py-4 space-y-3">
+          <button
+            onClick={() => {
+              navigate('/motivacional');
+              setMenuOpen(false);
+            }}
+            className="block w-full text-left text-white py-2"
+          >
+            {t('home.motivation')}
+          </button>
           {userName && (
             <>
-              <button
-                onClick={() => {
-                  navigate('/mood-tracker');
-                  setMenuOpen(false);
-                }}
-                className="block w-full text-left text-white py-2"
-              >
-                {t('home.moodTracker')}
-              </button>
-              <button
-                onClick={() => {
-                  navigate('/motivacional');
-                  setMenuOpen(false);
-                }}
-                className="block w-full text-left text-white py-2"
-              >
-                {t('home.motivation')}
-              </button>
               <button
                 onClick={() => {
                   navigate('/mood-tracker');
