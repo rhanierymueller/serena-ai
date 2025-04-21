@@ -8,6 +8,7 @@ import AboutPage from './pages/AboutPage';
 import MoodTracker from './pages/MoodTracker';
 import BreathingPage from './pages/BreathingPage';
 import MotivationalSpin from './pages/MotivationalSpin';
+import Contact from './pages/Contact';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
       <Route path="/mood-tracker" element={<MoodTracker />} />
       <Route path="/respiracao" element={<BreathingPage />} />
       <Route path="/motivacional" element={<MotivationalSpin />} />
+      <Route path="/contact" element={<Contact />} />
     </Routes>
   );
 };

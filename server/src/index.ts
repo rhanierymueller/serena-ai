@@ -19,6 +19,7 @@ import stripeRoutes from "./routes/stripeRoutes.js";
 import tokenRoutes from "./routes/tokenRoutes.js";
 import moodRoutes from "./routes/moodRoutes.js";
 import motivacionalRoutes from "./routes/motivacionalRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 dotenv.config();
 
@@ -96,7 +97,7 @@ app.use("/api/stripe", stripeRoutes);
 app.use("/api/tokens", tokenRoutes);
 app.use("/api/mood", moodRoutes);
 app.use('/api/motivacional', motivacionalRoutes);
-
+app.use('/api/contact', contactRoutes);
 
 // 🩺 Health Check
 app.get("/", (_, res) => {

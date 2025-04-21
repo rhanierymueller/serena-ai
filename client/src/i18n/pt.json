@@ -237,5 +237,18 @@
     "spin": "Girar frase",
     "listen": "Ouvir frase",
     "loading": "Gerando motivação..."
+  },
+  "contact": {
+    "title": "Fale Conosco",
+    "subtitle": "Tem dúvidas, sugestões ou precisa de ajuda? Entre em contato com a gente!",
+    "name": "Seu nome",
+    "namePlaceholder": "Digite seu nome",
+    "email": "Seu e-mail",
+    "emailPlaceholder": "Digite seu e-mail",
+    "message": "Mensagem",
+    "messagePlaceholder": "Escreva sua mensagem aqui...",
+    "send": "Enviar mensagem",
+    "successMessage": "Sua mensagem foi enviada com sucesso!",
+    "errorMessage": "Ops! Algo deu errado. Tente novamente mais tarde."
   }
 }

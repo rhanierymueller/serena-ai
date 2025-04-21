@@ -239,5 +239,18 @@
     "spin": "Spin quote",
     "listen": "Listen",
     "loading": "Generating motivation..."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have questions, suggestions, or need help? Get in touch with us!",
+    "name": "Your name",
+    "namePlaceholder": "Enter your name",
+    "email": "Your email",
+    "emailPlaceholder": "Enter your email",
+    "message": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "send": "Send message",
+    "successMessage": "Your message has been sent successfully!",
+    "errorMessage": "Oops! Something went wrong. Try again later."
   }
 }
