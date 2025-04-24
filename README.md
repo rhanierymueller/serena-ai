@@ -1,6 +1,6 @@
-# Serena AI
+# Avylia AI
 
-Serena AI é uma aplicação de assistência terapêutica com foco em escuta empática e suporte emocional. Este projeto é composto por um frontend moderno em React e um backend robusto com Node.js e TypeScript, utilizando PostgreSQL como banco de dados.
+Avylia AI é uma aplicação de assistência terapêutica com foco em escuta empática e suporte emocional. Este projeto é composto por um frontend moderno em React e um backend robusto com Node.js e TypeScript, utilizando PostgreSQL como banco de dados.
 
 ---
 

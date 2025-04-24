@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Mic, Send, AlertTriangle, LogOut, Square } from 'lucide-react';
+import { Mic, Send, AlertTriangle, LogOut, Square } from 'lucide-react';
+import LogoIcon from '/image/image.png';
 import ChatSidebar from '../components/ChatSidebar';
 import { useI18n } from '../i18n/I18nContext';
 import { createChat, getChats } from '../services/chatService';
@@ -13,7 +14,7 @@ interface Message {
   text: string;
 }
 
-const SerenaChat: React.FC = () => {
+const AvyliaChat: React.FC = () => {
   const { t, language } = useI18n();
   const { total, used, refetchTokens } = useUserTokens();
 
@@ -222,9 +223,13 @@ const SerenaChat: React.FC = () => {
         {isEmpty ? (
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <div className="flex items-center gap-3 mb-8">
-              <Bot size={56} className="text-[#6DAEDB]" />
-              <h1 className="text-3xl md:text-4xl font-bold font-sans text-white">
-                {t('header.title')}
+              <img
+                src={LogoIcon}
+                alt="Avylia logo"
+                className="h-12 w-12 md:h-14 md:w-14 select-none pointer-events-none"
+              />
+              <h1 className="text-3xl md:text-4xl font-bold font-sans" style={{ color: '#6DAEDB' }}>
+                Avylia <span className="text-white/80">AI</span>
               </h1>
             </div>
             <div className="w-full max-w-lg">
@@ -357,4 +362,4 @@ const SerenaChat: React.FC = () => {
   );
 };
 
-export default SerenaChat;
+export default AvyliaChat;

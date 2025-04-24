@@ -1,10 +1,10 @@
 {
   "header": {
-    "title": "Serena AI",
+    "title": "Avylia",
     "subtitle": "An empathic conversation experience with Artificial Intelligence.",
     "selfCare": "Self Care",
     "account": "Account",
-    "chatTitle": "Serena chat"
+    "chatTitle": "Avylia chat"
   },
   "home": {
     "testNow": "Try now",
@@ -13,7 +13,7 @@
     "logout": "Logout",
     "motivation": "Motivational Quote",
     "logoutTitle": "Do you want to logout?",
-    "logoutConfirm": "Are you sure you want to logout from Serena AI?",
+    "logoutConfirm": "Are you sure you want to logout from Avylia?",
     "logoutCancel": "Cancel",
     "logoutConfirmBtn": "Yes, logout",
     "plans": "Plans",
@@ -22,7 +22,7 @@
     "myProfile": "My profile",
     "disclaimer": {
       "title": "Disclaimer",
-      "text": "Serena AI is a virtual assistant for informational and empathetic listening purposes. It does not replace professional care from psychologists, therapists, or psychiatrists. If you are going through a difficult time, please seek specialized medical help.",
+      "text": "Avylia AI is a virtual assistant for informational and empathetic listening purposes. It does not replace professional care from psychologists, therapists, or psychiatrists. If you are going through a difficult time, please seek specialized medical help.",
       "understood": "I understand",
       "back": "Back"
     }
@@ -39,9 +39,9 @@
     "startCall": "Start call",
     "endCall": "End call",
     "youSaid": "You said:",
-    "warning": "Serena AI may make mistakes. Please verify information and consult a specialist when needed.",
+    "warning": "Avylia AI may make mistakes. Please verify information and consult a specialist when needed.",
     "goHome": "Return to homepage",
-    "typing": "Serena está digitando...",
+    "typing": "Avylia está digitando...",
     "planLabel": "Plan",
     "plan": {
       "pro": "Pro",
@@ -100,7 +100,7 @@
   },
   "plansPage": {
     "title": "Choose your plan",
-    "subtitle": "Tokens to use Serena AI however you want",
+    "subtitle": "Tokens to use Avylia AI however you want",
     "tokens": "tokens",
     "validFor": "Valid until used.",
     "tokenBasedUsage": "Usage based on AI credits",
@@ -161,10 +161,10 @@
   },
   "terms": {
     "title": "Terms of Use",
-    "intro": "Welcome to Serena AI. By using our services, you agree to the following terms of use. Please read carefully before proceeding.",
-    "noMedical": "Serena AI is a virtual assistant focused on emotional support and guided reflections. We do not provide medical diagnoses or replace mental health professionals.",
+    "intro": "Welcome to Avylia AI. By using our services, you agree to the following terms of use. Please read carefully before proceeding.",
+    "noMedical": "Avylia AI is a virtual assistant focused on emotional support and guided reflections. We do not provide medical diagnoses or replace mental health professionals.",
     "privacy": "All interactions may be recorded for continuous improvement purposes, respecting your privacy according to our Privacy Policy.",
-    "agreement": "Using the service implies full acceptance of these terms. If you do not agree, please do not use Serena AI.",
+    "agreement": "Using the service implies full acceptance of these terms. If you do not agree, please do not use Avylia AI.",
     "changes": "We reserve the right to update the terms at any time. Check this page periodically to stay informed about changes.",
     "lastUpdate": "Last updated: April 2025."
   },
@@ -200,7 +200,7 @@
   },
   "about": {
     "title": "About the Creator",
-    "description": "Hi! My name is Rhaniery Mueller, founder of Mueller Solutions. With years of experience as a fullstack developer, I created Serena AI to bring technology and mental well-being closer together. I believe in the power of digital empathy and the potential of voice assistants to make emotional care more accessible to everyone.",
+    "description": "Hi! My name is Rhaniery Mueller, founder of Mueller Solutions. With years of experience as a fullstack developer, I created Avylia AI to bring technology and mental well-being closer together. I believe in the power of digital empathy and the potential of voice assistants to make emotional care more accessible to everyone.",
     "backHome": "Back to Home"
   },
   "moodTracker": {

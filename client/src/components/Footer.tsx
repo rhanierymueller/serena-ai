@@ -8,11 +8,11 @@ const Footer: React.FC = () => {
     <footer className="bg-[#111] text-gray-400 px-6 py-5 border-t border-gray-800 text-sm">
       <div className="max-w-6xl mx-auto flex flex-col items-center gap-2 md:flex-row md:items-center md:justify-between md:gap-4 text-center md:text-left">
         {/* Marca */}
-        <div className="text-white font-semibold">Serena AI</div>
+        <div className="text-white font-semibold">Avylia AI</div>
 
         {/* Direitos autorais */}
         <div className="text-xs text-gray-500">
-          &copy; {new Date().getFullYear()} Serena AI. {t('footer.copyright')}
+          &copy; {new Date().getFullYear()} Avylia AI. {t('footer.copyright')}
         </div>
 
         {/* Links */}

@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://serena-ai-production.up.railway.app/api/:path*"
+      "destination": "https://Avylia-ai-production.up.railway.app/api/:path*"
     },
     {
       "source": "/(.*)",

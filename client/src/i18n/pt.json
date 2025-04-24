@@ -1,10 +1,10 @@
 {
   "header": {
-    "title": "Serena AI",
+    "title": "Avylia AI",
     "subtitle": "Uma experiência de conversa empática com inteligência artificial.",
     "selfCare": "Cuidado pessoal",
     "account": "Conta",
-    "chatTitle": "Serena Chat"
+    "chatTitle": "Avylia Chat"
   },
   "home": {
     "testNow": "Testar agora",
@@ -13,7 +13,7 @@
     "logout": "Sair",
     "logoutTitle": "Deseja sair?",
     "motivation": "Frase Motivacional",
-    "logoutConfirm": "Tem certeza que deseja sair da Serena AI?",
+    "logoutConfirm": "Tem certeza que deseja sair da Avylia AI?",
     "logoutCancel": "Cancelar",
     "logoutConfirmBtn": "Sim, sair",
     "plans": "Planos",
@@ -22,7 +22,7 @@
     "myProfile": "Meu perfil",
     "disclaimer": {
       "title": "Termo de responsabilidade",
-      "text": "A Serena AI é um assistente virtual com fins informativos e de escuta empática. Ela não substitui atendimento profissional com psicólogos, terapeutas ou psiquiatras. Se você estiver passando por uma situação difícil, procure ajuda médica especializada.",
+      "text": "A Avylia AI é um assistente virtual com fins informativos e de escuta empática. Ela não substitui atendimento profissional com psicólogos, terapeutas ou psiquiatras. Se você estiver passando por uma situação difícil, procure ajuda médica especializada.",
       "understood": "Entendi",
       "back": "Voltar"
     }
@@ -39,9 +39,9 @@
     "startCall": "Iniciar ligação",
     "endCall": "Encerrar ligação",
     "youSaid": "Você disse:",
-    "warning": "A Serena AI pode cometer erros. Verifique as informações e consulte um especialista quando necessário.",
+    "warning": "A Avylia AI pode cometer erros. Verifique as informações e consulte um especialista quando necessário.",
     "goHome": "Voltar para a página inicial",
-    "typing": "Serena está digitando...",
+    "typing": "Avylia está digitando...",
     "planLabel": "Plano",
     "plan": {
       "pro": "Pro",
@@ -100,7 +100,7 @@
   },
   "plansPage": {
     "title": "Escolha seu pacote",
-    "subtitle": "Tokens para usar Serena AI como quiser",
+    "subtitle": "Tokens para usar Avylia AI como quiser",
     "tokens": "tokens",
     "validFor": "Válido até serem usados.",
     "tokenBasedUsage": "Uso baseado em créditos de IA",
@@ -159,10 +159,10 @@
   },
   "terms": {
     "title": "Termos de Uso",
-    "intro": "Bem-vindo à Serena AI. Ao utilizar nossos serviços, você concorda com os seguintes termos de uso. Leia com atenção antes de continuar.",
-    "noMedical": "Serena AI é uma assistente virtual com foco em apoio emocional e reflexões guiadas. Não oferecemos diagnósticos médicos ou substituímos profissionais de saúde mental.",
+    "intro": "Bem-vindo à Avylia AI. Ao utilizar nossos serviços, você concorda com os seguintes termos de uso. Leia com atenção antes de continuar.",
+    "noMedical": "Avylia AI é uma assistente virtual com foco em apoio emocional e reflexões guiadas. Não oferecemos diagnósticos médicos ou substituímos profissionais de saúde mental.",
     "privacy": "Todas as interações podem ser registradas para fins de melhoria contínua do serviço, respeitando sua privacidade conforme nossa Política de Privacidade.",
-    "agreement": "O uso do serviço implica na aceitação integral destes termos. Caso não concorde, por favor, não utilize o Serena AI.",
+    "agreement": "O uso do serviço implica na aceitação integral destes termos. Caso não concorde, por favor, não utilize o Avylia AI.",
     "changes": "Reservamo-nos o direito de atualizar os termos a qualquer momento. Verifique esta página periodicamente para estar ciente de mudanças.",
     "lastUpdate": "Última atualização: Abril de 2025."
   },
@@ -198,7 +198,7 @@
   },
   "about": {
     "title": "Sobre o Criador",
-    "description": "Olá! Me chamo Rhaniery Mueller, fundador da Mueller Solutions. Com anos de experiência como desenvolvedor fullstack, criei o Serena AI com o objetivo de aproximar tecnologia e bem-estar mental. Acredito no poder da empatia digital e no potencial dos assistentes de voz para tornar o cuidado emocional mais acessível a todos.",
+    "description": "Olá! Me chamo Rhaniery Mueller, fundador da Mueller Solutions. Com anos de experiência como desenvolvedor fullstack, criei o Avylia AI com o objetivo de aproximar tecnologia e bem-estar mental. Acredito no poder da empatia digital e no potencial dos assistentes de voz para tornar o cuidado emocional mais acessível a todos.",
     "backHome": "Voltar para Início"
   },
   "moodTracker": {

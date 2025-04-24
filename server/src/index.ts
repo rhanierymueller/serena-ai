@@ -29,13 +29,13 @@ const app = express();
 app.set('trust proxy', 1);
 
 // determina domínio do front para o cookie
-const clientHost = new URL(process.env.CLIENT_URL!).hostname; // ex: "serena-ai.vercel.app"
+const clientHost = new URL(process.env.CLIENT_URL!).hostname; // ex: "Avylia-ai.vercel.app"
 
 // 🌐 Domínios permitidos para o frontend (local + produção)
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://serena-ai.vercel.app",
-  "https://serena-7wvz3len9-rhaniery-muellers-projects.vercel.app",
+  "https://Avylia-ai.vercel.app",
+  "https://Avylia-7wvz3len9-rhaniery-muellers-projects.vercel.app",
 ];
 
 // ✅ CORS configurado antes de tudo
@@ -101,7 +101,7 @@ app.use('/api/contact', contactRoutes);
 
 // 🩺 Health Check
 app.get("/", (_, res) => {
-  res.send("✅ Serena AI Backend rodando");
+  res.send("✅ Avylia AI Backend rodando");
 });
 
 // 🚀 Porta (Railway já injeta automaticamente)

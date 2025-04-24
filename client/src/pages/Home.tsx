@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Bot } from 'lucide-react';
+import LogoIcon from '/image/image.png';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
 import Modal from '../components/Modal';
@@ -103,20 +103,23 @@ const Home: React.FC = () => {
 
       <main className="flex-1 flex flex-col items-center justify-center z-10 px-4">
         <div className="flex items-center gap-3 mb-8">
-          <Bot size={40} className="text-[#6DAEDB]" />
-          <h1 className="text-4xl font-bold font-sans">{t('header.title')}</h1>
+          <img
+            src={LogoIcon}
+            alt="Avylia logo"
+            className="h-16 w-16 md:h-24 md:w-24 select-none pointer-events-none"
+          />
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Avylia <span className="text-white/80">AI</span>
+          </h1>
         </div>
-
         <p className="text-center text-lg md:text-xl text-[#AAB9C3] max-w-xl mb-6">
           {t('header.subtitle')}
         </p>
-
         {userName && (
           <div className="mt-4 mb-6 text-[#6DAEDB] text-xl md:text-2xl font-bold">
             <TypingText text={`${t('home.welcome')} ${userName}`} />
           </div>
         )}
-
         <div className="flex gap-4">
           {!userName ? (
             <>
