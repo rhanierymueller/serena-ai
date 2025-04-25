@@ -34,8 +34,9 @@ const clientHost = new URL(process.env.CLIENT_URL!).hostname; // ex: "Avylia-ai.
 // 🌐 Domínios permitidos para o frontend (local + produção)
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://Avylia-ai.vercel.app",
-  "https://Avylia-7wvz3len9-rhaniery-muellers-projects.vercel.app",
+  "https://serena-ai.vercel.app",
+  "https://serena-ai-7wvz3len9-rhaniery-muellers-projects.vercel.app",
+  "https://www.avylia.com",
 ];
 
 // ✅ CORS configurado antes de tudo
