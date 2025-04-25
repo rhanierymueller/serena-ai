@@ -35,7 +35,7 @@ const clientHost = new URL(process.env.CLIENT_URL!).hostname; // ex: "Avylia-ai.
 const allowedOrigins = [
   "http://localhost:5173",
   "https://serena-ai.vercel.app",
-  "https://serena-ai-7wvz3len9-rhaniery-muellers-projects.vercel.app",
+  "https://serena-ai-rhaniery-muellers-projects.vercel.app/",
   "https://www.avylia.com",
 ];
 
