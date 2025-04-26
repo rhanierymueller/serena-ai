@@ -16,12 +16,17 @@ export async function createUser(data: CreateUserInput) {
     body: JSON.stringify(data),
   });
 
+  const json = await response.json();
+
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error?.message || 'Erro ao criar usuário');
+    const error = new Error(json.error) as Error & {
+      errorCode?: string;
+    };
+    error.errorCode = json.errorCode;
+    throw error;
   }
 
-  return await response.json();
+  return json;
 }
 
 export async function loginUser({ email, password }: { email: string; password: string }) {
@@ -33,7 +38,7 @@ export async function loginUser({ email, password }: { email: string; password: 
   });
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.message || 'Falha no login');
+    throw new Error(err?.error || 'Falha no login');
   }
   return res.json();
 }

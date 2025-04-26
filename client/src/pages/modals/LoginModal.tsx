@@ -6,6 +6,7 @@ import { loginUser } from '../../services/userService';
 import { saveUser } from '../../services/userSession';
 import { useI18n } from '../../i18n/I18nContext';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { useToast } from '../../context/ToastContext';
 
 interface LoginModalProps {
   onClose: () => void;
@@ -15,6 +16,8 @@ interface LoginModalProps {
 const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
   const { t } = useI18n();
   const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const { showToast } = useToast();
+
   const [captchaVerified, setCaptchaVerified] = useState(false);
 
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '';
@@ -37,16 +40,20 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
     onSubmit: async values => {
       try {
         if (!captchaVerified) {
-          alert('Por favor, verifique o reCAPTCHA.');
+          showToast(t('login.validation.recaptcha'), 'error');
           return;
         }
 
         const user = await loginUser(values);
         saveUser(user);
         onSuccess();
-      } catch (err) {
-        alert('Erro ao autenticar.');
+      } catch (err: any) {
         console.error(err);
+
+        const errorCode = err.message || 'internalServerError';
+        const translatedMessage = t(`errors.${errorCode}`);
+
+        showToast(translatedMessage, 'error');
       }
     },
   });

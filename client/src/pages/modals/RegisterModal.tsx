@@ -12,6 +12,7 @@ import { inferGender } from '../../utils/inferGender';
 
 import { createUser } from '../../services/userService';
 import { saveUser } from '../../services/userSession';
+import { useToast } from '../../context/ToastContext';
 
 interface RegisterModalProps {
   onClose: () => void;
@@ -31,6 +32,7 @@ const countries = [
 
 const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) => {
   const { t } = useI18n();
+  const { showToast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
@@ -73,6 +75,11 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
     }),
     onSubmit: async values => {
       try {
+        if (!captchaVerified) {
+          showToast(t('validation.recaptcha'), 'error');
+          return;
+        }
+
         const fullName = `${values.firstName.trim()} ${values.lastName.trim()}`;
 
         const user = await createUser({
@@ -82,10 +89,21 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
           password: values.password || undefined,
         });
         saveUser(user);
+        showToast(t('register.successMessage'), 'success');
         onClose();
-      } catch (error) {
+      } catch (error: any) {
         console.error('Erro ao registrar:', error);
-        alert('Erro ao registrar. Tente novamente.');
+
+        const errorCode = error.errorCode;
+        let errorMessage = '';
+
+        if (errorCode && t(`errors.${errorCode}`) !== `errors.${errorCode}`) {
+          errorMessage = t(`errors.${errorCode}`);
+        } else {
+          errorMessage = error.message;
+        }
+
+        showToast(errorMessage, 'error');
       }
     },
   });

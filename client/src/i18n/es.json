@@ -76,6 +76,7 @@
     "firstNamePlaceholder": "Ingresa tu nombre",
     "lastNamePlaceholder": "Ingresa tu apellido",
     "confirmPassword": "Confirmar contraseña",
+    "successMessage": "¡Cuenta creada con éxito!",
     "validation": {
       "firstName": "El nombre es obligatorio.",
       "lastName": "El apellido es obligatorio.",
@@ -90,7 +91,8 @@
       "passwordNumber": "La contraseña debe contener un número.",
       "passwordSymbol": "La contraseña debe contener un carácter especial.",
       "passwordMatch": "Las contraseñas no coinciden.",
-      "passwordConfirm": "Se requiere la confirmación de la contraseña."
+      "passwordConfirm": "Se requiere la confirmación de la contraseña.",
+      "emailExists": "Este correo electrónico ya está registrado."
     }
   },
   "login": {
@@ -103,9 +105,12 @@
     "emailPlaceholder": "Ingresa tu correo electrónico",
     "passwordPlaceholder": "Ingresa tu contraseña",
     "validation": {
-      "emailRequired": "El correo es obligatorio.",
-      "emailInvalid": "Ingresa un correo válido.",
-      "passwordRequired": "La contraseña es obligatoria."
+      "emailRequired": "Correo electrónico es obligatorio.",
+      "emailInvalid": "Ingrese un correo electrónico válido.",
+      "passwordRequired": "Contraseña es obligatoria.",
+      "userNotFound": "Usuario no encontrado.",
+      "incorrectPassword": "Contraseña incorrecta.",
+      "recaptcha": "Por favor, verifica el reCAPTCHA."
     }
   },
   "plansPage": {
@@ -277,5 +282,12 @@
     "security": "Aplicamos medidas técnicas y organizativas para proteger tus datos. Ningún sistema es 100% seguro, pero hacemos todo lo posible para mitigar los riesgos.",
     "rights": "Puedes solicitar la eliminación de tus datos en cualquier momento escribiendo a soporte@avylia.com.",
     "lastUpdate": "Última actualización: Abril de 2025"
+  },
+  "errors": {
+    "emailAlreadyExists": "Este correo ya está registrado.",
+    "userNotFound": "Usuario no encontrado.",
+    "incorrectPassword": "Contraseña incorrecta.",
+    "internalServerError": "Error interno. Inténtalo de nuevo más tarde.",
+    "recaptcha": "Por favor, verifica el reCAPTCHA."
   }
 }

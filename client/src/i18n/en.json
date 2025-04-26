@@ -76,6 +76,7 @@
     "firstNamePlaceholder": "Enter your first name",
     "lastNamePlaceholder": "Enter your last name",
     "confirmPassword": "Confirm password",
+    "successMessage": "Account created successfully!",
     "validation": {
       "firstName": "First name is required.",
       "lastName": "Last name is required.",
@@ -90,7 +91,8 @@
       "passwordNumber": "Password must contain a number.",
       "passwordSymbol": "Password must contain a special character.",
       "passwordMatch": "Passwords do not match.",
-      "passwordConfirm": "Password confirmation is required."
+      "passwordConfirm": "Password confirmation is required.",
+      "emailExists": "This email is already registered."
     }
   },
   "login": {
@@ -105,7 +107,10 @@
     "validation": {
       "emailRequired": "Email is required.",
       "emailInvalid": "Enter a valid email.",
-      "passwordRequired": "Password is required."
+      "passwordRequired": "Password is required.",
+      "userNotFound": "User not found.",
+      "incorrectPassword": "Incorrect password.",
+      "recaptcha": "Please verify reCAPTCHA."
     }
   },
   "plansPage": {
@@ -278,5 +283,12 @@
     "security": "We apply technical and organizational measures to protect your data. No system is 100% secure, but we strive to mitigate risks as much as possible.",
     "rights": "You may request the deletion of your data at any time by contacting suporte@avylia.com.",
     "lastUpdate": "Last updated: April 2025"
+  },
+  "errors": {
+    "emailAlreadyExists": "This email is already registered.",
+    "userNotFound": "User not found.",
+    "incorrectPassword": "Incorrect password.",
+    "internalServerError": "Internal server error. Please try again later.",
+    "recaptcha": "Please verify reCAPTCHA."
   }
 }

@@ -76,6 +76,7 @@
     "gender": "Gênero",
     "password": "Senha",
     "confirmPassword": "Confirmar senha",
+    "successMessage": "Conta criada com sucesso!",
     "validation": {
       "firstName": "O nome é obrigatório.",
       "lastName": "O sobrenome é obrigatório.",
@@ -90,7 +91,8 @@
       "passwordNumber": "A senha deve conter um número.",
       "passwordSymbol": "A senha deve conter um caractere especial.",
       "passwordMatch": "As senhas não coincidem.",
-      "passwordConfirm": "Confirmação de senha obrigatória."
+      "passwordConfirm": "Confirmação de senha obrigatória.",
+      "emailExists": "Este email já está registrado."
     }
   },
   "login": {
@@ -103,9 +105,12 @@
     "emailPlaceholder": "Digite seu e-mail",
     "passwordPlaceholder": "Digite sua senha",
     "validation": {
-      "emailRequired": "O e-mail é obrigatório.",
-      "emailInvalid": "Informe um e-mail válido.",
-      "passwordRequired": "A senha é obrigatória."
+      "emailRequired": "Email é obrigatório.",
+      "emailInvalid": "Digite um email válido.",
+      "passwordRequired": "Senha é obrigatória.",
+      "userNotFound": "Usuário não encontrado.",
+      "incorrectPassword": "Senha incorreta.",
+      "recaptcha": "Por favor, verifique o reCAPTCHA."
     }
   },
   "plansPage": {
@@ -276,5 +281,12 @@
     "security": "Aplicamos medidas técnicas e organizacionais para proteger seus dados. Nenhum sistema é 100% seguro, mas fazemos o possível para mitigar riscos.",
     "rights": "Você pode solicitar a exclusão dos seus dados a qualquer momento pelo e-mail muellercode@gmail.com.",
     "lastUpdate": "Última atualização: Abril de 2025"
+  },
+  "errors": {
+    "emailAlreadyExists": "Este e-mail já está registrado.",
+    "userNotFound": "Usuário não encontrado.",
+    "incorrectPassword": "Senha incorreta.",
+    "internalServerError": "Erro interno. Tente novamente mais tarde.",
+    "recaptcha": "Por favor, verifique o reCAPTCHA."
   }
 }
