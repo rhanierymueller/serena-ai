@@ -2,12 +2,12 @@ import { Router } from "express";
 import { prisma } from "../lib/prisma.js";
 import bcrypt from "bcrypt";
 import { Prisma } from "@prisma/client";
+import { v4 as uuidv4 } from "uuid";
 
 const router = Router();
 
-// CRIAR USUÁRIO
 router.post("/users", async (req: any, res: any) => {
-  const { name, email, gender, password, provider = 'credentials' } = req.body;
+  const { name, email, gender, password, provider = "credentials" } = req.body;
 
   if (!name || !email) {
     return res.status(400).json({ errorCode: "missingCredentials" });
@@ -15,9 +15,18 @@ router.post("/users", async (req: any, res: any) => {
 
   try {
     const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
+    const activationToken = uuidv4();
 
     const user = await prisma.user.create({
-      data: { name, email, gender, password: hashedPassword, provider },
+      data: {
+        name,
+        email,
+        gender,
+        password: hashedPassword,
+        provider,
+        active: false,
+        activationToken: activationToken,
+      },
     });
 
     const { password: _, ...userWithoutPassword } = user;
@@ -26,7 +35,7 @@ router.post("/users", async (req: any, res: any) => {
   } catch (err: any) {
     console.error("Erro ao criar usuário:", err);
 
-    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
       return res.status(400).json({ errorCode: "emailAlreadyExists" });
     }
 
@@ -34,7 +43,6 @@ router.post("/users", async (req: any, res: any) => {
   }
 });
 
-// LOGIN
 router.post("/login", async (req: any, res: any) => {
   const { email, password } = req.body;
 
@@ -49,12 +57,16 @@ router.post("/login", async (req: any, res: any) => {
       return res.status(401).json({ errorCode: "userNotFound" });
     }
 
+    if (!user.active) {
+      return res.status(401).json({ errorCode: "accountNotActivated" });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ errorCode: "wrongPassword" });
     }
 
-    const { password: _, ...userSafe } = user;
+    const { password: _, activationToken: __, ...userSafe } = user;
     return res.json(userSafe);
 
   } catch (err) {
@@ -63,7 +75,38 @@ router.post("/login", async (req: any, res: any) => {
   }
 });
 
-// GET USUÁRIO
+router.get("/activate/:token", async (req: any, res: any) => {
+  const { token } = req.params;
+
+  if (!token) {
+    return res.status(400).json({ errorCode: "invalidToken" });
+  }
+
+  try {
+    const user = await prisma.user.findFirst({
+      where: { activationToken: token },
+    });
+
+    if (!user) {
+      return res.status(404).json({ errorCode: "tokenNotFound" });
+    }
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        active: true,
+        activationToken: null,
+      },
+    });
+
+    return res.status(200).json({ message: "Conta ativada com sucesso!" });
+
+  } catch (error: any) {
+    console.error("Erro ao ativar conta:", error);
+    return res.status(500).json({ errorCode: "internalServerError" });
+  }
+});
+
 router.get("/users", async (req: any, res: any) => {
   const { email } = req.query;
 
@@ -78,7 +121,8 @@ router.get("/users", async (req: any, res: any) => {
       return res.status(404).json({ errorCode: "userNotFound" });
     }
 
-    return res.json(user);
+    const { password: _, activationToken: __, ...userSafe } = user;
+    return res.json(userSafe);
 
   } catch (err) {
     console.error("Erro ao buscar usuário:", err);
@@ -86,7 +130,6 @@ router.get("/users", async (req: any, res: any) => {
   }
 });
 
-// UPDATE USUÁRIO
 router.put("/users/:id", async (req: any, res: any) => {
   const { id } = req.params;
   const { name, gender, plan } = req.body;
@@ -97,7 +140,7 @@ router.put("/users/:id", async (req: any, res: any) => {
       data: { name, gender, plan },
     });
 
-    const { password: _, ...userWithoutPassword } = updated;
+    const { password: _, activationToken: __, ...userWithoutPassword } = updated;
     return res.json(userWithoutPassword);
 
   } catch (err) {
@@ -106,7 +149,6 @@ router.put("/users/:id", async (req: any, res: any) => {
   }
 });
 
-// DELETE USUÁRIO
 router.delete("/users/:id", async (req: any, res: any) => {
   const { id } = req.params;
 

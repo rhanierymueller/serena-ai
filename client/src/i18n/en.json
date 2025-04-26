@@ -76,7 +76,8 @@
     "firstNamePlaceholder": "Enter your first name",
     "lastNamePlaceholder": "Enter your last name",
     "confirmPassword": "Confirm password",
-    "successMessage": "Account created successfully!",
+    "successMessage": "Account created successfully! Check your email to activate your account.",
+    "checkYourEmail": "Check your email to activate your account.",
     "validation": {
       "firstName": "First name is required.",
       "lastName": "Last name is required.",
@@ -290,5 +291,13 @@
     "incorrectPassword": "Incorrect password.",
     "internalServerError": "Internal server error. Please try again later.",
     "recaptcha": "Please verify reCAPTCHA."
+  },
+  "activation": {
+    "loadingTitle": "Activating your account...",
+    "loadingText": "Please wait a moment.",
+    "successTitle": "Account successfully activated!",
+    "successText": "You can now log in to Avylia AI.",
+    "errorTitle": "Invalid or expired token",
+    "errorText": "Please check the link or request a new activation."
   }
 }

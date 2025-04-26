@@ -17,10 +17,13 @@ model User {
   plan             String        @default("free")
   provider         String        @default("credentials")
   stripeCustomerId String?
+  active           Boolean       @default(false)
+  activationToken  String?       @unique
   chats            Chat[]
   token            UserToken?
   moodEntries      MoodEntry[]
 }
+
 
 model MoodEntry {
   id        String   @id @default(uuid())

@@ -77,6 +77,7 @@
     "lastNamePlaceholder": "Ingresa tu apellido",
     "confirmPassword": "Confirmar contraseña",
     "successMessage": "¡Cuenta creada con éxito!",
+    "checkYourEmail": "¡Revisa tu correo electrónico para activar tu cuenta!",
     "validation": {
       "firstName": "El nombre es obligatorio.",
       "lastName": "El apellido es obligatorio.",
@@ -92,7 +93,8 @@
       "passwordSymbol": "La contraseña debe contener un carácter especial.",
       "passwordMatch": "Las contraseñas no coinciden.",
       "passwordConfirm": "Se requiere la confirmación de la contraseña.",
-      "emailExists": "Este correo electrónico ya está registrado."
+      "emailExists": "Este correo electrónico ya está registrado.",
+      "checkYourEmail": "Cadastro feito! Confira seu e-mail para ativar sua conta."
     }
   },
   "login": {
@@ -289,5 +291,13 @@
     "incorrectPassword": "Contraseña incorrecta.",
     "internalServerError": "Error interno. Inténtalo de nuevo más tarde.",
     "recaptcha": "Por favor, verifica el reCAPTCHA."
+  },
+  "activation": {
+    "loadingTitle": "Activando tu cuenta...",
+    "loadingText": "Por favor, espera un momento.",
+    "successTitle": "¡Cuenta activada con éxito!",
+    "successText": "Ahora puedes iniciar sesión en Avylia AI.",
+    "errorTitle": "Token inválido o expirado",
+    "errorText": "Verifica el enlace o solicita una nueva activación."
   }
 }

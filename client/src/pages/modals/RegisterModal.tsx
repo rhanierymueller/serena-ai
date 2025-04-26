@@ -13,6 +13,7 @@ import { inferGender } from '../../utils/inferGender';
 import { createUser } from '../../services/userService';
 import { saveUser } from '../../services/userSession';
 import { useToast } from '../../context/ToastContext';
+import { sendActivationEmail } from '../../services/sendActivationEmail';
 
 interface RegisterModalProps {
   onClose: () => void;
@@ -88,20 +89,21 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
           gender: values.gender || undefined,
           password: values.password || undefined,
         });
-        saveUser(user);
-        showToast(t('register.successMessage'), 'success');
+
+        // ✉️ Após criar, envia o email de ativação
+        const activationLink = `https://avylia.com/activate/${user.activationToken}`;
+        await sendActivationEmail(user.email, user.name, activationLink);
+
+        showToast(t('register.checkYourEmail'), 'success');
         onClose();
       } catch (error: any) {
         console.error('Erro ao registrar:', error);
 
         const errorCode = error.errorCode;
-        let errorMessage = '';
-
-        if (errorCode && t(`errors.${errorCode}`) !== `errors.${errorCode}`) {
-          errorMessage = t(`errors.${errorCode}`);
-        } else {
-          errorMessage = error.message;
-        }
+        const errorMessage =
+          errorCode && t(`errors.${errorCode}`) !== `errors.${errorCode}`
+            ? t(`errors.${errorCode}`)
+            : error.message;
 
         showToast(errorMessage, 'error');
       }

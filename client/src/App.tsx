@@ -10,6 +10,7 @@ import MotivationalSpin from './pages/MotivationalSpin';
 import Contact from './pages/Contact';
 import AvyliaChat from './pages/AvyliaChat';
 import PrivacyPage from './pages/PrivacyPage';
+import ActivateAccount from './pages/ActivateAccount';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
       <Route path="/respiracao" element={<BreathingPage />} />
       <Route path="/motivacional" element={<MotivationalSpin />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/activate/:token" element={<ActivateAccount />} />
     </Routes>
   );
 };
