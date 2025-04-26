@@ -9,6 +9,7 @@ import BreathingPage from './pages/BreathingPage';
 import MotivationalSpin from './pages/MotivationalSpin';
 import Contact from './pages/Contact';
 import AvyliaChat from './pages/AvyliaChat';
+import PrivacyPage from './pages/PrivacyPage';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
       <Route path="/planos" element={<PlansPage />} />
       <Route path="/perfil" element={<ProfilePage />} />
       <Route path="/termos" element={<TermsPage />} />
+      <Route path="/privacidade" element={<PrivacyPage />} />
       <Route path="/sobre" element={<AboutPage />} />
       <Route path="/mood-tracker" element={<MoodTracker />} />
       <Route path="/respiracao" element={<BreathingPage />} />

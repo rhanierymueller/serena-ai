@@ -32,7 +32,8 @@
     "copyright": "Todos los derechos reservados.",
     "about": "Sobre",
     "terms": "Términos",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "developedBy": "Desarrollado por"
   },
   "chat": {
     "placeholder": "Escribe tu mensaje...",
@@ -251,5 +252,15 @@
     "send": "Enviar mensaje",
     "successMessage": "¡Tu mensaje ha sido enviado con éxito!",
     "errorMessage": "Ups... Algo salió mal. Intenta nuevamente más tarde."
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "intro": "Esta política explica cómo Avylia AI recopila, utiliza y protege tus datos personales.",
+    "dataCollection": "Recopilamos información como nombre, correo electrónico e interacciones en el chat para brindar una experiencia personalizada.",
+    "dataUse": "Los datos se utilizan exclusivamente para autenticación, personalización y mejora de la experiencia con la IA.",
+    "sharing": "No compartimos tus datos con terceros, salvo servicios esenciales como proveedores de IA (por ejemplo, OpenAI) y hospedaje.",
+    "security": "Aplicamos medidas técnicas y organizativas para proteger tus datos. Ningún sistema es 100% seguro, pero hacemos todo lo posible para mitigar los riesgos.",
+    "rights": "Puedes solicitar la eliminación de tus datos en cualquier momento escribiendo a soporte@avylia.com.",
+    "lastUpdate": "Última actualización: Abril de 2025"
   }
 }

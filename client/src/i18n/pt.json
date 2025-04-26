@@ -31,7 +31,8 @@
     "copyright": "Todos os direitos reservados.",
     "about": "Sobre",
     "terms": "Termos",
-    "contact": "Contato"
+    "contact": "Contato",
+    "developedBy": "Desenvolvido por"
   },
   "chat": {
     "placeholder": "Digite sua mensagem...",
@@ -250,5 +251,15 @@
     "send": "Enviar mensagem",
     "successMessage": "Sua mensagem foi enviada com sucesso!",
     "errorMessage": "Ops! Algo deu errado. Tente novamente mais tarde."
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "intro": "Esta política explica como o Avylia AI coleta, usa e protege seus dados pessoais.",
+    "dataCollection": "Coletamos informações como nome, e-mail e interações de chat para oferecer uma experiência personalizada.",
+    "dataUse": "Os dados são usados exclusivamente para autenticação, personalização e melhoria da experiência com a IA.",
+    "sharing": "Não compartilhamos dados com terceiros, exceto serviços essenciais como provedores de IA (ex: OpenAI) e hospedagem.",
+    "security": "Aplicamos medidas técnicas e organizacionais para proteger seus dados. Nenhum sistema é 100% seguro, mas fazemos o possível para mitigar riscos.",
+    "rights": "Você pode solicitar a exclusão dos seus dados a qualquer momento pelo e-mail muellercode@gmail.com.",
+    "lastUpdate": "Última atualização: Abril de 2025"
   }
 }
