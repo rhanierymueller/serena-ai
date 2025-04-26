@@ -4,10 +4,10 @@
     "subtitle": "Uma experiência de conversa empática com inteligência artificial.",
     "selfCare": "Cuidado pessoal",
     "account": "Conta",
-    "chatTitle": "Avylia Chat"
+    "chatTitle": "Avy Chat"
   },
   "home": {
-    "testNow": "Testar agora",
+    "avyChat": "Avy Chat",
     "register": "Registrar",
     "welcome": "Olá,",
     "logout": "Sair",
@@ -71,6 +71,8 @@
     "country": "País",
     "submit": "Registrar",
     "cancel": "Cancelar",
+    "firstNamePlaceholder": "Digite seu nome",
+    "lastNamePlaceholder": "Digite seu sobrenome",
     "gender": "Gênero",
     "password": "Senha",
     "confirmPassword": "Confirmar senha",
@@ -97,7 +99,14 @@
     "email": "E-mail",
     "password": "Senha",
     "confirm": "Confirmar",
-    "googleAuth": "Entrar com o Google"
+    "googleAuth": "Entrar com o Google",
+    "emailPlaceholder": "Digite seu e-mail",
+    "passwordPlaceholder": "Digite sua senha",
+    "validation": {
+      "emailRequired": "O e-mail é obrigatório.",
+      "emailInvalid": "Informe um e-mail válido.",
+      "passwordRequired": "A senha é obrigatória."
+    }
   },
   "plansPage": {
     "title": "Escolha seu pacote",
@@ -174,6 +183,12 @@
     "name": "Nome",
     "email": "Email",
     "gender": "Gênero",
+    "deleteAccount": "Excluir Conta",
+    "confirmDeleteTitle": "Tem certeza que deseja excluir sua conta?",
+    "confirmDeleteText": "Esta ação é irreversível.",
+    "noRefundWarning": "Se você tiver tokens restantes, eles não serão reembolsados.",
+    "confirmDeleteButton": "Sim, excluir",
+    "cancelButton": "Cancelar",
     "genderOptions": {
       "select": "Selecionar",
       "male": "Masculino",

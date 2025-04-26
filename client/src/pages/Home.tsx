@@ -127,7 +127,7 @@ const Home: React.FC = () => {
                 onClick={handleTestClick}
                 className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
               >
-                {t('home.testNow')}
+                {t('home.avyChat')}
               </button>
               <button
                 onClick={() => setShowRegister(true)}
@@ -147,7 +147,7 @@ const Home: React.FC = () => {
               onClick={handleTestClick}
               className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold whitespace-nowrap transition-all"
             >
-              {t('home.testNow')}
+              {t('home.avyChat')}
             </button>
           )}
         </div>

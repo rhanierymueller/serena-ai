@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Modal from '../../components/Modal';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { loginUser } from '../../services/userService';
 import { saveUser } from '../../services/userSession';
 import { useI18n } from '../../i18n/I18nContext';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface LoginModalProps {
   onClose: () => void;
@@ -13,7 +14,10 @@ interface LoginModalProps {
 
 const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
   const { t } = useI18n();
-  const [isHuman, setIsHuman] = useState(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+
+  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '';
 
   const formik = useFormik({
     initialValues: {
@@ -21,12 +25,21 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
       password: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string().email('E-mail inválido').required('Obrigatório'),
-      password: Yup.string().required('Senha obrigatória'),
+      email: Yup.string()
+        .email(t('register.validation.emailInvalid'))
+        .max(255, t('register.validation.emailInvalid'))
+        .required(t('register.validation.emailRequired')),
+
+      password: Yup.string()
+        .max(128, t('register.validation.passwordRequired'))
+        .required(t('register.validation.passwordRequired')),
     }),
     onSubmit: async values => {
       try {
-        if (!isHuman) return alert('Confirme que você não é um robô.');
+        if (!captchaVerified) {
+          alert('Por favor, verifique o reCAPTCHA.');
+          return;
+        }
 
         const user = await loginUser(values);
         saveUser(user);
@@ -37,6 +50,23 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
       }
     },
   });
+
+  const handleCaptchaChange = (token: string | null) => {
+    setCaptchaVerified(!!token);
+  };
+
+  const handleSubmitModal = async () => {
+    formik.setTouched({
+      email: true,
+      password: true,
+    });
+
+    const errors = await formik.validateForm();
+
+    if (Object.keys(errors).length === 0) {
+      formik.handleSubmit();
+    }
+  };
 
   return (
     <Modal
@@ -72,40 +102,45 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
               <span>{t('login.googleAuth')}</span>
             </button>
           </div>
+
           <div>
             <label className="text-sm mb-1 block">{t('login.email')}</label>
             <input
               type="email"
               name="email"
+              placeholder={t('login.emailPlaceholder')}
               onChange={formik.handleChange}
               value={formik.values.email}
               className="w-full bg-gray-700 px-4 py-2 rounded-md border border-gray-600"
             />
+            {formik.touched.email && formik.errors.email && (
+              <p className="text-red-500 text-xs mt-1">{formik.errors.email}</p>
+            )}
           </div>
+
           <div>
             <label className="text-sm mb-1 block">{t('login.password')}</label>
             <input
               type="password"
               name="password"
+              placeholder={t('login.passwordPlaceholder')}
               onChange={formik.handleChange}
               value={formik.values.password}
               className="w-full bg-gray-700 px-4 py-2 rounded-md border border-gray-600"
             />
+            {formik.touched.password && formik.errors.password && (
+              <p className="text-red-500 text-xs mt-1">{formik.errors.password}</p>
+            )}
           </div>
-          <div className="text-sm mt-4">
-            <label>
-              <input
-                type="checkbox"
-                onChange={e => setIsHuman(e.target.checked)}
-                className="mr-2"
-              />
-              {t('login.notARobot')}
-            </label>
+
+          <div className="flex justify-center">
+            <ReCAPTCHA ref={recaptchaRef} sitekey={siteKey} onChange={handleCaptchaChange} />
           </div>
         </form>
       }
       onCancel={onClose}
-      onConfirm={formik.submitForm}
+      onConfirm={handleSubmitModal}
+      confirmDisabled={!captchaVerified}
       confirmText={t('login.confirm')}
       cancelText={t('register.cancel')}
       size="sm"

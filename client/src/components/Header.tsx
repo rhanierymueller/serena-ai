@@ -49,6 +49,7 @@ const Header: React.FC<HeaderProps> = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const [selfCareOpen, setSelfCareOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
 
   const handleLogout = () => {
     clearUser();
@@ -86,7 +87,6 @@ const Header: React.FC<HeaderProps> = ({
         )}
 
         <div className="flex items-center gap-2">
-          {/* Language selector mobile */}
           <Select
             value={language}
             onChange={setLanguage}
@@ -96,9 +96,8 @@ const Header: React.FC<HeaderProps> = ({
 
           {showMenu && (
             <div className="hidden md:flex items-center gap-4 ml-4">
-              {/* Self-Care Dropdown */}
               <button
-                onClick={() => navigate('/chat')}
+                onClick={() => setShowDisclaimerModal(true)}
                 className="flex items-center gap-2 text-sm text-white px-4 py-2 hover:bg-[#2C3E50] rounded-xl transition"
               >
                 <MessageSquare size={18} className="text-[#6DAEDB]" />
@@ -281,6 +280,20 @@ const Header: React.FC<HeaderProps> = ({
           cancelText={t('home.logoutCancel')}
           confirmText={t('home.logoutConfirmBtn')}
           size="sm"
+        />
+      )}
+      {showDisclaimerModal && (
+        <Modal
+          title={t('home.disclaimer.title')}
+          description={t('home.disclaimer.text')}
+          onCancel={() => setShowDisclaimerModal(false)}
+          onConfirm={() => {
+            setShowDisclaimerModal(false);
+            navigate('/chat');
+          }}
+          cancelText={t('home.disclaimer.back')}
+          confirmText={t('home.disclaimer.understood')}
+          size="md"
         />
       )}
     </>

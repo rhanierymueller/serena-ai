@@ -29,4 +29,14 @@
     appearance: auto;
     accent-color: #6daedb;
   }
+
+  .input {
+    @apply w-full bg-gray-700 px-4 py-2 rounded-md border border-gray-600;
+  }
+  .error {
+    @apply text-red-400 text-xs mt-1;
+  }
+  .eye-icon {
+    @apply absolute top-9 right-3 cursor-pointer;
+  }
 }

@@ -24,13 +24,13 @@ const Select = <T extends string | number>({
   id,
 }: SelectProps<T>) => {
   return (
-    <div className={`relative inline-block ${className}`}>
+    <div className={`relative ${className}`}>
       <select
         name={name}
         id={id}
         value={value}
         onChange={e => onChange(e.target.value as T)}
-        className="appearance-none bg-[#2C3E50] text-white px-4 py-2 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] transition"
+        className="appearance-none bg-[#2C3E50] text-white px-4 py-2 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-[#6DAEDB] transition w-full"
       >
         {options.map(opt => (
           <option key={opt.value} value={opt.value}>

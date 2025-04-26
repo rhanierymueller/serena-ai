@@ -25,7 +25,7 @@ export async function createUser(data: CreateUserInput) {
 }
 
 export async function loginUser({ email, password }: { email: string; password: string }) {
-  const res = await fetch('/api/auth/login', {
+  const res = await fetch(`${BASE_URL}/api/login`, {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },

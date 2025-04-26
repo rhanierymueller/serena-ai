@@ -8,6 +8,11 @@ interface ModalProps {
   confirmText?: string;
   cancelText?: string;
   size?: 'sm' | 'md' | 'lg';
+  /**
+   * When true, disables the confirm button (e.g., until a CAPTCHA is verified).
+   * Defaults to false to avoid breaking existing usages.
+   */
+  confirmDisabled?: boolean;
 }
 
 const sizeMap = {
@@ -24,6 +29,7 @@ const Modal: React.FC<ModalProps> = ({
   confirmText = 'Entendi',
   cancelText = 'Voltar',
   size = 'md',
+  confirmDisabled = false,
 }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center">
@@ -34,14 +40,19 @@ const Modal: React.FC<ModalProps> = ({
         <div className="text-sm text-gray-300 mb-6 leading-relaxed">{description}</div>
         <div className="flex justify-end gap-3">
           <button
+            type="button"
             onClick={onCancel}
             className="px-4 py-2 rounded-xl bg-[#2C3E50] hover:bg-[#34495E] text-white transition-all"
           >
             {cancelText}
           </button>
           <button
-            onClick={onConfirm}
-            className="px-4 py-2 rounded-xl bg-[#6DAEDB] hover:bg-[#4F91C3] text-black transition-all font-semibold"
+            type="button"
+            onClick={confirmDisabled ? undefined : onConfirm}
+            disabled={confirmDisabled}
+            className={`px-4 py-2 rounded-xl bg-[#6DAEDB] text-black font-semibold transition-all ${
+              confirmDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#4F91C3]'
+            }`}
           >
             {confirmText}
           </button>

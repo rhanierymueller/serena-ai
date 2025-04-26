@@ -4,10 +4,10 @@
     "subtitle": "An empathic conversation experience with Artificial Intelligence.",
     "selfCare": "Self Care",
     "account": "Account",
-    "chatTitle": "Avylia chat"
+    "chatTitle": "Avy chat"
   },
   "home": {
-    "testNow": "Try now",
+    "avyChat": "Avy Chat",
     "register": "Register",
     "welcome": "Hello,",
     "logout": "Logout",
@@ -73,6 +73,8 @@
     "cancel": "Cancel",
     "gender": "Gender",
     "password": "Password",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastNamePlaceholder": "Enter your last name",
     "confirmPassword": "Confirm password",
     "validation": {
       "firstName": "First name is required.",
@@ -97,7 +99,14 @@
     "email": "Email",
     "password": "Password",
     "confirm": "Confirm",
-    "googleAuth": "Enter with Google"
+    "googleAuth": "Login with Google",
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "validation": {
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Enter a valid email.",
+      "passwordRequired": "Password is required."
+    }
   },
   "plansPage": {
     "title": "Choose your plan",
@@ -176,6 +185,12 @@
     "name": "Name",
     "email": "Email",
     "gender": "Gender",
+    "deleteAccount": "Delete Account",
+    "confirmDeleteTitle": "Are you sure you want to delete your account?",
+    "confirmDeleteText": "This action is irreversible.",
+    "noRefundWarning": "If you have tokens remaining, they will not be refunded.",
+    "confirmDeleteButton": "Yes, delete",
+    "cancelButton": "Cancel",
     "genderOptions": {
       "select": "Select",
       "male": "Male",

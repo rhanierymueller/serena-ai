@@ -97,4 +97,19 @@ router.put("/users/:id", async (req: any, res: any) => {
   }
 });
 
+router.delete("/users/:id", async (req: any, res: any) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.user.delete({
+      where: { id },
+    });
+
+    return res.status(200).json({ message: "Usuário excluído com sucesso." });
+  } catch (err) {
+    console.error("Erro ao excluir usuário:", err);
+    return res.status(400).json({ error: "Erro ao excluir usuário." });
+  }
+});
+
 export default router;
