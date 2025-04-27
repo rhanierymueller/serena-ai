@@ -36,7 +36,10 @@ RUN npm ci --omit=dev --ignore-scripts
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 
-# 8) Expõe porta e inicia app
+# 8) Gera Prisma Client para produção
+RUN npx prisma generate
+
+# 9) Expõe porta e inicia app
 ENV NODE_ENV=production
 EXPOSE 4000
 CMD ["node", "dist/index.js"]
