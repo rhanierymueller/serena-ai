@@ -1,10 +1,10 @@
 import { Router, Request, Response } from "express";
 import { prisma } from "../lib/prisma";
-import { wrapAsync } from "../utils/wrapAsync.js";
+
 
 const router = Router();
 
-router.post("/", wrapAsync(async (req: Request, res: Response) => {
+router.post("/", async (req: any, res: any) => {
   const { userId, visitorId } = req.body;
 
   if (!userId && !visitorId) {
@@ -27,9 +27,9 @@ router.post("/", wrapAsync(async (req: Request, res: Response) => {
   });
 
   return res.status(201).json(chat);
-}));
+});
 
-router.get("/", wrapAsync(async (req: Request, res: Response) => {
+router.get("/", async (req: any, res: any) => {
   const { userId, visitorId } = req.query;
 
   if (!userId && !visitorId) {
@@ -52,9 +52,9 @@ router.get("/", wrapAsync(async (req: Request, res: Response) => {
   });
 
   return res.json(chats);
-}));
+});
 
-router.delete("/:id", wrapAsync(async (req: Request, res: Response) => {
+router.delete("/:id", async (req: any, res: any) => {
   const { id } = req.params;
   const { userId, visitorId } = req.query;
 
@@ -84,6 +84,6 @@ router.delete("/:id", wrapAsync(async (req: Request, res: Response) => {
   await prisma.chat.delete({ where: { id } });
 
   return res.status(200).json({ success: true });
-}));
+});
 
 export default router;

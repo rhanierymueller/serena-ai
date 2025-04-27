@@ -4,11 +4,11 @@ import { openai } from "../lib/openai";
 import { callOpenRouter } from "../lib/openrouter";
 import { ChatCompletionMessageParam } from "openai/resources/chat";
 import { canUseTokens, consumeTokens } from "../lib/token";
-import { wrapAsync } from "../utils/wrapAsync.js";
+
 
 const router = Router();
 
-router.post("/", wrapAsync(async (req: Request, res: Response) => {
+router.post("/", async (req: any, res: any) => {
   const { chatId } = req.body;
 
   if (!chatId || typeof chatId !== "string") {
@@ -77,6 +77,6 @@ router.post("/", wrapAsync(async (req: Request, res: Response) => {
   });
 
   res.json({ content: saved.content });
-}));
+});
 
 export default router;

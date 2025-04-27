@@ -1,10 +1,10 @@
 import { Router, Request, Response } from "express";
 import { prisma } from "../lib/prisma";
-import { wrapAsync } from "../utils/wrapAsync.js";
+
 
 const router = Router();
 
-router.post("/", wrapAsync(async (req: Request, res: Response) => {
+router.post("/", async (req: any, res: any) => {
   const { chatId, role, content } = req.body;
 
   if (!chatId || !role || !content) {
@@ -42,9 +42,9 @@ router.post("/", wrapAsync(async (req: Request, res: Response) => {
   }
 
   return res.status(201).json(message);
-}));
+});
 
-router.get("/", wrapAsync(async (req: Request, res: Response) => {
+router.get("/", async (req: any, res: any) => {
   const { chatId } = req.query;
 
   if (!chatId || typeof chatId !== "string") {
@@ -57,6 +57,6 @@ router.get("/", wrapAsync(async (req: Request, res: Response) => {
   });
 
   return res.json(messages);
-}));
+});
 
 export default router;

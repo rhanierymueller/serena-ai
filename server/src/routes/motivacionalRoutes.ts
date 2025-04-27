@@ -1,5 +1,4 @@
 import { Router, Request, Response } from 'express';
-import { wrapAsync } from '../utils/wrapAsync';
 import { callOpenRouter } from '../lib/openrouter.js';
 
 const router = Router();
@@ -13,7 +12,7 @@ const prompt: Record<'pt' | 'en' | 'es', string> = {
 const supportedLanguages = ['pt', 'en', 'es'] as const;
 type Language = typeof supportedLanguages[number];
 
-router.post('/', wrapAsync(async (req: Request, res: Response) => {
+router.post('/', async (req: any, res: any) => {
   let lang: Language = 'pt';
   if (supportedLanguages.includes(req.body.language)) {
     lang = req.body.language;
@@ -28,6 +27,6 @@ router.post('/', wrapAsync(async (req: Request, res: Response) => {
 
   const reply = await callOpenRouter(messages);
   res.json({ quote: reply.trim().replace(/^["']|["']$/g, '') });
-}));
+});
 
 export default router;

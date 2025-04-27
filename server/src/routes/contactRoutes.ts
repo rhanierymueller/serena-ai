@@ -1,11 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { wrapAsync } from '../utils/wrapAsync.js';
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.post('/', wrapAsync(async (req: Request, res: Response) => {
+router.post('/', async (req: any, res: any) => {
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
@@ -21,6 +20,6 @@ router.post('/', wrapAsync(async (req: Request, res: Response) => {
   });
 
   res.status(201).json(contact);
-}));
+});
 
 export default router;

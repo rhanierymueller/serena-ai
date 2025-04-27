@@ -1,11 +1,9 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
-import { Prisma } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { sendActivationEmail, sendResetPasswordEmail } from "../lib/email";
 import rateLimit from "express-rate-limit";
-import { wrapAsync } from "../utils/wrapAsync.js";
 
 const router = Router();
 
@@ -27,7 +25,7 @@ const resendActivationLimiter = rateLimit({
   message: { errorCode: "tooManyRequests" },
 });
 
-router.post("/users", wrapAsync(async (req: Request, res: Response) => {
+router.post("/users", (async (req: any, res: any) => {
   const { name, email, gender, password, provider = "credentials" } = req.body;
 
   if (!name || !email) {
@@ -82,7 +80,7 @@ router.post("/users", wrapAsync(async (req: Request, res: Response) => {
   return res.status(201).json(userWithoutPassword);
 }));
 
-router.post("/login", [loginLimiter], wrapAsync(async (req: Request, res: Response, next: NextFunction) => {
+router.post("/login", [loginLimiter], async (req: any, res: any, next: NextFunction) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({ errorCode: "missingCredentials" });
@@ -107,9 +105,9 @@ router.post("/login", [loginLimiter], wrapAsync(async (req: Request, res: Respon
     if (err) return next(err);
     res.json(userSafe);
   });
-}));
+});
 
-router.get("/activate/:token", wrapAsync(async (req: Request, res: Response) => {
+router.get("/activate/:token", async (req: any, res: any) => {
   const { token } = req.params;
   if (!token) {
     return res.status(400).json({ errorCode: "invalidToken" });
@@ -126,9 +124,9 @@ router.get("/activate/:token", wrapAsync(async (req: Request, res: Response) => 
   });
 
   return res.status(200).json({ message: "Conta ativada com sucesso!" });
-}));
+});
 
-router.get("/users", wrapAsync(async (req: Request, res: Response) => {
+router.get("/users", async (req: any, res: any) => {
   const { email } = req.query;
   if (!email || typeof email !== "string") {
     return res.status(400).json({ errorCode: "missingEmail" });
@@ -141,18 +139,18 @@ router.get("/users", wrapAsync(async (req: Request, res: Response) => {
 
   const { password: _, activationToken: __, ...userSafe } = user;
   return res.json(userSafe);
-}));
+});
 
-router.put("/users/:id", wrapAsync(async (req: Request, res: Response) => {
+router.put("/users/:id", async (req: any, res: any) => {
   const { id } = req.params;
   const { name, gender, plan } = req.body;
 
   const updated = await prisma.user.update({ where: { id }, data: { name, gender, plan } });
   const { password: _, activationToken: __, ...userWithoutPassword } = updated;
   return res.json(userWithoutPassword);
-}));
+});
 
-router.delete("/users/:id", wrapAsync(async (req: Request, res: Response) => {
+router.delete("/users/:id", async (req: any, res: any) => {
   const { id } = req.params;
 
   await prisma.user.update({ where: { id }, data: { active: false } });
@@ -163,9 +161,9 @@ router.delete("/users/:id", wrapAsync(async (req: Request, res: Response) => {
     res.clearCookie("connect.sid", { path: "/" });
     res.status(200).json({ message: "Usuário desativado e logout realizado." });
   });
-}));
+});
 
-router.post("/resend-activation", [resendActivationLimiter], wrapAsync(async (req: Request, res: Response) => {
+router.post("/resend-activation", [resendActivationLimiter], async (req: any, res: any) => {
   const { email } = req.body;
   if (!email) {
     return res.status(400).json({ errorCode: "missingEmail" });
@@ -190,9 +188,9 @@ router.post("/resend-activation", [resendActivationLimiter], wrapAsync(async (re
   await sendActivationEmail(email, user.name, activationLink);
 
   return res.status(200).json({ message: "Activation email resent." });
-}));
+});
 
-router.post("/reset-password/:token", wrapAsync(async (req: Request, res: Response) => {
+router.post("/reset-password/:token", async (req: any, res: any) => {
   const { token } = req.params;
   const { password } = req.body;
 
@@ -216,9 +214,9 @@ router.post("/reset-password/:token", wrapAsync(async (req: Request, res: Respon
   });
 
   return res.status(200).json({ message: "Password updated successfully!" });
-}));
+});
 
-router.post("/forgot-password", [forgotPasswordLimiter], wrapAsync(async (req: Request, res: Response) => {
+router.post("/forgot-password", [forgotPasswordLimiter], async (req: any, res: any) => {
   const { email } = req.body;
   if (!email) {
     return res.status(400).json({ errorCode: "missingEmail" });
@@ -240,6 +238,6 @@ router.post("/forgot-password", [forgotPasswordLimiter], wrapAsync(async (req: R
   await sendResetPasswordEmail(email, user.name, resetLink);
 
   return res.status(200).json({ message: "Reset password email sent." });
-}));
+});
 
 export default router;

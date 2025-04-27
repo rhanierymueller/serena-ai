@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { wrapAsync } from "../utils/wrapAsync.js";
+
 
 const prisma = new PrismaClient();
 const router = express.Router();
 
-router.post("/", wrapAsync(async (req: Request, res: Response) => {
+router.post("/", async (req: any, res: any) => {
   const { mood, intensity, note, userId } = req.body;
 
   if (typeof userId !== "string" || typeof mood !== "string" || typeof intensity !== "number") {
@@ -16,9 +16,9 @@ router.post("/", wrapAsync(async (req: Request, res: Response) => {
     data: { mood, intensity, note, userId },
   });
   res.json(entry);
-}));
+});
 
-router.get("/:userId", wrapAsync(async (req: Request, res: Response) => {
+router.get("/:userId", async (req: any, res: any) => {
   const { userId } = req.params;
 
   if (!userId || typeof userId !== "string") {
@@ -30,6 +30,6 @@ router.get("/:userId", wrapAsync(async (req: Request, res: Response) => {
     orderBy: { createdAt: "asc" },
   });
   res.json(entries);
-}));
+});
 
 export default router;

@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import passport from 'passport';
-import { wrapAsync } from '../utils/wrapAsync.js';
 
 const router = express.Router();
 
@@ -18,11 +17,11 @@ router.get('/auth/google/callback',
   }
 );
 
-router.get('/logout', wrapAsync(async (req: Request, res: Response) => {
+router.get('/logout', async (req: any, res: any) => {
   req.logout(() => {
     res.redirect('/');
   });
-}));
+});
 
 router.get('/auth/me', (req: Request, res: Response) => {
   if (req.isAuthenticated() && req.user) {

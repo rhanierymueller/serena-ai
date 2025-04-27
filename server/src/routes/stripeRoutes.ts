@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import { stripe, PRICE_MAP } from "../lib/stripe";
-import { wrapAsync } from "../utils/wrapAsync.js"; // adiciona esse import se ainda não
+ // adiciona esse import se ainda não
 
 const router = express.Router();
 
-router.post("/create-token-checkout", wrapAsync(async (req: Request, res: Response) => {
+router.post("/create-token-checkout", async (req: any, res: any) => {
   const { userId, userEmail, tokenAmount } = req.body;
 
   if (!userId || !userEmail || tokenAmount == null) {
@@ -50,6 +50,6 @@ router.post("/create-token-checkout", wrapAsync(async (req: Request, res: Respon
   });
 
   res.json({ sessionId: session.id });
-}));
+});
 
 export default router;
