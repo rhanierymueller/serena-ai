@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsc && node fix-imports.cjs",
     "postinstall": "npm run build",
     "start": "node dist/index.js"
   },

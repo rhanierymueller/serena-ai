@@ -3,12 +3,12 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci
-
 COPY tsconfig.json ./
 COPY prisma ./prisma
 COPY src ./src
+COPY fix-imports.cjs ./
 
+RUN npm ci
 RUN npm run build
 
 # Stage 2: Runtime
