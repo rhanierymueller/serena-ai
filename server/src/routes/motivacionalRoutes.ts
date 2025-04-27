@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { wrapAsync } from '../../utils/wrapAsync';
+import { wrapAsync } from '../utils/wrapAsync';
 import { callOpenRouter } from '../lib/openrouter.js';
 
 const router = Router();

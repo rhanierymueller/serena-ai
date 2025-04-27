@@ -5,7 +5,7 @@ import { Prisma } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { sendActivationEmail, sendResetPasswordEmail } from "../lib/email.js";
 import rateLimit from "express-rate-limit";
-import { wrapAsync } from "../../utils/wrapAsync.js";
+import { wrapAsync } from "../utils/wrapAsync.js";
 
 const router = Router();
 
