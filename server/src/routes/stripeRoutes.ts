@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import { stripe, PRICE_MAP } from "../lib/stripe";
-import { wrapAsync } from "../utils/wrapAsync"; // adiciona esse import se ainda não
+import { wrapAsync } from "../utils/wrapAsync.js"; // adiciona esse import se ainda não
 
 const router = express.Router();
 

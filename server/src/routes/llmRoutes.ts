@@ -4,7 +4,7 @@ import { openai } from "../lib/openai";
 import { callOpenRouter } from "../lib/openrouter";
 import { ChatCompletionMessageParam } from "openai/resources/chat";
 import { canUseTokens, consumeTokens } from "../lib/token";
-import { wrapAsync } from "../utils/wrapAsync";
+import { wrapAsync } from "../utils/wrapAsync.js";
 
 const router = Router();
 
