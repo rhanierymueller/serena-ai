@@ -35,7 +35,7 @@ const MotivationalSpin: React.FC = () => {
       setTimeout(() => {
         setQuote(data.quote);
         audioRef.current?.pause();
-        audioRef.current!.currentTime = 0;
+        if (audioRef.current) audioRef.current.currentTime = 0;
       }, 2000);
     } catch (err) {
       console.error(err);

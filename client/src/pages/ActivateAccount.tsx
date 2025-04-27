@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import PageLayout from '../components/PageLayout';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { useI18n } from '../i18n/I18nContext';
@@ -7,6 +7,7 @@ import { useI18n } from '../i18n/I18nContext';
 const ActivateAccount: React.FC = () => {
   const { token } = useParams();
   const { t } = useI18n();
+  const navigate = useNavigate();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
 
   useEffect(() => {
@@ -27,6 +28,16 @@ const ActivateAccount: React.FC = () => {
       activate();
     }
   }, [token]);
+
+  useEffect(() => {
+    if (status === 'success' || status === 'error') {
+      const timeout = setTimeout(() => {
+        navigate('/');
+      }, 5000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [status, navigate]);
 
   return (
     <PageLayout backTo="/">

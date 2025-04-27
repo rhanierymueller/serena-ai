@@ -22,9 +22,8 @@ const BreathingSession: React.FC = () => {
     { text: t('breathing.exhale'), duration: 4000 },
   ];
 
-  // Carrega vozes
   useEffect(() => {
-    const tryLoad = () => {
+    const tryLoadVoices = () => {
       const available = speechSynthesis.getVoices();
       if (available.length > 0) {
         setVoices(available);
@@ -34,9 +33,9 @@ const BreathingSession: React.FC = () => {
       return false;
     };
 
-    if (!tryLoad()) {
+    if (!tryLoadVoices()) {
       const interval = window.setInterval(() => {
-        if (tryLoad()) window.clearInterval(interval);
+        if (tryLoadVoices()) window.clearInterval(interval);
       }, 200);
       return () => window.clearInterval(interval);
     }
@@ -47,16 +46,14 @@ const BreathingSession: React.FC = () => {
   }, [isRunning]);
 
   const getCalmVoice = (): SpeechSynthesisVoice | undefined => {
-    const preferredNames = [
+    const preferred = [
       'Google português do Brasil',
       'Luciana',
       'Microsoft Maria Desktop',
       'pt-BR-Wavenet-F',
     ];
     let voice = voices.find(
-      v =>
-        v.lang === 'pt-BR' &&
-        preferredNames.some(name => v.name.toLowerCase().includes(name.toLowerCase()))
+      v => v.lang === 'pt-BR' && preferred.some(name => v.name.includes(name))
     );
     if (!voice) voice = voices.find(v => v.lang === 'pt-BR');
     return voice;

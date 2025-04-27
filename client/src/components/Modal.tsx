@@ -5,13 +5,9 @@ interface ModalProps {
   description: string | React.ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
-  confirmText?: string;
-  cancelText?: string;
+  confirmText?: string | React.ReactNode;
+  cancelText?: string | React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
-  /**
-   * When true, disables the confirm button (e.g., until a CAPTCHA is verified).
-   * Defaults to false to avoid breaking existing usages.
-   */
   confirmDisabled?: boolean;
 }
 

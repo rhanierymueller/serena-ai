@@ -105,6 +105,11 @@
     "googleAuth": "Entrar com o Google",
     "emailPlaceholder": "Digite seu e-mail",
     "passwordPlaceholder": "Digite sua senha",
+    "forgotPassword": "Esqueci minha senha",
+    "forgotPasswordTitle": "Redefinir senha",
+    "send": "Enviar",
+    "emailSent": "E-mail de redefinição de senha enviado com sucesso!",
+    "sent": "Senha redefinida com sucesso!",
     "validation": {
       "emailRequired": "Email é obrigatório.",
       "emailInvalid": "Digite um email válido.",
@@ -242,7 +247,9 @@
       "tired": "Cansado",
       "motivated": "Motivado",
       "stressed": "Estressado"
-    }
+    },
+    "entrySaved": "Entrada registrada com sucesso!",
+    "saveError": "Erro ao salvar a entrada."
   },
   "breathing": {
     "start": "Iniciar",
@@ -288,7 +295,8 @@
     "userNotFound": "Usuário não encontrado.",
     "incorrectPassword": "Senha incorreta.",
     "internalServerError": "Erro interno. Tente novamente mais tarde.",
-    "recaptcha": "Por favor, verifique o reCAPTCHA."
+    "recaptcha": "Por favor, verifique o reCAPTCHA.",
+    "accountNotActivated": "Conta não ativada."
   },
   "activation": {
     "loadingTitle": "Ativando sua conta...",
@@ -302,5 +310,14 @@
     "activate": "Ativar",
     "cancel": "Cancelar",
     "invalidToken": "Token inválido ou expirado."
+  },
+  "activationEmail": {
+    "title": "Verifique seu e-mail",
+    "text": "Enviamos um e-mail de ativação para {{email}}. Verifique também sua caixa de spam.",
+    "resendIn": "Você poderá reenviar em {{seconds}} segundos.",
+    "resendButton": "Reenviar e-mail",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "resentSuccess": "E-mail reenviado com sucesso!"
   }
 }

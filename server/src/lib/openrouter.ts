@@ -1,5 +1,9 @@
 import axios from "axios";
 
+if (!process.env.OPENROUTER_API_KEY) {
+  throw new Error("Missing OPENROUTER_API_KEY in environment variables");
+}
+
 export async function callOpenRouter(messages: { role: string; content: string }[]) {
   try {
     const response = await axios.post(
@@ -19,9 +23,13 @@ export async function callOpenRouter(messages: { role: string; content: string }
       }
     );
 
+    if (!response.data.choices?.[0]?.message?.content) {
+      throw new Error("Resposta inesperada da OpenRouter");
+    }
+
     return response.data.choices[0].message.content;
   } catch (error: any) {
     console.error("Erro na chamada do OpenRouter:", error.response?.data || error.message);
-    throw new Error("Erro ao chamar OpenRouter");
+    throw new Error(error.response?.data?.error || "Erro ao chamar OpenRouter");
   }
 }

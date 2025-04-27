@@ -105,6 +105,11 @@
     "googleAuth": "Login with Google",
     "emailPlaceholder": "Enter your email",
     "passwordPlaceholder": "Enter your password",
+    "forgotPassword": "Forgot password",
+    "forgotPasswordTitle": "Reset Password",
+    "emailSent": "Password reset email sent successfully!",
+    "sent": "Password reset successfully!",
+    "send": "Send",
     "validation": {
       "emailRequired": "Email is required.",
       "emailInvalid": "Enter a valid email.",
@@ -244,7 +249,9 @@
       "tired": "Tired",
       "motivated": "Motivated",
       "stressed": "Stressed"
-    }
+    },
+    "entrySaved": "Entry recorded successfully!",
+    "saveError": "Error saving entry."
   },
   "breathing": {
     "start": "Start",
@@ -290,7 +297,8 @@
     "userNotFound": "User not found.",
     "incorrectPassword": "Incorrect password.",
     "internalServerError": "Internal server error. Please try again later.",
-    "recaptcha": "Please verify reCAPTCHA."
+    "recaptcha": "Please verify reCAPTCHA.",
+    "accountNotActivated": "Account not activated"
   },
   "activation": {
     "loadingTitle": "Activating your account...",
@@ -299,5 +307,14 @@
     "successText": "You can now log in to Avylia AI.",
     "errorTitle": "Invalid or expired token",
     "errorText": "Please check the link or request a new activation."
+  },
+  "activationEmail": {
+    "title": "Check your email",
+    "text": "We have sent an activation email to {{email}}. Please also check your spam folder.",
+    "resendIn": "You can resend in {{seconds}} seconds.",
+    "resendButton": "Resend email",
+    "cancel": "Cancel",
+    "close": "Close",
+    "resentSuccess": "Activation email sent again successfully."
   }
 }

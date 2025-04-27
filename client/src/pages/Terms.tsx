@@ -14,7 +14,6 @@ const TermsPage: React.FC = () => {
           <h1 className="text-3xl md:text-4xl font-bold text-[#6DAEDB]">{t('terms.title')}</h1>
           <p className="text-base md:text-lg text-[#AAB9C3] max-w-2xl">{t('terms.intro')}</p>
         </div>
-
         <div className="mt-10 max-w-3xl space-y-6 text-sm md:text-base text-[#E0ECF1] leading-relaxed">
           <p>{t('terms.noMedical')}</p>
           <p>{t('terms.privacy')}</p>

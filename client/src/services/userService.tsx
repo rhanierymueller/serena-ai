@@ -7,38 +7,40 @@ export interface CreateUserInput {
   password?: string;
 }
 
-export async function createUser(data: CreateUserInput) {
-  const response = await fetch(`${BASE_URL}/api/users`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
+  const res = await fetch(url, options);
+  const json = await res.json();
 
-  const json = await response.json();
-
-  if (!response.ok) {
-    const error = new Error(json.error) as Error & {
-      errorCode?: string;
-    };
-    error.errorCode = json.errorCode;
+  if (!res.ok) {
+    const error = new Error(json?.error || 'Erro de API') as Error & { errorCode?: string };
+    error.errorCode = json?.errorCode;
     throw error;
   }
 
   return json;
 }
 
-export async function loginUser({ email, password }: { email: string; password: string }) {
-  const res = await fetch(`${BASE_URL}/api/login`, {
+export function createUser(data: CreateUserInput) {
+  return fetchJson(`${BASE_URL}/api/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+}
+
+export function loginUser({ email, password }: { email: string; password: string }) {
+  return fetchJson(`${BASE_URL}/api/login`, {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   });
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err?.error || 'Falha no login');
-  }
-  return res.json();
+}
+
+export function resendActivationEmail(email: string) {
+  return fetchJson(`${BASE_URL}/api/resend-activation`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
 }

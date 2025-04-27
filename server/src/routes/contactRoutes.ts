@@ -1,25 +1,26 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { wrapAsync } from '../../utils/wrapAsync';
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.post('/', async (req: any, res: any) => {
+router.post('/', wrapAsync(async (req: Request, res: Response) => {
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Missing fields' });
   }
 
-  try {
-    const contact = await prisma.contactMessage.create({
-      data: { name, email, message },
-    });
-    res.status(201).json(contact);
-  } catch (error) {
-    console.error('Error saving contact message:', error);
-    res.status(500).json({ error: 'Internal server error' });
+  if (typeof name !== "string" || typeof email !== "string" || typeof message !== "string") {
+    return res.status(400).json({ error: 'Invalid data types' });
   }
-});
+
+  const contact = await prisma.contactMessage.create({
+    data: { name, email, message },
+  });
+
+  res.status(201).json(contact);
+}));
 
 export default router;

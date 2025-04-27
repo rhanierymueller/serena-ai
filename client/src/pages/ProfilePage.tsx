@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import PageLayout from '../components/PageLayout';
 import { BASE_URL } from '../config';
 import { useI18n } from '../i18n/I18nContext';
+import { useToast } from '../context/ToastContext';
 import { useUserTokens } from '../hooks/useUserTokens';
 import Modal from '../components/Modal';
 
@@ -16,6 +17,7 @@ const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { t } = useI18n();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const userData = getUser();
@@ -33,19 +35,29 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleDeleteAccount = async () => {
+    if (!user?.id) {
+      console.error('Usuário inválido para exclusão.');
+      return;
+    }
     try {
       await fetch(`${BASE_URL}/api/users/${user.id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
       saveUser(null);
+      showToast(t('profile.accountDeletedSuccess'), 'success');
       navigate('/');
     } catch (err) {
       console.error('Erro ao excluir conta:', err);
+      showToast(t('errors.internalServerError'), 'error');
     }
   };
 
   const handleSave = async () => {
+    if (!user?.id) {
+      console.error('Usuário inválido para atualização.');
+      return;
+    }
     try {
       const res = await fetch(`${BASE_URL}/api/users/${user.id}`, {
         method: 'PUT',
@@ -57,9 +69,11 @@ const ProfilePage: React.FC = () => {
       const updated = await res.json();
       saveUser(updated);
       setUser(updated);
+      showToast(t('profile.saveChangesSuccess'), 'success');
       navigate('/');
     } catch (err) {
       console.error('Erro ao salvar usuário:', err);
+      showToast(t('errors.internalServerError'), 'error');
     }
   };
 
@@ -134,9 +148,8 @@ const ProfilePage: React.FC = () => {
                   type="text"
                   name="plan"
                   value={user.plan}
-                  onChange={handleChange}
-                  className="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-600"
                   disabled
+                  className="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-600"
                 />
               </div>
               <button

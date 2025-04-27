@@ -82,7 +82,7 @@ const ContactPage: React.FC = () => {
                 {t('contact.email')}
               </label>
               <input
-                type="text" // <- string normal para validação 100% yup
+                type="text"
                 id="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}

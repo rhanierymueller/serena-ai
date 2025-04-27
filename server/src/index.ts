@@ -20,6 +20,7 @@ import tokenRoutes from "./routes/tokenRoutes.js";
 import moodRoutes from "./routes/moodRoutes.js";
 import motivacionalRoutes from "./routes/motivacionalRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
+import { prisma } from "./lib/prisma.js";
 
 dotenv.config();
 
@@ -29,7 +30,10 @@ const app = express();
 app.set('trust proxy', 1);
 
 // determina domínio do front para o cookie
-const clientHost = new URL(process.env.CLIENT_URL!).hostname; // ex: "Avylia-ai.vercel.app"
+if (!process.env.CLIENT_URL) {
+  throw new Error("CLIENT_URL não configurado no ambiente!");
+}
+const clientHost = new URL(process.env.CLIENT_URL).hostname
 
 // 🌐 Domínios permitidos para o frontend (local + produção)
 const allowedOrigins = [
@@ -42,17 +46,21 @@ const allowedOrigins = [
 // ✅ CORS configurado antes de tudo
 app.use(cors({
   origin: (origin, callback) => {
-    console.log("🌐 CORS request from:", origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      console.warn(`🌐 CORS bloqueado para origem: ${origin}`);
+      callback(null, false);
     }
   },
   credentials: true,
 }));
 
 app.use(express.json());
+
+if (!process.env.SESSION_SECRET) {
+  console.warn("🚨 Atenção: Usando fallback SECRET para sessões. Configure SESSION_SECRET no ambiente.");
+}
 
 // 🔐 Sessão com Redis se disponível
 const sessionOptions: session.SessionOptions = {
@@ -86,6 +94,15 @@ app.use(session(sessionOptions));
 
 // 🔐 Auth
 app.use(passport.initialize());
+passport.serializeUser((user: any, done) => done(null, user.id));
+passport.deserializeUser(async (id: string | undefined, done) => {
+  if (!id) return done(null, false);
+  const u = await prisma.user.findUnique({ where: { id } });
+  if (!u) return done(null, false);
+  const { password, activationToken, ...safe } = u;
+  done(null, safe);
+});
+
 app.use(passport.session());
 
 // 🧩 Rotas

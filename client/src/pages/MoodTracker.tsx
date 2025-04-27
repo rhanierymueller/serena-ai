@@ -77,7 +77,6 @@ const MoodTracker: React.FC = () => {
   useEffect(() => {
     const u = getUser();
     setUser(u);
-
     if (u?.id) {
       fetch(`${BASE_URL}/api/mood/${u.id}`)
         .then(res => res.json())
@@ -94,7 +93,6 @@ const MoodTracker: React.FC = () => {
   const handleSubmit = async () => {
     if (!mood || !user?.id) return;
     setLoading(true);
-
     try {
       await fetch(`${BASE_URL}/api/mood`, {
         method: 'POST',
@@ -112,11 +110,11 @@ const MoodTracker: React.FC = () => {
       setMood('');
       setIntensity(3);
       setNote('');
-      showToast('✅ Entrada registrada com sucesso!', 'success');
+      showToast(t('moodTracker.entrySaved'), 'success');
       chartRef.current?.scrollIntoView({ behavior: 'smooth' });
     } catch (err) {
       console.error(err);
-      showToast('Erro ao salvar entrada 😢', 'error');
+      showToast(t('moodTracker.saveError'), 'error');
     } finally {
       setLoading(false);
     }
@@ -203,7 +201,6 @@ const MoodTracker: React.FC = () => {
                       content={({ active, payload, label }) => {
                         if (active && payload && payload.length) {
                           const entry = payload[0].payload;
-
                           const iconMap: Record<string, JSX.Element> = {
                             feliz: <Smile className="w-4 h-4 inline mr-1 text-[#6DAEDB]" />,
                             triste: <Frown className="w-4 h-4 inline mr-1 text-[#6DAEDB]" />,
@@ -216,7 +213,6 @@ const MoodTracker: React.FC = () => {
                             motivado: <Bolt className="w-4 h-4 inline mr-1 text-[#6DAEDB]" />,
                             estressado: <Zap className="w-4 h-4 inline mr-1 text-[#6DAEDB]" />,
                           };
-
                           const moodKeyMap = {
                             feliz: 'happy',
                             triste: 'sad',
@@ -227,7 +223,6 @@ const MoodTracker: React.FC = () => {
                             motivado: 'motivated',
                             estressado: 'stressed',
                           } as const;
-
                           const icon = iconMap[entry.mood];
                           const moodKey =
                             moodKeyMap[entry.mood as keyof typeof moodKeyMap] || entry.mood;

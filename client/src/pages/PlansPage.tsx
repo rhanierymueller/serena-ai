@@ -17,7 +17,6 @@ const PlansPage: React.FC = () => {
       alert(t('plansPage.loginRequired'));
       return;
     }
-
     handleStripeSubscriptionCheckout(user.id, user.email, tokenAmount);
   };
 
@@ -35,7 +34,6 @@ const PlansPage: React.FC = () => {
         <h1 className="text-4xl font-bold mb-4">{t('plansPage.title')}</h1>
         <p className="text-gray-400 mb-10">{t('plansPage.subtitle')}</p>
 
-        {/* 🔍 Plano atual */}
         <div className="mb-10 bg-[#111] text-white border border-gray-700 p-4 rounded-xl">
           <h3 className="text-lg font-semibold mb-1">{t('plansPage.currentPlan')}</h3>
 
@@ -56,7 +54,6 @@ const PlansPage: React.FC = () => {
           )}
         </div>
 
-        {/* 💳 Planos disponíveis */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map(plan => (
             <div
@@ -80,7 +77,6 @@ const PlansPage: React.FC = () => {
           ))}
         </div>
 
-        {/* 🎁 Benefícios */}
         <div className="mt-16 text-left text-white max-w-4xl mx-auto space-y-10">
           <h2 className="text-2xl font-bold text-[#6DAEDB] mb-2">{t('plansPage.benefitsTitle')}</h2>
 

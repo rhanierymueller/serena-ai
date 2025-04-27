@@ -22,6 +22,7 @@ model User {
   chats            Chat[]
   token            UserToken?
   moodEntries      MoodEntry[]
+  resetToken       String?       @unique
 }
 
 

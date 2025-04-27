@@ -6,7 +6,7 @@ type Language = 'pt' | 'en' | 'es';
 interface I18nContextProps {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (path: string) => string;
+  t: (path: string, params?: Record<string, string | number>) => string;
 }
 
 const I18nContext = createContext<I18nContextProps>({
@@ -38,7 +38,7 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setLanguageState(lang);
   };
 
-  const t = (path: string) => {
+  const t = (path: string, params?: Record<string, string | number>) => {
     const keys = path.split('.');
     let result: any = translations[language];
     for (const key of keys) {
@@ -48,6 +48,13 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return path;
       }
     }
+
+    if (typeof result === 'string' && params) {
+      Object.keys(params).forEach(param => {
+        result = result.replace(`{{${param}}}`, String(params[param]));
+      });
+    }
+
     return typeof result === 'string' ? result : path;
   };
 

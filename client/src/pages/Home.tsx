@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import LogoIcon from '/image/image.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
 import Modal from '../components/Modal';
 import Footer from '../components/Footer';
@@ -21,13 +21,21 @@ const Home: React.FC = () => {
 
   const storedUser = getUser();
   const [userName, setUserName] = useState<string | null>(
-    () => storedUser?.name.split(' ')[0] ?? null
+    () => storedUser?.name?.split(' ')[0] ?? null
   );
   const [gender, setGender] = useState<'male' | 'female' | 'other'>(
     () => storedUser?.gender ?? 'other'
   );
 
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const location = useLocation();
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search);
+    if (query.get('activated') === 'true') {
+      setShowLogin(true);
+    }
+  }, [location]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -41,9 +49,27 @@ const Home: React.FC = () => {
     updateUserState();
   }, []);
 
-  const handleRegisterSuccess = () => {
-    updateUserState();
-    setShowRegister(false);
+  const updateUserState = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/auth/me`, { credentials: 'include' });
+      if (!res.ok) throw new Error('Não autenticado');
+
+      const user = await res.json();
+
+      if (!user.active) throw new Error('Conta não ativada');
+
+      saveUser(user);
+
+      if (user.name) {
+        const [firstName] = user.name.split(' ');
+        setUserName(firstName);
+      }
+      setGender(user.gender || 'male');
+    } catch (err) {
+      console.error('Falha ao verificar login:', err);
+      setUserName(null);
+      setGender('other');
+    }
   };
 
   const handleTestClick = () => setShowDisclaimer(true);
@@ -54,31 +80,8 @@ const Home: React.FC = () => {
     setTimeout(() => navigate('/chat'), 600);
   };
 
-  const updateUserState = async () => {
-    try {
-      const res = await fetch(`${BASE_URL}/api/auth/me`, {
-        credentials: 'include',
-      });
-
-      if (!res.ok) throw new Error('Não autenticado');
-
-      const user = await res.json();
-      saveUser(user);
-
-      if (user.name) {
-        const [firstName] = user.name.split(' ');
-        setUserName(firstName);
-      }
-      setGender(user.gender || 'male');
-    } catch (err) {
-      console.error('Falha ao verificar login:', err);
-      const stored = getUser();
-      if (stored?.name) {
-        const [firstName] = stored.name.split(' ');
-        setUserName(firstName);
-        setGender(stored.gender || 'male');
-      }
-    }
+  const handleRegisterSuccess = () => {
+    setShowRegister(false);
   };
 
   return (
@@ -115,12 +118,14 @@ const Home: React.FC = () => {
         <p className="text-center text-lg md:text-xl text-[#AAB9C3] max-w-xl mb-6">
           {t('header.subtitle')}
         </p>
+
         {userName && (
           <div className="mt-4 mb-6 text-[#6DAEDB] text-xl md:text-2xl font-bold">
             <TypingText text={`${t('home.welcome')} ${userName}`} />
           </div>
         )}
-        <div className="flex gap-4">
+
+        <div className="flex flex-wrap justify-center gap-4">
           {!userName ? (
             <>
               <button
@@ -153,9 +158,7 @@ const Home: React.FC = () => {
         </div>
       </main>
 
-      <div className="z-10">
-        <Footer />
-      </div>
+      <Footer />
 
       {showDisclaimer && (
         <Modal
@@ -168,7 +171,9 @@ const Home: React.FC = () => {
           size="md"
         />
       )}
+
       {showRegister && <RegisterModal onClose={handleRegisterSuccess} />}
+
       {showLogin && (
         <LoginModal
           onClose={() => setShowLogin(false)}

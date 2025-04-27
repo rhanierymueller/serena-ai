@@ -11,6 +11,7 @@ import Contact from './pages/Contact';
 import AvyliaChat from './pages/AvyliaChat';
 import PrivacyPage from './pages/PrivacyPage';
 import ActivateAccount from './pages/ActivateAccount';
+import ResetPassword from './pages/ResetPassword';
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
       <Route path="/motivacional" element={<MotivationalSpin />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/activate/:token" element={<ActivateAccount />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
   );
 };

@@ -1,4 +1,5 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
+import { wrapAsync } from '../../utils/wrapAsync';
 import { callOpenRouter } from '../lib/openrouter.js';
 
 const router = Router();
@@ -12,26 +13,21 @@ const prompt: Record<'pt' | 'en' | 'es', string> = {
 const supportedLanguages = ['pt', 'en', 'es'] as const;
 type Language = typeof supportedLanguages[number];
 
-router.post('/', async (req, res) => {
+router.post('/', wrapAsync(async (req: Request, res: Response) => {
   let lang: Language = 'pt';
   if (supportedLanguages.includes(req.body.language)) {
     lang = req.body.language;
   }
 
-  const messages: { role: string; content: string }[] = [
+  const messages = [
     {
       role: 'user',
       content: prompt[lang],
     },
   ];
 
-  try {
-    const reply = await callOpenRouter(messages);
-    res.json({ quote: reply.trim().replace(/^["']|["']$/g, '') });
-  } catch (err) {
-    console.error('Erro ao gerar frase:', err);
-    res.status(500).json({ error: 'Erro ao gerar frase motivacional.' });
-  }
-});
+  const reply = await callOpenRouter(messages);
+  res.json({ quote: reply.trim().replace(/^["']|["']$/g, '') });
+}));
 
 export default router;
