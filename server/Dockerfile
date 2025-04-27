@@ -12,6 +12,7 @@ RUN npm ci
 
 # 3) Copia o restante do projeto
 COPY tsconfig.json ./
+COPY prisma ./prisma
 COPY src ./src
 COPY utils ./utils
 
