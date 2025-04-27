@@ -22,7 +22,7 @@ router.post("/", wrapAsync(async (req: Request, res: Response) => {
 
   if (!chat) return res.status(404).json({ error: "Chat não encontrado" });
 
-  const history: ChatCompletionMessageParam[] = chat.messages.map(m => ({
+  const history: ChatCompletionMessageParam[] = chat.messages.map((m: { role: string; content: any }) => ({
     role: m.role === "assistant" ? "assistant" : "user",
     content: typeof m.content === "string" ? m.content : "[mensagem inválida]",
   }));
