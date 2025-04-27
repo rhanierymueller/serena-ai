@@ -2,13 +2,16 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 
+# Copia arquivos de configuração
 COPY package.json package-lock.json ./
-RUN npm ci
-
 COPY tsconfig.json ./
 COPY prisma ./prisma
+
+# Copia código-fonte
 COPY src ./src
 
+# Instala dependências e compila
+RUN npm ci
 RUN npm run build
 
 # Stage 2: Runtime
