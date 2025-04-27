@@ -4,8 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "start": "node dist/index.js",
-    "build": "tsc"
+    "build": "tsc",
+    "postinstall": "npm run build",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@auth/core": "^0.38.0",
