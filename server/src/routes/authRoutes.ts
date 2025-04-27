@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import passport from 'passport';
-import { wrapAsync } from '../utils/wrapAsync';
+import { wrapAsync } from '../utils/wrapAsync.js';
 
 const router = express.Router();
 
