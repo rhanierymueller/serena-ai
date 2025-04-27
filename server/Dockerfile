@@ -1,19 +1,14 @@
+# Stage 1: Build
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# 1) Copia apenas package.json e package-lock.json primeiro
 COPY package.json package-lock.json ./
+RUN npm ci
 
-# 2) Instala dependências (postinstall vai rodar depois)
-RUN npm ci --ignore-scripts
-
-# 3) Agora sim copia o resto
 COPY tsconfig.json ./
 COPY prisma ./prisma
 COPY src ./src
-COPY utils ./utils
 
-# 4) Roda build manualmente
 RUN npm run build
 
 # Stage 2: Runtime
