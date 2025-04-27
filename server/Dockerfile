@@ -1,39 +1,42 @@
-# Stage 1: build
+# ┌───────────────────────────────────────────────┐
+# │  Stage 1: build (com devDependencies)        │
+# └───────────────────────────────────────────────┘
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Copia pacotes
+# 1) Copia só package.json e lockfile
 COPY package*.json ./
 
-# Instala tudo (prod + dev)
+# 2) Instala tudo (prod + dev) para o TS poder compilar
 RUN npm ci
 
-# Copia o restante
+# 3) Copia o restante do código
 COPY tsconfig.json ./
 COPY src ./src
 COPY utils ./utils
-COPY prisma ./prisma
 
-# Compila TypeScript para /dist
+# 4) Roda a compilação
 RUN npx tsc
 
-# Stage 2: runtime
+# ┌───────────────────────────────────────────────┐
+# │  Stage 2: runtime (apenas produção)          │
+# └───────────────────────────────────────────────┘
 FROM node:18-alpine AS runner
 WORKDIR /app
 
-# Copia apenas pacotes
+# 5) Copia package.json para instalar só prod-deps
 COPY package*.json ./
 
-# Instala apenas deps de produção
-RUN npm ci --omit=dev
+# 6) Instala apenas production dependencies
+ENV NODE_ENV=production
+RUN npm ci --omit=dev --ignore-scripts
 
-# Copia apenas a build
+# 7) Traz o dist compilado pelo builder
 COPY --from=builder /app/dist ./dist
-COPY prisma ./prisma
 
-# Define variáveis
+# 8) Variáveis de ambiente e porta
 ENV NODE_ENV=production
 EXPOSE 4000
 
-# Inicia o app
+# 9) Inicia o servidor
 CMD ["node", "dist/index.js"]
