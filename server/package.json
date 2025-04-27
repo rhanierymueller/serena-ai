@@ -13,7 +13,7 @@
     "@auth/express": "^0.9.0",
     "@prisma/client": "^6.6.0",
     "axios": "^1.8.4",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "connect-redis": "^6.1.3",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { prisma } from "../lib/prisma";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from "uuid";
 import { sendActivationEmail, sendResetPasswordEmail } from "../lib/email";
 import rateLimit from "express-rate-limit";
