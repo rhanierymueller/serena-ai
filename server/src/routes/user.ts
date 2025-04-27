@@ -1,11 +1,11 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../lib/prisma";
 import bcrypt from "bcrypt";
 import { Prisma } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
-import { sendActivationEmail, sendResetPasswordEmail } from "../lib/email.js";
+import { sendActivationEmail, sendResetPasswordEmail } from "../lib/email";
 import rateLimit from "express-rate-limit";
-import { wrapAsync } from "../utils/wrapAsync.js";
+import { wrapAsync } from "../utils/wrapAsync";
 
 const router = Router();
 

@@ -1,10 +1,10 @@
 import { Router, Request, Response } from "express";
-import { prisma } from "../lib/prisma.js";
-import { openai } from "../lib/openai.js";
-import { callOpenRouter } from "../lib/openrouter.js";
+import { prisma } from "../lib/prisma";
+import { openai } from "../lib/openai";
+import { callOpenRouter } from "../lib/openrouter";
 import { ChatCompletionMessageParam } from "openai/resources/chat";
-import { canUseTokens, consumeTokens } from "../lib/token.js";
-import { wrapAsync } from "../utils/wrapAsync.js";
+import { canUseTokens, consumeTokens } from "../lib/token";
+import { wrapAsync } from "../utils/wrapAsync";
 
 const router = Router();
 
