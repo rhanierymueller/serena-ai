@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "node",
@@ -8,8 +10,6 @@
     "resolveJsonModule": true,
     "strict": true,
     "skipLibCheck": true,
-    "outDir": "dist",
-    "rootDir": "src",
     "types": ["node"],
     "forceConsistentCasingInFileNames": true
   },
