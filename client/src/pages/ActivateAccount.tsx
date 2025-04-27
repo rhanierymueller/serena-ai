@@ -29,15 +29,15 @@ const ActivateAccount: React.FC = () => {
     }
   }, [token]);
 
-  useEffect(() => {
-    if (status === 'success' || status === 'error') {
-      const timeout = setTimeout(() => {
-        navigate('/');
-      }, 5000);
+  // useEffect(() => {
+  //   if (status === 'success' || status === 'error') {
+  //     const timeout = setTimeout(() => {
+  //       navigate('/');
+  //     }, 5000);
 
-      return () => clearTimeout(timeout);
-    }
-  }, [status, navigate]);
+  //     return () => clearTimeout(timeout);
+  //   }
+  // }, [status, navigate]);
 
   return (
     <PageLayout backTo="/">
