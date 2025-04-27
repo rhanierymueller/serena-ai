@@ -1,45 +1,44 @@
 # ┌───────────────────────────────────────────────┐
-# │  Stage 1: build (compilar TypeScript)          │
+# │ Stage 1: Build (compilar TypeScript)           │
 # └───────────────────────────────────────────────┘
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# 1) Copia package.json e lockfile
+# Copia package.json e package-lock.json
 COPY package.json package-lock.json ./
 
-# 2) Instala dependências completas (prod + dev)
+# Instala dependências completas (prod + dev)
 RUN npm ci
 
-# 3) Copia o restante do código
+# Copia o restante do projeto
 COPY tsconfig.json ./
 COPY prisma ./prisma
 COPY src ./src
 COPY utils ./utils
 
-# 4) Compila TypeScript
+# Compila o TypeScript
 RUN npm run build
 
 # ┌───────────────────────────────────────────────┐
-# │  Stage 2: runtime (somente produção)           │
+# │ Stage 2: Runtime (produção)                    │
 # └───────────────────────────────────────────────┘
 FROM node:18-alpine AS runner
 WORKDIR /app
 
-# 5) Copia só o necessário
+# Copia apenas o necessário
 COPY package.json package-lock.json ./
 
-# 6) Instala apenas production dependencies
+# Instala apenas dependências de produção
 ENV NODE_ENV=production
 RUN npm ci --omit=dev --ignore-scripts
 
-# 7) Copia o que foi gerado
+# Copia o que foi gerado na fase de build
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 
-# 8) Gera Prisma Client para produção
+# Prisma generate no runtime (se usar Prisma Client)
 RUN npx prisma generate
 
-# 9) Expõe porta e inicia app
-ENV NODE_ENV=production
+# Porta e startup
 EXPOSE 4000
 CMD ["node", "dist/index.js"]
