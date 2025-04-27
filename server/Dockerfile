@@ -17,7 +17,7 @@ COPY src ./src
 COPY utils ./utils
 
 # 4) Compila TypeScript
-RUN npx tsc
+RUN npm run build
 
 # ┌───────────────────────────────────────────────┐
 # │  Stage 2: runtime (somente produção)           │
