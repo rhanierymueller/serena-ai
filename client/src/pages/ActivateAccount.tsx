@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import PageLayout from '../components/PageLayout';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { useI18n } from '../i18n/I18nContext';
+import { BASE_URL } from '../config';
 
 const ActivateAccount: React.FC = () => {
   const { token } = useParams();
@@ -13,11 +14,16 @@ const ActivateAccount: React.FC = () => {
   useEffect(() => {
     const activate = async () => {
       try {
-        const response = await fetch(`/api/activate/${token}`);
+        const response = await fetch(`${BASE_URL}/api/activate/${token}`);
         if (response.ok) {
           setStatus('success');
         } else {
-          setStatus('error');
+          const data = await response.json();
+          if (data.errorCode === 'tokenNotFound') {
+            setStatus('success');
+          } else {
+            setStatus('error');
+          }
         }
       } catch (error) {
         setStatus('error');
@@ -29,15 +35,15 @@ const ActivateAccount: React.FC = () => {
     }
   }, [token]);
 
-  // useEffect(() => {
-  //   if (status === 'success' || status === 'error') {
-  //     const timeout = setTimeout(() => {
-  //       navigate('/');
-  //     }, 5000);
+  useEffect(() => {
+    if (status === 'success' || status === 'error') {
+      const timeout = setTimeout(() => {
+        navigate('/');
+      }, 5000);
 
-  //     return () => clearTimeout(timeout);
-  //   }
-  // }, [status, navigate]);
+      return () => clearTimeout(timeout);
+    }
+  }, [status, navigate]);
 
   return (
     <PageLayout backTo="/">
