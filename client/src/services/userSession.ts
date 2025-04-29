@@ -20,9 +20,6 @@ export function getUser(): UserProfile | null {
   const user = localStorage.getItem(USER_KEY);
   if (user !== null) {
     try {
-      if (import.meta.env.DEV) {
-        console.log('User found in localStorage:', user);
-      }
       return JSON.parse(user) as UserProfile;
     } catch (error) {
       console.error('Erro ao parsear usuário do localStorage:', error);

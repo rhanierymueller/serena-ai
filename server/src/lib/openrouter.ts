@@ -10,18 +10,20 @@ export async function callOpenRouter(messages: { role: string; content: string }
       "https://openrouter.ai/api/v1/chat/completions",
       {
         model: "deepseek/deepseek-chat:free",
+        temperature: 0.6,   
+        top_p: 0.9,          
+        max_tokens: 400,
         messages: [
-          { role: "system", content: "Você é uma terapeuta empática e acolhedora." },
+          { role: "system",
+            content: "Você é uma terapeuta empática. Responda em texto simples, sem markdown." },
           ...messages,
         ],
+        provider: { allow_fallbacks: false },
       },
-      {
-        headers: {
-          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
+      { headers: { Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}` } }
     );
+    
+    
 
     if (!response.data.choices?.[0]?.message?.content) {
       throw new Error("Resposta inesperada da OpenRouter");
