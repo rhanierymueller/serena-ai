@@ -12,6 +12,7 @@ model User {
   name             String
   email            String        @unique
   gender           String?
+  birthDate        String?
   createdAt        DateTime      @default(now())
   password         String?
   plan             String        @default("free")

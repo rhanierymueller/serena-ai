@@ -20,6 +20,7 @@ import tokenRoutes from "./routes/tokenRoutes.js";
 import moodRoutes from "./routes/moodRoutes.js";
 import motivacionalRoutes from "./routes/motivacionalRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
+import configRoutes from "./routes/configRoutes.js";
 import { prisma } from "./lib/prisma.js";
 
 dotenv.config();
@@ -38,20 +39,29 @@ const clientHost = new URL(process.env.CLIENT_URL).hostname;
 const allowedOrigins = [
   "http://localhost:5173",
   "https://serena-ai.vercel.app",
-  "https://serena-ai-rhaniery-muellers-projects.vercel.app/",
+  "https://serena-ai-rhaniery-muellers-projects.vercel.app",
   "https://www.avylia.com",
+  "capacitor://localhost",
+  "ionic://localhost",
+  "http://localhost",
+  "file://",
 ];
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.warn(`🌐 CORS bloqueado para origem: ${origin}`);
-      callback(null, false);
+    if (!origin) return callback(null, false);
+  
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, origin); // Retorna a origem, não true
     }
+  
+    console.warn(`🌐 CORS bloqueado para origem: ${origin}`);
+    return callback(new Error("Not allowed by CORS"));
   },
+  
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 
 app.use(express.json());
@@ -66,6 +76,7 @@ const sessionOptions: session.SessionOptions = {
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     httpOnly: true,
     path: "/",
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 dias em milissegundos
   },
 };
 
@@ -104,6 +115,7 @@ app.use("/api/tokens", tokenRoutes);
 app.use("/api/mood", moodRoutes);
 app.use('/api/motivacional', motivacionalRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/config', configRoutes);
 
 // 🩺 Health Check
 app.get("/", (_, res) => {

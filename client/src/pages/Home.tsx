@@ -7,9 +7,10 @@ import Footer from '../components/Footer';
 import RegisterModal from './modals/RegisterModal';
 import LoginModal from './modals/LoginModal';
 import { TypingText } from '../components/TypingText';
-import { getUser, saveUser } from '../services/userSession';
+import { getUser, saveUser, clearUser } from '../services/userSession';
 import { BASE_URL } from '../config';
 import Header from '../components/Header';
+import { checkAuth } from '../services/userService';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -72,22 +73,33 @@ const Home: React.FC = () => {
 
   const updateUserState = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/me`, { credentials: 'include' });
-      if (!res.ok) throw new Error('Não autenticado');
+      // Primeiro verifica se já temos um usuário no armazenamento local
+      const storedUser = getUser();
 
-      const user = await res.json();
+      if (storedUser?.id) {
+        // Se temos um usuário armazenado, verifica se ainda está válido no servidor
+        const user = await checkAuth();
 
-      if (!user.active) throw new Error('Conta não ativada');
+        if (user && user.active) {
+          // Atualiza o usuário armazenado com os dados mais recentes
+          saveUser(user);
 
-      saveUser(user);
-
-      if (user.name) {
-        const [firstName] = user.name.split(' ');
-        setUserName(firstName);
+          if (user.name) {
+            const [firstName] = user.name.split(' ');
+            setUserName(firstName);
+          }
+          setGender(user.gender || 'other');
+          return;
+        }
       }
-      setGender(user.gender || 'male');
+
+      // Se não temos usuário armazenado ou ele não é mais válido
+      clearUser();
+      setUserName(null);
+      setGender('other');
     } catch (err) {
       console.error('Falha ao verificar login:', err);
+      clearUser();
       setUserName(null);
       setGender('other');
     }

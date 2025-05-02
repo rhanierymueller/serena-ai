@@ -16,6 +16,7 @@ import { useI18n } from '../i18n/I18nContext';
 import Select from './Select';
 import Modal from './Modal';
 import { getUser, clearUser } from '../services/userSession';
+import { BASE_URL } from '../config';
 
 type Language = 'pt' | 'en' | 'es';
 
@@ -51,11 +52,20 @@ const Header: React.FC<HeaderProps> = ({
   const [accountOpen, setAccountOpen] = useState(false);
   const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
 
-  const handleLogout = () => {
-    clearUser();
-    onLogoutSuccess?.();
-    setShowLogoutModal(false);
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await fetch(`${BASE_URL}/api/logout`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.warn('Erro ao fazer logout no servidor:', error);
+    } finally {
+      clearUser();
+      onLogoutSuccess?.();
+      setShowLogoutModal(false);
+      navigate('/');
+    }
   };
 
   return (

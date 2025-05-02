@@ -26,7 +26,7 @@ const resendActivationLimiter = rateLimit({
 });
 
 router.post("/users", (async (req: any, res: any) => {
-  const { name, email, gender, password, provider = "credentials" } = req.body;
+  const { name, email, gender, password, birthDate, provider = "credentials" } = req.body;
 
   if (!name || !email) {
     return res.status(400).json({ errorCode: "missingCredentials" });
@@ -47,6 +47,7 @@ router.post("/users", (async (req: any, res: any) => {
       data: {
         name,
         gender,
+        birthDate,
         password: hashedPassword,
         provider,
         active: false, // ainda deixa inativo até confirmar o email
@@ -67,6 +68,7 @@ router.post("/users", (async (req: any, res: any) => {
       email,
       gender,
       password: hashedPassword,
+      birthDate,
       provider,
       active: false,
       activationToken,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
 import PageLayout from '../components/PageLayout';
@@ -6,11 +6,79 @@ import { getUser } from '../services/userSession';
 import { handleStripeSubscriptionCheckout } from '../hooks/useStripeCheckout';
 import { useUserTokens } from '../hooks/useUserTokens';
 import { Gem } from 'lucide-react';
+import { formatPrice } from '../utils/formatters';
+import { getPublicConfig } from '../services/configService';
 
 const PlansPage: React.FC = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const user = getUser();
   const { total, used } = useUserTokens();
+  const [plans, setPlans] = useState<
+    { tokens: number; price: string; priceUsd: number; priceBrl: number }[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadPlans = async () => {
+      try {
+        setLoading(true);
+        const config = await getPublicConfig();
+
+        // Formata os preços de acordo com o idioma
+        const formattedPlans = config.plans.map(plan => {
+          // Usa o preço em BRL para português e USD para outros idiomas
+          const priceToShow = language === 'pt' ? plan.priceBrl : plan.priceUsd;
+          return {
+            tokens: plan.tokens,
+            price: formatPrice(priceToShow, language),
+            priceUsd: plan.priceUsd,
+            priceBrl: plan.priceBrl,
+          };
+        });
+
+        setPlans(formattedPlans);
+      } catch (error) {
+        console.error('Erro ao carregar planos:', error);
+        // Fallback para valores padrão em caso de erro
+        const defaultPriceUsd2k = 9.99;
+        const defaultPriceUsd5k = 19.99;
+        const defaultPriceUsd10k = 29.99;
+        const defaultPriceBrl2k = 49.9;
+        const defaultPriceBrl5k = 99.0;
+        const defaultPriceBrl10k = 149.9;
+
+        // Usa o preço em BRL para português e USD para outros idiomas
+        const priceToShow2k = language === 'pt' ? defaultPriceBrl2k : defaultPriceUsd2k;
+        const priceToShow5k = language === 'pt' ? defaultPriceBrl5k : defaultPriceUsd5k;
+        const priceToShow10k = language === 'pt' ? defaultPriceBrl10k : defaultPriceUsd10k;
+
+        setPlans([
+          {
+            tokens: 2000,
+            price: formatPrice(priceToShow2k, language),
+            priceUsd: defaultPriceUsd2k,
+            priceBrl: defaultPriceBrl2k,
+          },
+          {
+            tokens: 5000,
+            price: formatPrice(priceToShow5k, language),
+            priceUsd: defaultPriceUsd5k,
+            priceBrl: defaultPriceBrl5k,
+          },
+          {
+            tokens: 10000,
+            price: formatPrice(priceToShow10k, language),
+            priceUsd: defaultPriceUsd10k,
+            priceBrl: defaultPriceBrl10k,
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPlans();
+  }, [language]);
 
   const handleCheckout = (tokenAmount: number) => {
     if (!user?.id || !user?.email) {
@@ -19,12 +87,6 @@ const PlansPage: React.FC = () => {
     }
     handleStripeSubscriptionCheckout(user.id, user.email, tokenAmount);
   };
-
-  const plans = [
-    { tokens: 2000, price: 'R$ 49,90' },
-    { tokens: 5000, price: 'R$ 99,00' },
-    { tokens: 10000, price: 'R$ 149,90' },
-  ];
 
   const tokensLeft = total - used;
 
@@ -54,28 +116,34 @@ const PlansPage: React.FC = () => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {plans.map(plan => (
-            <div
-              key={plan.tokens}
-              className="bg-[#1a1a1a] p-6 rounded-2xl border border-[#6DAEDB] shadow-md"
-            >
-              <h2 className="text-2xl font-semibold mb-2">
-                {plan.tokens} {t('plansPage.tokens')}
-              </h2>
-              <p className="text-gray-400 mb-4">
-                {t('plansPage.validFor')} {t('plansPage.tokenBasedUsage')}
-              </p>
-              <span className="block text-2xl font-bold mb-4">{plan.price}</span>
-              <button
-                onClick={() => handleCheckout(plan.tokens)}
-                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl font-semibold transition"
+        {loading ? (
+          <div className="text-center py-10">
+            <p>{t('common.loading')}</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {plans.map(plan => (
+              <div
+                key={plan.tokens}
+                className="bg-[#1a1a1a] p-6 rounded-2xl border border-[#6DAEDB] shadow-md"
               >
-                {t('plansPage.buyNow')}
-              </button>
-            </div>
-          ))}
-        </div>
+                <h2 className="text-2xl font-semibold mb-2">
+                  {plan.tokens} {t('plansPage.tokens')}
+                </h2>
+                <p className="text-gray-400 mb-4">
+                  {t('plansPage.validFor')} {t('plansPage.tokenBasedUsage')}
+                </p>
+                <span className="block text-2xl font-bold mb-4">{plan.price}</span>
+                <button
+                  onClick={() => handleCheckout(plan.tokens)}
+                  className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-4 py-2 rounded-xl font-semibold transition"
+                >
+                  {t('plansPage.buyNow')}
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="mt-16 text-left text-white max-w-4xl mx-auto space-y-10">
           <h2 className="text-2xl font-bold text-[#6DAEDB] mb-2">{t('plansPage.benefitsTitle')}</h2>

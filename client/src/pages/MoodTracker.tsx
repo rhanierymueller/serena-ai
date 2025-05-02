@@ -28,6 +28,7 @@ import { getUser } from '../services/userSession';
 import { BASE_URL } from '../config';
 import { useToast } from '../context/ToastContext';
 import MoodSelect from '../components/MoodSelect';
+import { formatDate } from '../utils/formatters';
 
 interface MoodEntry {
   mood: string;
@@ -37,7 +38,7 @@ interface MoodEntry {
 }
 
 const MoodTracker: React.FC = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { showToast } = useToast();
   const [user, setUser] = useState<any>(null);
   const [mood, setMood] = useState('');
@@ -83,12 +84,12 @@ const MoodTracker: React.FC = () => {
         .then(entries => {
           const parsed = entries.map((entry: MoodEntry) => ({
             ...entry,
-            createdAt: new Date(entry.createdAt).toLocaleDateString(),
+            createdAt: formatDate(new Date(entry.createdAt), language),
           }));
           setData(parsed);
         });
     }
-  }, []);
+  }, [language]);
 
   const handleSubmit = async () => {
     if (!mood || !user?.id) return;
@@ -103,7 +104,7 @@ const MoodTracker: React.FC = () => {
       const updated = await fetch(`${BASE_URL}/api/mood/${user.id}`).then(res => res.json());
       const parsed = updated.map((entry: MoodEntry) => ({
         ...entry,
-        createdAt: new Date(entry.createdAt).toLocaleDateString(),
+        createdAt: formatDate(new Date(entry.createdAt), language),
       }));
       setData(parsed);
 

@@ -11,6 +11,7 @@ import Select from '../../components/Select';
 import { createUser } from '../../services/userService';
 import { useToast } from '../../context/ToastContext';
 import EmailVerificationModal from './EmailVerificationModal';
+import { formatDate, parseDateToBrFormat } from '../../utils/formatters';
 
 interface RegisterModalProps {
   onClose: () => void;
@@ -29,7 +30,7 @@ const countries = [
 ];
 
 const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { showToast } = useToast();
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
@@ -84,11 +85,16 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
       }
       try {
         const fullName = `${values.firstName.trim()} ${values.lastName.trim()}`;
+        // Converte a data para o formato brasileiro antes de enviar para o servidor
+        const birthDate = values.birthDate
+          ? parseDateToBrFormat(values.birthDate, language)
+          : undefined;
         await createUser({
           name: fullName,
           email: values.email,
           gender: values.gender || undefined,
           password: values.password,
+          birthDate: birthDate,
         });
         setShowEmailVerification(true);
       } catch (error: any) {
@@ -240,7 +246,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
                     mask="00/00/0000"
                     value={formik.values.birthDate}
                     onAccept={(value: string) => formik.setFieldValue('birthDate', value)}
-                    placeholder={t('register.birthDate')}
+                    placeholder={language === 'pt' ? 'dd/mm/aaaa' : 'mm/dd/yyyy'}
                     className="input"
                   />
                 </div>
