@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getUser, saveUser } from '../services/userSession';
+import { fetchUserProfile } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
+import { isMobileDevice } from '../utils/deviceDetection';
 import PageLayout from '../components/PageLayout';
 import { BASE_URL } from '../config';
 import { useI18n } from '../i18n/I18nContext';
@@ -24,14 +26,36 @@ const ProfilePage: React.FC = () => {
   const { showToast } = useToast();
 
   useEffect(() => {
-    const userData = getUser();
-    if (!userData) {
-      navigate('/');
-      return;
-    }
-    setUser(userData);
-    setLoading(false);
-  }, []);
+    const loadUserData = async () => {
+      try {
+        // Em dispositivos móveis, busca diretamente do servidor
+        if (isMobileDevice()) {
+          const userData = await fetchUserProfile();
+          if (!userData) {
+            navigate('/');
+            return;
+          }
+          setUser(userData);
+        } else {
+          // Em desktop, tenta obter do localStorage primeiro
+          const userData = getUser();
+          if (!userData) {
+            navigate('/');
+            return;
+          }
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário:', error);
+        navigate('/');
+        return;
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserData();
+  }, [navigate]);
 
   useEffect(() => {
     const loadPlans = async () => {

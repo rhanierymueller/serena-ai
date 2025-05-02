@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
 import PageLayout from '../components/PageLayout';
 import { getUser } from '../services/userSession';
+import { fetchUserProfile } from '../services/userService';
+import { isMobileDevice } from '../utils/deviceDetection';
 import { handleStripeSubscriptionCheckout } from '../hooks/useStripeCheckout';
 import { useUserTokens } from '../hooks/useUserTokens';
 import { Gem } from 'lucide-react';
@@ -11,12 +13,32 @@ import { getPublicConfig } from '../services/configService';
 
 const PlansPage: React.FC = () => {
   const { t, language } = useI18n();
-  const user = getUser();
+  const [user, setUser] = useState<any>(null);
   const { total, used } = useUserTokens();
   const [plans, setPlans] = useState<
     { tokens: number; price: string; priceUsd: number; priceBrl: number }[]
   >([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        // Em dispositivos móveis, busca diretamente do servidor
+        if (isMobileDevice()) {
+          const userData = await fetchUserProfile();
+          setUser(userData);
+        } else {
+          // Em desktop, tenta obter do localStorage primeiro
+          const userData = getUser();
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário:', error);
+      }
+    };
+
+    loadUserData();
+  }, []);
 
   useEffect(() => {
     const loadPlans = async () => {

@@ -10,7 +10,8 @@ import { TypingText } from '../components/TypingText';
 import { getUser, saveUser, clearUser } from '../services/userSession';
 import { BASE_URL } from '../config';
 import Header from '../components/Header';
-import { checkAuth } from '../services/userService';
+import { checkAuth, fetchUserProfile } from '../services/userService';
+import { isMobileDevice } from '../utils/deviceDetection';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -73,27 +74,34 @@ const Home: React.FC = () => {
 
   const updateUserState = async () => {
     try {
-      // Primeiro verifica se já temos um usuário no armazenamento local
-      const storedUser = getUser();
+      let user;
 
-      if (storedUser?.id) {
-        // Se temos um usuário armazenado, verifica se ainda está válido no servidor
-        const user = await checkAuth();
+      // Em dispositivos móveis, sempre busca do servidor
+      if (isMobileDevice()) {
+        user = await fetchUserProfile();
+      } else {
+        // Em desktop, primeiro verifica se já temos um usuário no armazenamento local
+        const storedUser = getUser();
 
-        if (user && user.active) {
-          // Atualiza o usuário armazenado com os dados mais recentes
-          saveUser(user);
-
-          if (user.name) {
-            const [firstName] = user.name.split(' ');
-            setUserName(firstName);
-          }
-          setGender(user.gender || 'other');
-          return;
+        if (storedUser?.id) {
+          // Se temos um usuário armazenado, verifica se ainda está válido no servidor
+          user = await checkAuth();
         }
       }
 
-      // Se não temos usuário armazenado ou ele não é mais válido
+      if (user && user.active) {
+        // Atualiza o usuário armazenado com os dados mais recentes
+        saveUser(user);
+
+        if (user.name) {
+          const [firstName] = user.name.split(' ');
+          setUserName(firstName);
+        }
+        setGender(user.gender || 'other');
+        return;
+      }
+
+      // Se não temos usuário válido
       clearUser();
       setUserName(null);
       setGender('other');

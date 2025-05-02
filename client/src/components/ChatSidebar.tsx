@@ -3,6 +3,8 @@ import { Plus, MessageSquare, ChevronLeft, ChevronRight, X, LogOut } from 'lucid
 
 import { useI18n } from '../i18n/I18nContext';
 import { getUser } from '../services/userSession';
+import { fetchUserProfile } from '../services/userService';
+import { isMobileDevice } from '../utils/deviceDetection';
 import { getChats, createChat, deleteChat } from '../services/chatService';
 import Modal from './Modal';
 import { useNavigate } from 'react-router-dom';
@@ -28,10 +30,17 @@ const ChatSidebar: React.FC<{
 
   useEffect(() => {
     const fetchChats = async () => {
-      const user = getUser();
-      const userId = user?.id ?? null;
-
       try {
+        let user;
+        // Em dispositivos móveis, busca diretamente do servidor
+        if (isMobileDevice()) {
+          user = await fetchUserProfile();
+        } else {
+          // Em desktop, tenta obter do localStorage primeiro
+          user = getUser();
+        }
+
+        const userId = user?.id ?? null;
         const chats = await getChats(userId);
         setHistory(chats);
       } catch (err) {
@@ -43,10 +52,17 @@ const ChatSidebar: React.FC<{
   }, []);
 
   const handleNewChat = async () => {
-    const user = getUser();
-    const userId = user?.id ?? null;
-
     try {
+      let user;
+      // Em dispositivos móveis, busca diretamente do servidor
+      if (isMobileDevice()) {
+        user = await fetchUserProfile();
+      } else {
+        // Em desktop, tenta obter do localStorage primeiro
+        user = getUser();
+      }
+
+      const userId = user?.id ?? null;
       const newChat = await createChat(userId);
       setHistory(prev => [newChat, ...prev]);
       onCreateNew();
@@ -59,10 +75,17 @@ const ChatSidebar: React.FC<{
   const handleDeleteChat = async () => {
     if (!chatToDelete) return;
 
-    const user = getUser();
-    const userId = user?.id ?? null;
-
     try {
+      let user;
+      // Em dispositivos móveis, busca diretamente do servidor
+      if (isMobileDevice()) {
+        user = await fetchUserProfile();
+      } else {
+        // Em desktop, tenta obter do localStorage primeiro
+        user = getUser();
+      }
+
+      const userId = user?.id ?? null;
       await deleteChat(chatToDelete, userId);
       setHistory(prev => prev.filter(chat => chat.id !== chatToDelete));
       if (chatToDelete === currentChatId) {

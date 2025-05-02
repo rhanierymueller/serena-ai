@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: isDevelopment
       ? {
+          host: '0.0.0.0', // Permite acesso externo
           proxy: {
             '/api': 'http://localhost:3011', // Proxy só em desenvolvimento
           },

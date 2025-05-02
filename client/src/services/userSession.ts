@@ -1,4 +1,5 @@
 const USER_KEY = 'Avylia_user_profile';
+import { isMobileDevice } from '../utils/deviceDetection';
 
 export interface UserProfile {
   id: string;
@@ -37,36 +38,43 @@ function isSessionStorageAvailable() {
 }
 
 // Determina qual armazenamento usar
-const useLocalStorage = isLocalStorageAvailable();
-const useSessionStorage = isSessionStorageAvailable();
+const useLocalStorage = isLocalStorageAvailable() && !isMobileDevice();
+const useSessionStorage = isSessionStorageAvailable() && !isMobileDevice();
 
 // Variável para armazenamento em memória como último recurso
 let memoryStorage: UserProfile | null = null;
 
 /**
  * Salva o usuário no armazenamento disponível
+ * Em dispositivos móveis, apenas armazena em memória
  */
 export function saveUser(user: UserProfile | null) {
   if (user) {
-    const userData = JSON.stringify(user);
-    memoryStorage = user; // Sempre armazena em memória
+    // Sempre armazena em memória
+    memoryStorage = user;
 
-    if (useLocalStorage) {
-      try {
-        localStorage.setItem(USER_KEY, userData);
-      } catch (e) {
-        console.warn('Falha ao salvar no localStorage:', e);
+    // Se não for dispositivo móvel, armazena no localStorage/sessionStorage
+    if (!isMobileDevice()) {
+      const userData = JSON.stringify(user);
+
+      if (useLocalStorage) {
+        try {
+          localStorage.setItem(USER_KEY, userData);
+        } catch (e) {
+          console.warn('Falha ao salvar no localStorage:', e);
+        }
       }
-    }
 
-    if (useSessionStorage) {
-      try {
-        sessionStorage.setItem(USER_KEY, userData);
-      } catch (e) {
-        console.warn('Falha ao salvar no sessionStorage:', e);
+      if (useSessionStorage) {
+        try {
+          sessionStorage.setItem(USER_KEY, userData);
+        } catch (e) {
+          console.warn('Falha ao salvar no sessionStorage:', e);
+        }
       }
     }
   } else {
+    // Limpa o usuário
     memoryStorage = null;
 
     if (useLocalStorage) {
@@ -89,8 +97,14 @@ export function saveUser(user: UserProfile | null) {
 
 /**
  * Obtém o usuário do armazenamento disponível
+ * Em dispositivos móveis, sempre retorna null para forçar a busca no banco de dados
  */
 export function getUser(): UserProfile | null {
+  // Em dispositivos móveis, retorna null para forçar a busca no banco de dados
+  if (isMobileDevice()) {
+    return null;
+  }
+
   // Primeiro tenta localStorage
   if (useLocalStorage) {
     try {

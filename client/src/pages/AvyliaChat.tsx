@@ -6,6 +6,8 @@ import { useI18n } from '../i18n/I18nContext';
 import { createChat, getChats } from '../services/chatService';
 import { getMessages, sendMessage } from '../services/messageService';
 import { getUser } from '../services/userSession';
+import { fetchUserProfile } from '../services/userService';
+import { isMobileDevice } from '../utils/deviceDetection';
 import { generateReply } from '../services/llmService';
 import { useUserTokens } from '../hooks/useUserTokens';
 
@@ -137,21 +139,34 @@ const AvyliaChat: React.FC = () => {
 
   useEffect(() => {
     const init = async () => {
-      const user = getUser();
-      if (user?.plan) setPlan(user.plan);
-      const chats = await getChats(user?.id ?? null);
-      if (chats.length) {
-        setChatId(chats[0].id);
-        const msgs = await getMessages(chats[0].id);
-        setMessages(
-          msgs.map((m: { role: string; content: any }) => ({
-            sender: m.role === 'user' ? 'user' : 'bot',
-            text: m.content,
-          }))
-        );
-      } else {
-        const newChat = await createChat(user?.id ?? null);
-        setChatId(newChat.id);
+      try {
+        let user;
+        // Em dispositivos móveis, busca diretamente do servidor
+        if (isMobileDevice()) {
+          user = await fetchUserProfile();
+        } else {
+          // Em desktop, tenta obter do localStorage primeiro
+          user = getUser();
+        }
+
+        if (user?.plan) setPlan(user.plan);
+
+        const chats = await getChats(user?.id ?? null);
+        if (chats.length) {
+          setChatId(chats[0].id);
+          const msgs = await getMessages(chats[0].id);
+          setMessages(
+            msgs.map((m: { role: string; content: any }) => ({
+              sender: m.role === 'user' ? 'user' : 'bot',
+              text: m.content,
+            }))
+          );
+        } else {
+          const newChat = await createChat(user?.id ?? null);
+          setChatId(newChat.id);
+        }
+      } catch (error) {
+        console.error('Erro ao inicializar chat:', error);
       }
     };
     init();

@@ -4,8 +4,9 @@ import * as Yup from 'yup';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useI18n } from '../../i18n/I18nContext';
 import Modal from '../../components/Modal';
-import { loginUser } from '../../services/userService';
+import { loginUser, fetchUserProfile } from '../../services/userService';
 import { saveUser, UserProfile } from '../../services/userSession';
+import { isMobileDevice } from '../../utils/deviceDetection';
 import { useToast } from '../../context/ToastContext';
 import ForgotPasswordModal from './ForgotPasswordModal';
 
@@ -37,10 +38,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
         .required(t('register.validation.passwordRequired')),
     }),
     onSubmit: async values => {
-      if (!captchaVerified) {
-        showToast(t('login.validation.recaptcha'), 'error');
-        return;
-      }
+      // if (!captchaVerified) {
+      //   showToast(t('login.validation.recaptcha'), 'error');
+      //   return;
+      // }
       try {
         const user = await loginUser(values);
         saveUser(user as UserProfile);
@@ -133,14 +134,14 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
             </div>
 
             {/* reCAPTCHA */}
-            <div className="flex justify-center">
+            {/* <div className="flex justify-center">
               <ReCAPTCHA ref={recaptchaRef} sitekey={siteKey} onChange={handleCaptchaChange} />
-            </div>
+            </div> */}
           </form>
         }
         onCancel={onClose}
         onConfirm={handleSubmitModal}
-        confirmDisabled={!captchaVerified}
+        //confirmDisabled={!captchaVerified}
         confirmText={t('login.confirm')}
         cancelText={t('register.cancel')}
         size="sm"

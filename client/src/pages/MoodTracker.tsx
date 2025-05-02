@@ -25,6 +25,8 @@ import {
 import PageLayout from '../components/PageLayout';
 import { useI18n } from '../i18n/I18nContext';
 import { getUser } from '../services/userSession';
+import { fetchUserProfile } from '../services/userService';
+import { isMobileDevice } from '../utils/deviceDetection';
 import { BASE_URL } from '../config';
 import { useToast } from '../context/ToastContext';
 import MoodSelect from '../components/MoodSelect';
@@ -76,19 +78,36 @@ const MoodTracker: React.FC = () => {
   ];
 
   useEffect(() => {
-    const u = getUser();
-    setUser(u);
-    if (u?.id) {
-      fetch(`${BASE_URL}/api/mood/${u.id}`)
-        .then(res => res.json())
-        .then(entries => {
-          const parsed = entries.map((entry: MoodEntry) => ({
-            ...entry,
-            createdAt: formatDate(new Date(entry.createdAt), language),
-          }));
-          setData(parsed);
-        });
-    }
+    const loadUserData = async () => {
+      try {
+        let userData;
+        // Em dispositivos móveis, busca diretamente do servidor
+        if (isMobileDevice()) {
+          userData = await fetchUserProfile();
+        } else {
+          // Em desktop, tenta obter do localStorage primeiro
+          userData = getUser();
+        }
+
+        setUser(userData);
+
+        if (userData?.id) {
+          fetch(`${BASE_URL}/api/mood/${userData.id}`)
+            .then(res => res.json())
+            .then(entries => {
+              const parsed = entries.map((entry: MoodEntry) => ({
+                ...entry,
+                createdAt: formatDate(new Date(entry.createdAt), language),
+              }));
+              setData(parsed);
+            });
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário:', error);
+      }
+    };
+
+    loadUserData();
   }, [language]);
 
   const handleSubmit = async () => {

@@ -1,5 +1,6 @@
 import { BASE_URL } from '../config';
 import { UserProfile } from './userSession';
+import { isMobileDevice } from '../utils/deviceDetection';
 
 export interface CreateUserInput {
   name: string;
@@ -69,6 +70,7 @@ export function createUser(data: CreateUserInput) {
 }
 
 export function loginUser({ email, password }: { email: string; password: string }) {
+  console.log(email, 'email');
   return fetchJson(`${BASE_URL}/api/login`, {
     method: 'POST',
     body: JSON.stringify({ email, password }),
@@ -77,12 +79,28 @@ export function loginUser({ email, password }: { email: string; password: string
 
 /**
  * Verifica se o usuário está autenticado
+ * Em dispositivos móveis, sempre busca do servidor
+ * Em desktop, pode usar o cache local se disponível
  */
 export async function checkAuth(): Promise<UserProfile | null> {
   try {
+    // Em dispositivos móveis, sempre busca do servidor
     return await fetchJson<UserProfile>(`${BASE_URL}/api/auth/me`);
   } catch (error) {
     console.warn('Usuário não autenticado:', error);
+    return null;
+  }
+}
+
+/**
+ * Busca o perfil do usuário diretamente do servidor
+ * Útil para garantir dados atualizados, especialmente em dispositivos móveis
+ */
+export async function fetchUserProfile(): Promise<UserProfile | null> {
+  try {
+    return await fetchJson<UserProfile>(`${BASE_URL}/api/auth/me`);
+  } catch (error) {
+    console.warn('Erro ao buscar perfil do usuário:', error);
     return null;
   }
 }

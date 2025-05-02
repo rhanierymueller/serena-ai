@@ -1,0 +1,22 @@
+{
+  "name": "serena-ai",
+  "version": "1.0.0",
+  "description": "Serena AI - Aplicação completa com frontend e backend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node start-dev.js",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "ip": "node get-local-ip.js",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install"
+  },
+  "keywords": [
+    "serena",
+    "ai",
+    "react",
+    "node",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC"
+}
