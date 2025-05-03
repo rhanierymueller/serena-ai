@@ -88,12 +88,15 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
         const birthDate = values.birthDate
           ? parseDateToBrFormat(values.birthDate, language)
           : undefined;
+        const region = values.country === 'br' ? 'brasil' : 'other';
+
         await createUser({
           name: fullName,
           email: values.email,
           gender: values.gender || undefined,
           password: values.password,
           birthDate: birthDate,
+          region: region,
         });
         setShowEmailVerification(true);
       } catch (error: any) {

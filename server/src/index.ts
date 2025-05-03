@@ -15,6 +15,7 @@ import messageRoutes from "./routes/messageRoutes.js";
 import llmRoutes from "./routes/llmRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import stripeRoutes from "./routes/stripeRoutes.js";
+import stripeWebhook from "./routes/stripeWebhook.js";
 import tokenRoutes from "./routes/tokenRoutes.js";
 import moodRoutes from "./routes/moodRoutes.js";
 import motivacionalRoutes from "./routes/motivacionalRoutes.js";
@@ -72,8 +73,9 @@ app.use(cors({
   exposedHeaders: ['Set-Cookie'],
 }));
 
-app.use(express.json());
+app.use("/api/stripe/webhook", stripeWebhook);
 
+app.use(express.json());
 
 app.use((req, res, next) => {
   
@@ -83,19 +85,8 @@ app.use((req, res, next) => {
   const userAgent = req.headers['user-agent'] || '';
   const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
   
-  
   (req as any).isMobile = isMobileHeader || isMobileUserAgent;
-  
-  
-  if ((req as any).isMobile) {
-    console.log(`📱 Requisição de dispositivo móvel detectada: ${req.method} ${req.path}`);
-    console.log(`📱 Headers:`, JSON.stringify({
-      'user-agent': userAgent,
-      'x-mobile-device': req.headers['x-mobile-device'],
-      'cookie': req.headers.cookie ? '[PRESENT]' : '[ABSENT]'
-    }, null, 2));
-  }
-  
+
   next();
 });
 
@@ -163,8 +154,6 @@ app.get("/", (_, res) => {
 async function startServer() {
   try {
     await prisma.$connect();
-    console.log('✅ Prisma conectado com sucesso');
-
     const PORT = Number(process.env.PORT) || 4000;
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`✅ Server running on port ${PORT}`);

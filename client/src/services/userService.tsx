@@ -7,13 +7,13 @@ export interface CreateUserInput {
   gender?: string;
   password?: string;
   birthDate?: string;
+  region?: string;
 }
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
   try {
-    
     const defaultOptions: RequestInit = {
-      credentials: 'include', 
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -22,7 +22,6 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
       ...options,
     };
 
-    
     if (options?.headers) {
       defaultOptions.headers = {
         ...defaultOptions.headers,
@@ -32,7 +31,6 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
 
     const res = await fetch(url, defaultOptions);
 
-    
     let json;
     const text = await res.text();
     try {
@@ -54,7 +52,6 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
 
     return json as T;
   } catch (error) {
-    
     console.error(`Erro na requisição para ${url}:`, error);
     throw error;
   }

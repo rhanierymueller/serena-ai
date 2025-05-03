@@ -9,6 +9,9 @@ import { getUser } from '../services/userSession';
 import { checkAuth, fetchUserProfile } from '../services/userService';
 import { generateReply } from '../services/llmService';
 import { useUserTokens } from '../hooks/useUserTokens';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
+import { BASE_URL } from '../config';
 
 interface Message {
   sender: 'user' | 'bot';
@@ -18,6 +21,9 @@ interface Message {
 const AvyliaChat: React.FC = () => {
   const { t, language } = useI18n();
   const { total, used, refetchTokens } = useUserTokens();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { refreshUser } = useUser();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -26,6 +32,7 @@ const AvyliaChat: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
   const [isNarrating, setIsNarrating] = useState(false);
   const [showSidebarMobile, setShowSidebarMobile] = useState(false);
+  const checkoutProcessedRef = useRef(false);
 
   const recognitionRef = useRef<any>(null);
   const chatRef = useRef<HTMLDivElement>(null);
@@ -72,7 +79,6 @@ const AvyliaChat: React.FC = () => {
       if (!preferred) preferred = voices.find(v => v.lang === lc);
       if (preferred) {
         utterance.voice = preferred;
-        console.log('[🔊 Voz selecionada]', preferred.name);
       }
 
       setIsNarrating(true);
@@ -137,9 +143,72 @@ const AvyliaChat: React.FC = () => {
   }, [messages]);
 
   useEffect(() => {
-    const init = async () => {
+    const processCheckoutSuccess = async () => {
       try {
-        
+        const params = new URLSearchParams(location.search);
+        const checkoutSuccess = params.get('checkout_success') === 'true';
+        const sessionId = params.get('session_id');
+
+        if (checkoutSuccess && !checkoutProcessedRef.current) {
+          checkoutProcessedRef.current = true;
+
+          let tokenAmount;
+
+          if (sessionId) {
+            try {
+              const sessionResponse = await fetch(`${BASE_URL}/api/stripe/session/${sessionId}`);
+              if (sessionResponse.ok) {
+                const sessionData = await sessionResponse.json();
+                if (sessionData.tokenAmount) {
+                  tokenAmount = Number(sessionData.tokenAmount);
+                }
+              }
+            } catch (error) {
+              console.error('❌ Erro ao obter informações da sessão:', error);
+            }
+          }
+          try {
+            const response = await fetch(`${BASE_URL}/api/users/update-plan`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+              body: JSON.stringify({
+                userId: getUser()?.id,
+                plan: 'pro',
+                tokenAmount: tokenAmount,
+              }),
+            });
+
+            if (response.ok) {
+              await refreshUser();
+
+              const updatedUser = await checkAuth();
+
+              setPlan('pro');
+
+              await refetchTokens();
+            } else {
+              console.error('❌ Falha ao atualizar o plano manualmente');
+            }
+          } catch (error) {
+            console.error('❌ Erro ao atualizar o plano manualmente:', error);
+          }
+
+          navigate('/chat', { replace: true });
+        }
+      } catch (error) {
+        console.error('Erro ao processar checkout:', error);
+      }
+    };
+
+    processCheckoutSuccess();
+  }, [location.search, navigate, refreshUser, refetchTokens]);
+
+  useEffect(() => {
+    const initChat = async () => {
+      try {
         const user = await checkAuth();
 
         if (user?.plan) setPlan(user.plan);
@@ -162,7 +231,8 @@ const AvyliaChat: React.FC = () => {
         console.error('Erro ao inicializar chat:', error);
       }
     };
-    init();
+
+    initChat();
   }, []);
 
   const isEmpty = messages.length === 0;
