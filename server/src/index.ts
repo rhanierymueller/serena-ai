@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import session from "express-session";
 import passport from "passport";
 import Redis from "ioredis";
-// @ts-ignore
 import connectRedis from "connect-redis";
 import { URL } from "url";
 
@@ -28,16 +27,17 @@ dotenv.config();
 const app = express();
 app.set('trust proxy', 1);
 
-// Verificação do CLIENT_URL
+
 if (!process.env.CLIENT_URL) {
   throw new Error("CLIENT_URL não configurado no ambiente!");
 }
 
 const clientHost = new URL(process.env.CLIENT_URL).hostname;
 
-// 🌐 CORS
+
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://192.168.1.2:5173",
   "https://serena-ai.vercel.app",
   "https://serena-ai-rhaniery-muellers-projects.vercel.app",
   "https://www.avylia.com",
@@ -46,39 +46,77 @@ const allowedOrigins = [
   "http://localhost",
   "file://",
 ];
-
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin) return callback(null, false);
-  
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, origin); // Retorna a origem, não true
+    
+    if (!origin) {
+      return callback(null, true);
     }
   
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, origin);
+    }
+    
+    
+    if (origin.startsWith('http://192.168.')) {
+      return callback(null, origin);
+    }
+
     console.warn(`🌐 CORS bloqueado para origem: ${origin}`);
     return callback(new Error("Not allowed by CORS"));
   },
   
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Mobile-Device'],
+  exposedHeaders: ['Set-Cookie'],
 }));
 
 app.use(express.json());
 
-// 🔐 Sessão
+
+app.use((req, res, next) => {
+  
+  const isMobileHeader = req.headers['x-mobile-device'] === 'true';
+  
+  
+  const userAgent = req.headers['user-agent'] || '';
+  const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+  
+  
+  (req as any).isMobile = isMobileHeader || isMobileUserAgent;
+  
+  
+  if ((req as any).isMobile) {
+    console.log(`📱 Requisição de dispositivo móvel detectada: ${req.method} ${req.path}`);
+    console.log(`📱 Headers:`, JSON.stringify({
+      'user-agent': userAgent,
+      'x-mobile-device': req.headers['x-mobile-device'],
+      'cookie': req.headers.cookie ? '[PRESENT]' : '[ABSENT]'
+    }, null, 2));
+  }
+  
+  next();
+});
+
+
 const sessionOptions: session.SessionOptions = {
   secret: process.env.SESSION_SECRET || "fallback-secret",
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    
+    secure: false,
+    sameSite: "none",
     httpOnly: true,
     path: "/",
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 dias em milissegundos
+    maxAge: 30 * 24 * 60 * 60 * 1000, 
   },
 };
+
+if (process.env.COOKIE_DOMAIN) {
+  sessionOptions.cookie!.domain = process.env.COOKIE_DOMAIN;
+}
 
 if (process.env.REDIS_URL) {
   const RedisStore = connectRedis(session);
@@ -92,7 +130,6 @@ if (process.env.REDIS_URL) {
 
 app.use(session(sessionOptions));
 
-// 🔐 Passport
 app.use(passport.initialize());
 passport.serializeUser((user: any, done) => done(null, user.id));
 passport.deserializeUser(async (id: string | undefined, done) => {
@@ -104,7 +141,7 @@ passport.deserializeUser(async (id: string | undefined, done) => {
 });
 app.use(passport.session());
 
-// 🧩 Rotas
+
 app.use("/api", userRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/messages", messageRoutes);
@@ -117,12 +154,12 @@ app.use('/api/motivacional', motivacionalRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/config', configRoutes);
 
-// 🩺 Health Check
+
 app.get("/", (_, res) => {
   res.send("✅ Avylia AI Backend rodando");
 });
 
-// 🚀 Inicializar servidor com conexão garantida
+
 async function startServer() {
   try {
     await prisma.$connect();
@@ -134,13 +171,13 @@ async function startServer() {
     });
   } catch (err) {
     console.error("❌ Erro ao iniciar servidor:", err);
-    process.exit(1); // encerra para Railway mostrar erro
+    process.exit(1); 
   }
 }
 
 startServer();
 
-// 🚨 Captura de erros não tratados
+
 process.on("uncaughtException", (err) => {
   console.error("🔥 Uncaught Exception:", err);
 });

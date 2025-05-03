@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getUser, saveUser } from '../services/userSession';
-import { fetchUserProfile } from '../services/userService';
+import { saveUser } from '../services/userSession';
+import { checkAuth } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
-import { isMobileDevice } from '../utils/deviceDetection';
 import PageLayout from '../components/PageLayout';
 import { BASE_URL } from '../config';
 import { useI18n } from '../i18n/I18nContext';
@@ -28,23 +27,13 @@ const ProfilePage: React.FC = () => {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        // Em dispositivos móveis, busca diretamente do servidor
-        if (isMobileDevice()) {
-          const userData = await fetchUserProfile();
-          if (!userData) {
-            navigate('/');
-            return;
-          }
-          setUser(userData);
-        } else {
-          // Em desktop, tenta obter do localStorage primeiro
-          const userData = getUser();
-          if (!userData) {
-            navigate('/');
-            return;
-          }
-          setUser(userData);
+        
+        const userData = await checkAuth();
+        if (!userData) {
+          navigate('/');
+          return;
         }
+        setUser(userData);
       } catch (error) {
         console.error('Erro ao carregar dados do usuário:', error);
         navigate('/');
@@ -63,9 +52,9 @@ const ProfilePage: React.FC = () => {
         setLoadingPlans(true);
         const config = await getPublicConfig();
 
-        // Formata os preços de acordo com o idioma
+        
         const formattedPlans = config.plans.map(plan => {
-          // Usa o preço em BRL para português e USD para outros idiomas
+          
           const priceToShow = language === 'pt' ? plan.priceBrl : plan.priceUsd;
           return {
             tokens: plan.tokens,
@@ -76,7 +65,7 @@ const ProfilePage: React.FC = () => {
         setPlans(formattedPlans);
       } catch (error) {
         console.error('Erro ao carregar planos:', error);
-        // Fallback para valores padrão em caso de erro
+        
         const defaultPriceUsd2k = 9.99;
         const defaultPriceUsd5k = 19.99;
         const defaultPriceUsd10k = 29.99;
@@ -84,7 +73,7 @@ const ProfilePage: React.FC = () => {
         const defaultPriceBrl5k = 99.0;
         const defaultPriceBrl10k = 149.9;
 
-        // Usa o preço em BRL para português e USD para outros idiomas
+        
         const priceToShow2k = language === 'pt' ? defaultPriceBrl2k : defaultPriceUsd2k;
         const priceToShow5k = language === 'pt' ? defaultPriceBrl5k : defaultPriceUsd5k;
         const priceToShow10k = language === 'pt' ? defaultPriceBrl10k : defaultPriceUsd10k;

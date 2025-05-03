@@ -15,14 +15,12 @@ interface PublicConfig {
   };
 }
 
-// Cache para evitar múltiplas requisições
 let cachedConfig: PublicConfig | null = null;
 
 /**
  * Busca as configurações públicas do servidor
  */
 export const getPublicConfig = async (): Promise<PublicConfig> => {
-  // Se já temos as configurações em cache, retorna-as
   if (cachedConfig) {
     return cachedConfig;
   }
@@ -38,9 +36,6 @@ export const getPublicConfig = async (): Promise<PublicConfig> => {
     cachedConfig = config;
     return config;
   } catch (error) {
-    console.error('Erro ao buscar configurações:', error);
-    // Fallback para valores padrão em caso de erro
-    // Valores padrão que correspondem aos valores no servidor
     const defaultPriceUsd2k = 9.99;
     const defaultPriceUsd5k = 19.99;
     const defaultPriceUsd10k = 29.99;

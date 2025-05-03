@@ -33,7 +33,7 @@ passport.use(new GoogleStrategy(
   }
 ));
 
-// Serialização de sessão (usado com express-session)
+
 passport.serializeUser((user: any, done) => done(null, user.id));
 passport.deserializeUser(async (id: string, done) => {
   const user = await prisma.user.findUnique({ where: { id } });

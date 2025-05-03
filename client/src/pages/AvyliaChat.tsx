@@ -6,8 +6,7 @@ import { useI18n } from '../i18n/I18nContext';
 import { createChat, getChats } from '../services/chatService';
 import { getMessages, sendMessage } from '../services/messageService';
 import { getUser } from '../services/userSession';
-import { fetchUserProfile } from '../services/userService';
-import { isMobileDevice } from '../utils/deviceDetection';
+import { checkAuth, fetchUserProfile } from '../services/userService';
 import { generateReply } from '../services/llmService';
 import { useUserTokens } from '../hooks/useUserTokens';
 
@@ -140,14 +139,8 @@ const AvyliaChat: React.FC = () => {
   useEffect(() => {
     const init = async () => {
       try {
-        let user;
-        // Em dispositivos móveis, busca diretamente do servidor
-        if (isMobileDevice()) {
-          user = await fetchUserProfile();
-        } else {
-          // Em desktop, tenta obter do localStorage primeiro
-          user = getUser();
-        }
+        
+        const user = await checkAuth();
 
         if (user?.plan) setPlan(user.plan);
 

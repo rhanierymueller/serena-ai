@@ -4,11 +4,11 @@ import * as Yup from 'yup';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useI18n } from '../../i18n/I18nContext';
 import Modal from '../../components/Modal';
-import { loginUser, fetchUserProfile } from '../../services/userService';
-import { saveUser, UserProfile } from '../../services/userSession';
-import { isMobileDevice } from '../../utils/deviceDetection';
+import { loginUser } from '../../services/userService';
+import { UserProfile } from '../../services/userSession';
 import { useToast } from '../../context/ToastContext';
 import ForgotPasswordModal from './ForgotPasswordModal';
+import { useUser } from '../../context/UserContext';
 
 interface LoginModalProps {
   onClose: () => void;
@@ -18,6 +18,8 @@ interface LoginModalProps {
 const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
   const { t } = useI18n();
   const { showToast } = useToast();
+  const { setUser } = useUser();
+
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const [captchaVerified, setCaptchaVerified] = useState(false);
@@ -38,13 +40,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
         .required(t('register.validation.passwordRequired')),
     }),
     onSubmit: async values => {
-      // if (!captchaVerified) {
-      //   showToast(t('login.validation.recaptcha'), 'error');
-      //   return;
-      // }
+      if (!captchaVerified) {
+        showToast(t('login.validation.recaptcha'), 'error');
+        return;
+      }
       try {
         const user = await loginUser(values);
-        saveUser(user as UserProfile);
+        setUser(user as UserProfile);
         onSuccess();
       } catch (error: any) {
         console.error('Login error:', error);
@@ -76,21 +78,21 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
         title={t('login.title')}
         description={
           <form onSubmit={formik.handleSubmit} className="space-y-4 text-white">
-            {/* Botão Google */}
             <div className="flex flex-col gap-4">
               <button
                 type="button"
                 onClick={() => (window.location.href = `${API_URL}/api/signin/google`)}
                 className="flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition"
               >
-                <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                  {/* Paths do logo Google */}
-                </svg>
+                <svg
+                  className="w-5 h-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 48 48"
+                ></svg>
                 <span>{t('login.googleAuth')}</span>
               </button>
             </div>
 
-            {/* Email */}
             <div>
               <label className="text-sm mb-1 block">{t('login.email')}</label>
               <input
@@ -106,7 +108,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
               )}
             </div>
 
-            {/* Senha */}
             <div>
               <label className="text-sm mb-1 block">{t('login.password')}</label>
               <input
@@ -122,7 +123,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
               )}
             </div>
 
-            {/* Esqueceu senha */}
             <div className="flex justify-end mt-2">
               <button
                 type="button"
@@ -133,10 +133,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
               </button>
             </div>
 
-            {/* reCAPTCHA */}
-            {/* <div className="flex justify-center">
+            <div className="flex justify-center">
               <ReCAPTCHA ref={recaptchaRef} sitekey={siteKey} onChange={handleCaptchaChange} />
-            </div> */}
+            </div>
           </form>
         }
         onCancel={onClose}
@@ -147,7 +146,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
         size="sm"
       />
 
-      {/* Modal de Esqueci a Senha */}
       {showForgotPassword && <ForgotPasswordModal onClose={() => setShowForgotPassword(false)} />}
     </>
   );

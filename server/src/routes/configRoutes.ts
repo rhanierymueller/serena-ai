@@ -3,17 +3,17 @@ import express from "express";
 const router = express.Router();
 
 router.get("/public-config", (req, res) => {
-  // Preços em USD
+  
   const priceUsd2k = parseFloat(process.env.PLAN_PRICE_USD_2K || "9.99");
   const priceUsd5k = parseFloat(process.env.PLAN_PRICE_USD_5K || "19.99");
   const priceUsd10k = parseFloat(process.env.PLAN_PRICE_USD_10K || "29.99");
   
-  // Preços em BRL
+  
   const priceBrl2k = parseFloat(process.env.PLAN_PRICE_BRL_2K || "49.9");
   const priceBrl5k = parseFloat(process.env.PLAN_PRICE_BRL_5K || "99.0");
   const priceBrl10k = parseFloat(process.env.PLAN_PRICE_BRL_10K || "149.9");
   
-  // Taxa de conversão USD para BRL
+  
   const conversionRate = parseFloat(process.env.CURRENCY_CONVERSION_RATE || "6.0");
 
   const publicConfig = {

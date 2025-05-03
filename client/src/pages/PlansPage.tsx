@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
 import PageLayout from '../components/PageLayout';
 import { getUser } from '../services/userSession';
-import { fetchUserProfile } from '../services/userService';
-import { isMobileDevice } from '../utils/deviceDetection';
+import { fetchUserProfile, checkAuth } from '../services/userService';
 import { handleStripeSubscriptionCheckout } from '../hooks/useStripeCheckout';
 import { useUserTokens } from '../hooks/useUserTokens';
 import { Gem } from 'lucide-react';
@@ -23,15 +22,9 @@ const PlansPage: React.FC = () => {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        // Em dispositivos móveis, busca diretamente do servidor
-        if (isMobileDevice()) {
-          const userData = await fetchUserProfile();
-          setUser(userData);
-        } else {
-          // Em desktop, tenta obter do localStorage primeiro
-          const userData = getUser();
-          setUser(userData);
-        }
+        
+        const userData = await checkAuth();
+        setUser(userData);
       } catch (error) {
         console.error('Erro ao carregar dados do usuário:', error);
       }
@@ -46,9 +39,9 @@ const PlansPage: React.FC = () => {
         setLoading(true);
         const config = await getPublicConfig();
 
-        // Formata os preços de acordo com o idioma
+        
         const formattedPlans = config.plans.map(plan => {
-          // Usa o preço em BRL para português e USD para outros idiomas
+          
           const priceToShow = language === 'pt' ? plan.priceBrl : plan.priceUsd;
           return {
             tokens: plan.tokens,
@@ -61,7 +54,7 @@ const PlansPage: React.FC = () => {
         setPlans(formattedPlans);
       } catch (error) {
         console.error('Erro ao carregar planos:', error);
-        // Fallback para valores padrão em caso de erro
+        
         const defaultPriceUsd2k = 9.99;
         const defaultPriceUsd5k = 19.99;
         const defaultPriceUsd10k = 29.99;
@@ -69,7 +62,7 @@ const PlansPage: React.FC = () => {
         const defaultPriceBrl5k = 99.0;
         const defaultPriceBrl10k = 149.9;
 
-        // Usa o preço em BRL para português e USD para outros idiomas
+        
         const priceToShow2k = language === 'pt' ? defaultPriceBrl2k : defaultPriceUsd2k;
         const priceToShow5k = language === 'pt' ? defaultPriceBrl5k : defaultPriceUsd5k;
         const priceToShow10k = language === 'pt' ? defaultPriceBrl10k : defaultPriceUsd10k;

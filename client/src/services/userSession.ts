@@ -1,13 +1,15 @@
 const USER_KEY = 'Avylia_user_profile';
-import { isMobileDevice } from '../utils/deviceDetection';
-
 export interface UserProfile {
   id: string;
   email: string;
   name: string;
   plan?: 'free' | 'pro';
+  sessionID?: string;
+  isMobile?: boolean;
   [key: string]: any;
 }
+
+const SESSION_ID_KEY = 'Avylia_session_id';
 
 /**
  * Verifica se o localStorage está disponível e funcionando
@@ -37,44 +39,41 @@ function isSessionStorageAvailable() {
   }
 }
 
-// Determina qual armazenamento usar
-const useLocalStorage = isLocalStorageAvailable() && !isMobileDevice();
-const useSessionStorage = isSessionStorageAvailable() && !isMobileDevice();
+const useLocalStorage = isLocalStorageAvailable();
+const useSessionStorage = isSessionStorageAvailable();
 
-// Variável para armazenamento em memória como último recurso
 let memoryStorage: UserProfile | null = null;
 
 /**
  * Salva o usuário no armazenamento disponível
- * Em dispositivos móveis, apenas armazena em memória
+ * Tenta salvar em todos os armazenamentos disponíveis
  */
 export function saveUser(user: UserProfile | null) {
   if (user) {
-    // Sempre armazena em memória
     memoryStorage = user;
 
-    // Se não for dispositivo móvel, armazena no localStorage/sessionStorage
-    if (!isMobileDevice()) {
-      const userData = JSON.stringify(user);
+    const userData = JSON.stringify(user);
 
-      if (useLocalStorage) {
-        try {
-          localStorage.setItem(USER_KEY, userData);
-        } catch (e) {
-          console.warn('Falha ao salvar no localStorage:', e);
-        }
-      }
-
-      if (useSessionStorage) {
-        try {
-          sessionStorage.setItem(USER_KEY, userData);
-        } catch (e) {
-          console.warn('Falha ao salvar no sessionStorage:', e);
-        }
+    if (useLocalStorage) {
+      try {
+        localStorage.setItem(USER_KEY, userData);
+      } catch (e) {
+        console.warn('Falha ao salvar no localStorage:', e);
       }
     }
+
+    if (useSessionStorage) {
+      try {
+        sessionStorage.setItem(USER_KEY, userData);
+      } catch (e) {
+        console.warn('Falha ao salvar no sessionStorage:', e);
+      }
+    }
+
+    if (user.sessionID) {
+      saveSessionID(user.sessionID);
+    }
   } else {
-    // Limpa o usuário
     memoryStorage = null;
 
     if (useLocalStorage) {
@@ -92,20 +91,30 @@ export function saveUser(user: UserProfile | null) {
         console.warn('Falha ao remover do sessionStorage:', e);
       }
     }
+
+    try {
+      if (isLocalStorageAvailable()) {
+        localStorage.removeItem(SESSION_ID_KEY);
+      }
+    } catch (e) {
+      console.warn('Falha ao remover sessionID do localStorage:', e);
+    }
+
+    try {
+      if (isSessionStorageAvailable()) {
+        sessionStorage.removeItem(SESSION_ID_KEY);
+      }
+    } catch (e) {
+      console.warn('Falha ao remover sessionID do sessionStorage:', e);
+    }
   }
 }
 
 /**
  * Obtém o usuário do armazenamento disponível
- * Em dispositivos móveis, sempre retorna null para forçar a busca no banco de dados
+ * Tenta obter de todos os armazenamentos disponíveis
  */
 export function getUser(): UserProfile | null {
-  // Em dispositivos móveis, retorna null para forçar a busca no banco de dados
-  if (isMobileDevice()) {
-    return null;
-  }
-
-  // Primeiro tenta localStorage
   if (useLocalStorage) {
     try {
       const user = localStorage.getItem(USER_KEY);
@@ -117,7 +126,6 @@ export function getUser(): UserProfile | null {
     }
   }
 
-  // Depois tenta sessionStorage
   if (useSessionStorage) {
     try {
       const user = sessionStorage.getItem(USER_KEY);
@@ -129,8 +137,70 @@ export function getUser(): UserProfile | null {
     }
   }
 
-  // Por último, usa o armazenamento em memória
   return memoryStorage;
+}
+
+/**
+ * Salva o sessionID para uso em dispositivos móveis
+ * Mesmo em dispositivos móveis, tentamos salvar em localStorage/sessionStorage
+ * como fallback, mas também mantemos em memória
+ */
+export function saveSessionID(sessionID: string | undefined) {
+  if (!sessionID) return;
+
+  if (memoryStorage) {
+    memoryStorage.sessionID = sessionID;
+  }
+
+  try {
+    if (isLocalStorageAvailable()) {
+      localStorage.setItem(SESSION_ID_KEY, sessionID);
+    }
+  } catch (e) {
+    console.warn('Falha ao salvar sessionID no localStorage:', e);
+  }
+
+  try {
+    if (isSessionStorageAvailable()) {
+      sessionStorage.setItem(SESSION_ID_KEY, sessionID);
+    }
+  } catch (e) {
+    console.warn('Falha ao salvar sessionID no sessionStorage:', e);
+  }
+}
+
+/**
+ * Obtém o sessionID salvo
+ * Tenta obter de todas as fontes disponíveis
+ */
+export function getSessionID(): string | null {
+  if (memoryStorage?.sessionID) {
+    return memoryStorage.sessionID;
+  }
+
+  try {
+    if (isLocalStorageAvailable()) {
+      const sessionID = localStorage.getItem(SESSION_ID_KEY);
+      if (sessionID) {
+        return sessionID;
+      }
+    }
+  } catch (e) {
+    console.warn('Erro ao obter sessionID do localStorage:', e);
+  }
+
+  try {
+    if (isSessionStorageAvailable()) {
+      const sessionID = sessionStorage.getItem(SESSION_ID_KEY);
+      if (sessionID) {
+        return sessionID;
+      }
+    }
+  } catch (e) {
+    console.warn('Erro ao obter sessionID do sessionStorage:', e);
+  }
+
+  return null;
 }
 
 /**
@@ -153,5 +223,21 @@ export function clearUser() {
     } catch (e) {
       console.warn('Falha ao remover do sessionStorage:', e);
     }
+  }
+
+  try {
+    if (isLocalStorageAvailable()) {
+      localStorage.removeItem(SESSION_ID_KEY);
+    }
+  } catch (e) {
+    console.warn('Falha ao remover sessionID do localStorage:', e);
+  }
+
+  try {
+    if (isSessionStorageAvailable()) {
+      sessionStorage.removeItem(SESSION_ID_KEY);
+    }
+  } catch (e) {
+    console.warn('Falha ao remover sessionID do sessionStorage:', e);
   }
 }

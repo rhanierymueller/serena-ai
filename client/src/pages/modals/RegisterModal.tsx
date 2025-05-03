@@ -85,7 +85,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
       }
       try {
         const fullName = `${values.firstName.trim()} ${values.lastName.trim()}`;
-        // Converte a data para o formato brasileiro antes de enviar para o servidor
         const birthDate = values.birthDate
           ? parseDateToBrFormat(values.birthDate, language)
           : undefined;
@@ -141,19 +140,15 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
         description={
           <div className="w-full max-w-md mx-auto space-y-6 text-white">
             <form className="w-full max-w-lg mx-auto px-4 space-y-4" onSubmit={formik.handleSubmit}>
-              {/* Botão de login Google */}
               <button
                 type="button"
                 onClick={() => (window.location.href = '/api/signin/google')}
                 className="flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-md w-full font-medium hover:bg-gray-100 transition"
               >
-                <svg className="w-5 h-5" viewBox="0 0 48 48">
-                  {/* Paths do logo */}
-                </svg>
+                <svg className="w-5 h-5" viewBox="0 0 48 48"></svg>
                 <span>{t('login.googleAuth')}</span>
               </button>
 
-              {/* Campos Nome/Sobrenome */}
               <div className="flex gap-4">
                 <div className="w-1/2">
                   <label className="text-sm">{t('register.firstName')} *</label>
@@ -181,7 +176,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
                 </div>
               </div>
 
-              {/* Email */}
               <div>
                 <label className="text-sm">{t('register.email')} *</label>
                 <input
@@ -196,9 +190,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
                 )}
               </div>
 
-              {/* Senha e Confirmação */}
               <div className="flex gap-4">
-                {/* Senha */}
                 <div className="w-1/2 relative">
                   <label className="text-sm">{t('register.password')} *</label>
                   <input
@@ -216,7 +208,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
                   </span>
                 </div>
 
-                {/* Confirmar Senha */}
                 <div className="w-1/2 relative">
                   <label className="text-sm">{t('register.confirmPassword')} *</label>
                   <input
@@ -238,7 +229,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
                 </div>
               </div>
 
-              {/* Nascimento / País */}
               <div className="flex gap-4">
                 <div className="w-1/2">
                   <label className="text-sm">{t('register.birthDate')}</label>
@@ -249,30 +239,57 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
                     placeholder={language === 'pt' ? 'dd/mm/aaaa' : 'mm/dd/yyyy'}
                     className="input"
                   />
+                  {formik.touched.birthDate && formik.errors.birthDate && (
+                    <p className="error">{formik.errors.birthDate}</p>
+                  )}
                 </div>
                 <div className="w-1/2">
                   <label className="text-sm">{t('register.country')}</label>
                   <Select
+                    name="country"
                     value={formik.values.country}
-                    onChange={val => formik.setFieldValue('country', val)}
+                    onChange={value => formik.setFieldValue('country', value)}
                     options={countries}
                   />
                 </div>
               </div>
 
-              {/* Gênero */}
               <div>
                 <label className="text-sm">{t('register.gender')}</label>
                 <Select
+                  name="gender"
                   value={formik.values.gender}
-                  onChange={val => formik.setFieldValue('gender', val)}
+                  onChange={value => formik.setFieldValue('gender', value)}
                   options={genders}
                 />
               </div>
 
-              {/* reCAPTCHA */}
               <div className="flex justify-center">
-                <ReCAPTCHA ref={recaptchaRef} sitekey={siteKey} onChange={handleCaptchaChange} />
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={siteKey}
+                  onChange={handleCaptchaChange}
+                  theme="dark"
+                />
+              </div>
+
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-2 text-sm font-medium text-white hover:text-gray-300 transition"
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSubmitModal}
+                  className="px-4 py-2 text-sm font-medium bg-primary text-white rounded-md hover:bg-primary-dark transition flex items-center gap-2"
+                  disabled={formik.isSubmitting}
+                >
+                  {formik.isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {t('register.submit')}
+                </button>
               </div>
             </form>
           </div>

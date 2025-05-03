@@ -3,8 +3,7 @@ import { Plus, MessageSquare, ChevronLeft, ChevronRight, X, LogOut } from 'lucid
 
 import { useI18n } from '../i18n/I18nContext';
 import { getUser } from '../services/userSession';
-import { fetchUserProfile } from '../services/userService';
-import { isMobileDevice } from '../utils/deviceDetection';
+import { checkAuth, fetchUserProfile } from '../services/userService';
 import { getChats, createChat, deleteChat } from '../services/chatService';
 import Modal from './Modal';
 import { useNavigate } from 'react-router-dom';
@@ -31,15 +30,8 @@ const ChatSidebar: React.FC<{
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        let user;
-        // Em dispositivos móveis, busca diretamente do servidor
-        if (isMobileDevice()) {
-          user = await fetchUserProfile();
-        } else {
-          // Em desktop, tenta obter do localStorage primeiro
-          user = getUser();
-        }
-
+        
+        const user = await checkAuth();
         const userId = user?.id ?? null;
         const chats = await getChats(userId);
         setHistory(chats);
@@ -53,15 +45,8 @@ const ChatSidebar: React.FC<{
 
   const handleNewChat = async () => {
     try {
-      let user;
-      // Em dispositivos móveis, busca diretamente do servidor
-      if (isMobileDevice()) {
-        user = await fetchUserProfile();
-      } else {
-        // Em desktop, tenta obter do localStorage primeiro
-        user = getUser();
-      }
-
+      
+      const user = await checkAuth();
       const userId = user?.id ?? null;
       const newChat = await createChat(userId);
       setHistory(prev => [newChat, ...prev]);
@@ -76,15 +61,8 @@ const ChatSidebar: React.FC<{
     if (!chatToDelete) return;
 
     try {
-      let user;
-      // Em dispositivos móveis, busca diretamente do servidor
-      if (isMobileDevice()) {
-        user = await fetchUserProfile();
-      } else {
-        // Em desktop, tenta obter do localStorage primeiro
-        user = getUser();
-      }
-
+      
+      const user = await checkAuth();
       const userId = user?.id ?? null;
       await deleteChat(chatToDelete, userId);
       setHistory(prev => prev.filter(chat => chat.id !== chatToDelete));

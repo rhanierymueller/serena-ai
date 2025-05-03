@@ -8,10 +8,8 @@ import RegisterModal from './modals/RegisterModal';
 import LoginModal from './modals/LoginModal';
 import { TypingText } from '../components/TypingText';
 import { getUser, saveUser, clearUser } from '../services/userSession';
-import { BASE_URL } from '../config';
 import Header from '../components/Header';
 import { checkAuth, fetchUserProfile } from '../services/userService';
-import { isMobileDevice } from '../utils/deviceDetection';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -46,13 +44,13 @@ const Home: React.FC = () => {
     };
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Get footer height for masking calculations
+    
     const footerElement = document.querySelector('footer');
     if (footerElement) {
       setFooterHeight(footerElement.offsetHeight);
     }
 
-    // Update footer height on resize
+    
     const handleResize = () => {
       const footerElement = document.querySelector('footer');
       if (footerElement) {
@@ -74,23 +72,14 @@ const Home: React.FC = () => {
 
   const updateUserState = async () => {
     try {
-      let user;
+      
+      const storedUser = getUser();
 
-      // Em dispositivos móveis, sempre busca do servidor
-      if (isMobileDevice()) {
-        user = await fetchUserProfile();
-      } else {
-        // Em desktop, primeiro verifica se já temos um usuário no armazenamento local
-        const storedUser = getUser();
-
-        if (storedUser?.id) {
-          // Se temos um usuário armazenado, verifica se ainda está válido no servidor
-          user = await checkAuth();
-        }
-      }
+      
+      const user = await checkAuth();
 
       if (user && user.active) {
-        // Atualiza o usuário armazenado com os dados mais recentes
+        
         saveUser(user);
 
         if (user.name) {
@@ -101,7 +90,7 @@ const Home: React.FC = () => {
         return;
       }
 
-      // Se não temos usuário válido
+      
       clearUser();
       setUserName(null);
       setGender('other');

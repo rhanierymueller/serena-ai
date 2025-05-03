@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
       ? {
           host: '0.0.0.0', // Permite acesso externo
           proxy: {
-            '/api': 'http://localhost:3011', // Proxy só em desenvolvimento
+            '/api': 'http://192.168.1.2:4000', // Proxy só em desenvolvimento, usando IP em vez de localhost
           },
           historyApiFallback: true, // Para React Router funcionar no dev
         }

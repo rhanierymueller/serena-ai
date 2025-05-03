@@ -25,8 +25,7 @@ import {
 import PageLayout from '../components/PageLayout';
 import { useI18n } from '../i18n/I18nContext';
 import { getUser } from '../services/userSession';
-import { fetchUserProfile } from '../services/userService';
-import { isMobileDevice } from '../utils/deviceDetection';
+import { checkAuth, fetchUserProfile } from '../services/userService';
 import { BASE_URL } from '../config';
 import { useToast } from '../context/ToastContext';
 import MoodSelect from '../components/MoodSelect';
@@ -80,15 +79,8 @@ const MoodTracker: React.FC = () => {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        let userData;
-        // Em dispositivos móveis, busca diretamente do servidor
-        if (isMobileDevice()) {
-          userData = await fetchUserProfile();
-        } else {
-          // Em desktop, tenta obter do localStorage primeiro
-          userData = getUser();
-        }
-
+        
+        const userData = await checkAuth();
         setUser(userData);
 
         if (userData?.id) {

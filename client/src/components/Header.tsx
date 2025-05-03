@@ -15,10 +15,8 @@ import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
 import Select from './Select';
 import Modal from './Modal';
-import { getUser, clearUser } from '../services/userSession';
-import { fetchUserProfile } from '../services/userService';
-import { isMobileDevice } from '../utils/deviceDetection';
 import { BASE_URL } from '../config';
+import { useUser } from '../context/UserContext';
 
 type Language = 'pt' | 'en' | 'es';
 
@@ -45,39 +43,15 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const { t, language, setLanguage } = useI18n();
-  const [user, setUser] = React.useState<any>(null);
-  const [userName, setUserName] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    const loadUserData = async () => {
-      try {
-        let userData;
-        // Em dispositivos móveis, busca diretamente do servidor
-        if (isMobileDevice()) {
-          userData = await fetchUserProfile();
-        } else {
-          // Em desktop, tenta obter do localStorage primeiro
-          userData = getUser();
-        }
-
-        setUser(userData);
-        if (userData?.name) {
-          const [firstName] = userData.name.split(' ');
-          setUserName(firstName);
-        }
-      } catch (error) {
-        console.error('Erro ao carregar dados do usuário:', error);
-      }
-    };
-
-    loadUserData();
-  }, []);
-
+  const { user, logout } = useUser(); // <-- só contexto!
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selfCareOpen, setSelfCareOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
+
+  // Nome do usuário, se logado
+  const userName = user?.name ? user.name.split(' ')[0] : null;
 
   const handleLogout = async () => {
     try {
@@ -86,9 +60,9 @@ const Header: React.FC<HeaderProps> = ({
         credentials: 'include',
       });
     } catch (error) {
-      console.warn('Erro ao fazer logout no servidor:', error);
+      console.error('Erro ao fazer logout no servidor:', error);
     } finally {
-      clearUser();
+      logout();
       onLogoutSuccess?.();
       setShowLogoutModal(false);
       navigate('/');

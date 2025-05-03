@@ -50,7 +50,7 @@ router.post("/users", (async (req: any, res: any) => {
         birthDate,
         password: hashedPassword,
         provider,
-        active: false, // ainda deixa inativo até confirmar o email
+        active: false, 
         activationToken,
       },
     });
@@ -84,28 +84,49 @@ router.post("/users", (async (req: any, res: any) => {
 
 router.post("/login", [loginLimiter], async (req: any, res: any, next: NextFunction) => {
   const { email, password } = req.body;
+  
+  const userAgent = req.headers['user-agent'] || 'Unknown';
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+  console.log(`📱 Tentativa de login: Email=${email}, Mobile=${isMobile}, UserAgent=${userAgent}`);
+
   if (!email || !password) {
+    console.log(`❌ Login falhou: Credenciais ausentes. Email=${email}`);
     return res.status(400).json({ errorCode: "missingCredentials" });
   }
 
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !user.password) {
+    console.log(`❌ Login falhou: Usuário não encontrado. Email=${email}`);
     return res.status(401).json({ errorCode: "userNotFound" });
   }
   if (!user.active) {
+    console.log(`❌ Login falhou: Conta não ativada. Email=${email}`);
     return res.status(401).json({ errorCode: "accountNotActivated" });
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
+    console.log(`❌ Login falhou: Senha incorreta. Email=${email}`);
     return res.status(401).json({ errorCode: "wrongPassword" });
   }
 
   const { password: _, activationToken: __, ...userSafe } = user;
 
+  
   req.login(userSafe, (err: any) => {
-    if (err) return next(err);
-    res.json(userSafe);
+    if (err) {
+      console.error(`❌ Erro durante login com Passport: ${err.message}`, err);
+      return next(err);
+    }
+    
+    
+    console.log(`✅ Login bem-sucedido: Email=${email}, SessionID=${req.sessionID}`);
+    
+    
+    res.json({
+      ...userSafe,
+      sessionID: req.sessionID
+    });
   });
 });
 

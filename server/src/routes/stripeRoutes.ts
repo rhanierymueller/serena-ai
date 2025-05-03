@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import { stripe, PRICE_MAP } from "../lib/stripe";
- // adiciona esse import se ainda não
+ 
 
 const router = express.Router();
 

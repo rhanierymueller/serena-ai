@@ -19,7 +19,7 @@ function countContentTokens(text: string) {
   return enc.encode(text).length;
 }
 
-// heurística da OpenAI: +4 tokens por mensagem +2 de final
+
 function countPromptTokens(msgs: ChatCompletionMessageParam[]) {
   return msgs.reduce((sum, m) => sum + countContentTokens(m.content as string) + 4, 2);
 }
@@ -63,9 +63,9 @@ router.post("/", async (req: any, res: any) => {
 
     /* 1. Tokens do prompt + saldo restante ------------------------------ */
     const promptTokens = countPromptTokens(promptMsgs);
-    const saldoOpenAI = await remainingOpenAITokens(chat.user.id); // em tokens OpenAI
+    const saldoOpenAI = await remainingOpenAITokens(chat.user.id); 
 
-    // deixa 10 % de folga (variações de tokenização)
+    
     const maxCompletion = Math.floor((saldoOpenAI - promptTokens) * 0.9);
 
     if (maxCompletion < 50) {

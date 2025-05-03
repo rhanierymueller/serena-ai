@@ -32,11 +32,12 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/connect-redis": "^0.0.23",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/express-rate-limit": "^6.0.2",
     "@types/express-session": "^1.18.1",
-    "@types/node": "^22.14.1",
+    "@types/node": "^22.15.3",
     "@types/nodemailer": "^6.4.17",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",

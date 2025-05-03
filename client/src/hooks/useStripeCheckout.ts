@@ -2,10 +2,10 @@ import { loadStripe } from '@stripe/stripe-js';
 import { BASE_URL } from '../config';
 import { getPublicConfig } from '../services/configService';
 
-// Inicializa como null e carrega dinamicamente quando necessário
+
 let stripePromise: Promise<any> | null = null;
 
-// Função para obter a instância do Stripe com a chave do servidor
+
 const getStripeInstance = async () => {
   if (!stripePromise) {
     const config = await getPublicConfig();
@@ -37,7 +37,7 @@ export async function handleStripeSubscriptionCheckout(
 
     if (!data.sessionId) throw new Error('Stripe session not created');
 
-    // Obtém a instância do Stripe com a chave do servidor
+    
     const stripe = await getStripeInstance();
     if (!stripe) throw new Error('Stripe.js not loaded');
 

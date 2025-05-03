@@ -1,6 +1,5 @@
 import { BASE_URL } from '../config';
-import { UserProfile } from './userSession';
-import { isMobileDevice } from '../utils/deviceDetection';
+import { UserProfile, getSessionID } from './userSession';
 
 export interface CreateUserInput {
   name: string;
@@ -12,9 +11,9 @@ export interface CreateUserInput {
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
   try {
-    // Adiciona cabeçalhos padrão para todas as requisições
+    
     const defaultOptions: RequestInit = {
-      credentials: 'include', // Sempre inclui cookies
+      credentials: 'include', 
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -23,7 +22,7 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
       ...options,
     };
 
-    // Mescla os cabeçalhos personalizados com os padrão
+    
     if (options?.headers) {
       defaultOptions.headers = {
         ...defaultOptions.headers,
@@ -33,7 +32,7 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
 
     const res = await fetch(url, defaultOptions);
 
-    // Tenta obter o JSON, mas lida com respostas vazias
+    
     let json;
     const text = await res.text();
     try {
@@ -55,7 +54,7 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
 
     return json as T;
   } catch (error) {
-    // Adiciona mais informações ao erro para depuração
+    
     console.error(`Erro na requisição para ${url}:`, error);
     throw error;
   }
@@ -70,7 +69,6 @@ export function createUser(data: CreateUserInput) {
 }
 
 export function loginUser({ email, password }: { email: string; password: string }) {
-  console.log(email, 'email');
   return fetchJson(`${BASE_URL}/api/login`, {
     method: 'POST',
     body: JSON.stringify({ email, password }),
@@ -79,12 +77,15 @@ export function loginUser({ email, password }: { email: string; password: string
 
 /**
  * Verifica se o usuário está autenticado
- * Em dispositivos móveis, sempre busca do servidor
- * Em desktop, pode usar o cache local se disponível
+ * Usa sessionID se disponível para melhorar a confiabilidade da autenticação
  */
 export async function checkAuth(): Promise<UserProfile | null> {
   try {
-    // Em dispositivos móveis, sempre busca do servidor
+    const sessionID = getSessionID();
+    if (sessionID) {
+      return await fetchJson<UserProfile>(`${BASE_URL}/api/auth/me?sessionID=${sessionID}`);
+    }
+
     return await fetchJson<UserProfile>(`${BASE_URL}/api/auth/me`);
   } catch (error) {
     console.warn('Usuário não autenticado:', error);
@@ -94,10 +95,15 @@ export async function checkAuth(): Promise<UserProfile | null> {
 
 /**
  * Busca o perfil do usuário diretamente do servidor
- * Útil para garantir dados atualizados, especialmente em dispositivos móveis
+ * Usa sessionID se disponível para melhorar a confiabilidade da autenticação
  */
 export async function fetchUserProfile(): Promise<UserProfile | null> {
   try {
+    const sessionID = getSessionID();
+    if (sessionID) {
+      return await fetchJson<UserProfile>(`${BASE_URL}/api/auth/me?sessionID=${sessionID}`);
+    }
+
     return await fetchJson<UserProfile>(`${BASE_URL}/api/auth/me`);
   } catch (error) {
     console.warn('Erro ao buscar perfil do usuário:', error);
