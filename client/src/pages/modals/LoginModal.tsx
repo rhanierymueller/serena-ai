@@ -129,7 +129,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
                 className="text-sm text-blue-400 hover:underline"
                 onClick={() => setShowForgotPassword(true)}
               >
-                {t('ASASASAS')}
+                {t('login.forgotPassword')}
               </button>
             </div>
 
