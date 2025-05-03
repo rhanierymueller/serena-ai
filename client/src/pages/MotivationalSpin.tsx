@@ -60,7 +60,7 @@ const MotivationalSpin: React.FC = () => {
 
     utterance.pitch = 1.1;
     utterance.rate = 0.95;
-    speechSynthesis.cancel(); // para evitar sobreposição
+    speechSynthesis.cancel();
     speechSynthesis.speak(utterance);
   };
 

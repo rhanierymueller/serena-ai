@@ -313,4 +313,25 @@ router.post("/users/update-plan", async (req: any, res: any) => {
   }
 });
 
+router.post("/users/accept-terms", async (req: any, res: any) => {
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ error: "Missing userId" });
+  }
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { acceptedTerms: true },
+    });
+
+    const { password, activationToken, resetToken, ...userSafe } = updatedUser;
+    return res.status(200).json(userSafe);
+  } catch (error) {
+    console.error("❌ Erro ao atualizar aceitação dos termos:", error);
+    return res.status(500).json({ error: "Failed to update terms acceptance" });
+  }
+});
+
 export default router;

@@ -4,7 +4,8 @@
     "subtitle": "Uma experiência de conversa empática com inteligência artificial.",
     "selfCare": "Cuidado pessoal",
     "account": "Conta",
-    "chatTitle": "Avy Chat"
+    "chatTitle": "Avy Chat",
+    "professionalArea": "Área do Profissional"
   },
   "home": {
     "avyChat": "Avy Chat",
@@ -319,5 +320,10 @@
     "cancel": "Cancelar",
     "close": "Fechar",
     "resentSuccess": "E-mail reenviado com sucesso!"
+  },
+  "professionalArea": {
+    "title": "Área do Profissional",
+    "inDevelopment": "Em Desenvolvimento",
+    "description": "Estamos trabalhando para criar uma área especial dedicada aos profissionais da saúde mental."
   }
 }

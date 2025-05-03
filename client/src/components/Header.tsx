@@ -10,6 +10,7 @@ import {
   X,
   Sparkles,
   MessageSquare,
+  Briefcase,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
@@ -43,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const { t, language, setLanguage } = useI18n();
-  const { user, logout } = useUser(); // <-- só contexto!
+  const { user, logout } = useUser();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selfCareOpen, setSelfCareOpen] = useState(false);
@@ -52,6 +53,14 @@ const Header: React.FC<HeaderProps> = ({
 
   // Nome do usuário, se logado
   const userName = user?.name ? user.name.split(' ')[0] : null;
+
+  const handleChatClick = () => {
+    if (user?.acceptedTerms) {
+      navigate('/chat');
+    } else {
+      setShowDisclaimerModal(true);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -87,7 +96,15 @@ const Header: React.FC<HeaderProps> = ({
             <span>{t('home.disclaimer.back')}</span>
           </button>
         ) : (
-          <div className="w-10" />
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('/profissional')}
+              className="flex items-center gap-2 text-sm text-white px-4 py-2 hover:bg-[#2C3E50] rounded-xl transition"
+            >
+              <Briefcase size={18} className="text-[#6DAEDB]" />
+              <span>{t('header.professionalArea')}</span>
+            </button>
+          </div>
         )}
 
         {title && (
@@ -108,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({
           {showMenu && (
             <div className="hidden md:flex items-center gap-4 ml-4">
               <button
-                onClick={() => setShowDisclaimerModal(true)}
+                onClick={handleChatClick}
                 className="flex items-center gap-2 text-sm text-white px-4 py-2 hover:bg-[#2C3E50] rounded-xl transition"
               >
                 <MessageSquare size={18} className="text-[#6DAEDB]" />
@@ -212,11 +229,14 @@ const Header: React.FC<HeaderProps> = ({
         <div className="md:hidden bg-[#111] border-t border-[#2a3b47] px-4 py-4 space-y-3">
           <button
             onClick={() => {
-              navigate('/chat');
+              navigate('/profissional');
               setMenuOpen(false);
             }}
             className="block w-full text-left text-white py-2"
           >
+            {t('header.professionalArea')}
+          </button>
+          <button onClick={handleChatClick} className="block w-full text-left text-white py-2">
             {t('chat.title') || 'Chat'}
           </button>
           <button
@@ -298,7 +318,21 @@ const Header: React.FC<HeaderProps> = ({
           title={t('home.disclaimer.title')}
           description={t('home.disclaimer.text')}
           onCancel={() => setShowDisclaimerModal(false)}
-          onConfirm={() => {
+          onConfirm={async () => {
+            if (user?.id) {
+              try {
+                await fetch(`${BASE_URL}/api/users/accept-terms`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  credentials: 'include',
+                  body: JSON.stringify({ userId: user.id }),
+                });
+              } catch (error) {
+                console.error('Erro ao salvar aceitação dos termos:', error);
+              }
+            }
             setShowDisclaimerModal(false);
             navigate('/chat');
           }}

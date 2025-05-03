@@ -21,6 +21,7 @@ model User {
   stripeCustomerId String?
   active           Boolean       @default(false)
   activationToken  String?       @unique
+  acceptedTerms    Boolean       @default(false)
   chats            Chat[]
   token            UserToken?
   moodEntries      MoodEntry[]

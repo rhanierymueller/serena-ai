@@ -10,6 +10,7 @@ import { TypingText } from '../components/TypingText';
 import { getUser, saveUser, clearUser } from '../services/userSession';
 import Header from '../components/Header';
 import { checkAuth, fetchUserProfile } from '../services/userService';
+import { BASE_URL } from '../config';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -18,13 +19,13 @@ const Home: React.FC = () => {
   const [transitioning, setTransitioning] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
-  const storedUser = getUser();
   const [userName, setUserName] = useState<string | null>(
-    () => storedUser?.name?.split(' ')[0] ?? null
+    () => getUser()?.name?.split(' ')[0] ?? null
   );
   const [gender, setGender] = useState<'male' | 'female' | 'other'>(
-    () => storedUser?.gender ?? 'other'
+    () => getUser()?.gender ?? 'other'
   );
 
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
@@ -44,13 +45,11 @@ const Home: React.FC = () => {
     };
     window.addEventListener('mousemove', handleMouseMove);
 
-    
     const footerElement = document.querySelector('footer');
     if (footerElement) {
       setFooterHeight(footerElement.offsetHeight);
     }
 
-    
     const handleResize = () => {
       const footerElement = document.querySelector('footer');
       if (footerElement) {
@@ -72,15 +71,11 @@ const Home: React.FC = () => {
 
   const updateUserState = async () => {
     try {
-      
-      const storedUser = getUser();
-
-      
       const user = await checkAuth();
 
       if (user && user.active) {
-        
         saveUser(user);
+        setHasAcceptedTerms(user.acceptedTerms || false);
 
         if (user.name) {
           const [firstName] = user.name.split(' ');
@@ -90,23 +85,50 @@ const Home: React.FC = () => {
         return;
       }
 
-      
       clearUser();
       setUserName(null);
       setGender('other');
+      setHasAcceptedTerms(false);
     } catch (err) {
       console.error('Falha ao verificar login:', err);
       clearUser();
       setUserName(null);
       setGender('other');
+      setHasAcceptedTerms(false);
     }
   };
 
-  const handleTestClick = () => setShowDisclaimer(true);
+  const handleTestClick = () => {
+    if (!hasAcceptedTerms) {
+      setShowDisclaimer(true);
+    } else {
+      navigate('/chat');
+    }
+  };
 
-  const handleAcceptDisclaimer = () => {
+  const handleAcceptDisclaimer = async () => {
     setShowDisclaimer(false);
     setTransitioning(true);
+
+    if (userName) {
+      try {
+        const storedUser = getUser();
+        if (storedUser?.id) {
+          await fetch(`${BASE_URL}/api/users/accept-terms`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ userId: storedUser.id }),
+          });
+          setHasAcceptedTerms(true);
+        }
+      } catch (error) {
+        console.error('Erro ao salvar aceitação dos termos:', error);
+      }
+    }
+
     setTimeout(() => navigate('/chat'), 600);
   };
 
@@ -173,7 +195,7 @@ const Home: React.FC = () => {
               {!userName ? (
                 <>
                   <button
-                    onClick={() => setShowDisclaimer(true)}
+                    onClick={handleTestClick}
                     className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold transition-all"
                   >
                     {t('home.avyChat')}
@@ -193,7 +215,7 @@ const Home: React.FC = () => {
                 </>
               ) : (
                 <button
-                  onClick={() => setShowDisclaimer(true)}
+                  onClick={handleTestClick}
                   className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold transition-all"
                 >
                   {t('home.avyChat')}

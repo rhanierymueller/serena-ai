@@ -56,7 +56,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
       confirmPassword: '',
       birthDate: '',
       country: 'br',
-      gender: '',
+      gender: 'male',
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required(t('register.validation.firstName')),
@@ -76,7 +76,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
         .required(t('register.validation.passwordConfirm')),
       birthDate: Yup.string().matches(/^\d{2}\/\d{2}\/\d{4}$/, t('register.validation.birthDate')),
       country: Yup.string(),
-      gender: Yup.string(),
+      gender: Yup.string().required(),
     }),
     onSubmit: async values => {
       if (!captchaVerified) {
@@ -93,7 +93,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
         await createUser({
           name: fullName,
           email: values.email,
-          gender: values.gender || undefined,
+          gender: values.gender,
           password: values.password,
           birthDate: birthDate,
           region: region,
@@ -263,9 +263,15 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
                 <Select
                   name="gender"
                   value={formik.values.gender}
-                  onChange={value => formik.setFieldValue('gender', value)}
+                  onChange={value => {
+                    formik.setFieldValue('gender', value);
+                    formik.setFieldTouched('gender', true);
+                  }}
                   options={genders}
                 />
+                {formik.touched.gender && formik.errors.gender && (
+                  <p className="error">{formik.errors.gender}</p>
+                )}
               </div>
 
               <div className="flex justify-center">
