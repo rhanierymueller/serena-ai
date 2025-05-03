@@ -6,7 +6,7 @@ import { useI18n } from '../i18n/I18nContext';
 type Step = { text: string; duration: number };
 
 const BreathingSession: React.FC = () => {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const [currentStep, setCurrentStep] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
@@ -46,16 +46,23 @@ const BreathingSession: React.FC = () => {
   }, [isRunning]);
 
   const getCalmVoice = (): SpeechSynthesisVoice | undefined => {
-    const preferred = [
-      'Google português do Brasil',
-      'Luciana',
-      'Microsoft Maria Desktop',
-      'pt-BR-Wavenet-F',
-    ];
+    const preferredVoices: { [key: string]: string[] } = {
+      pt: ['Google português do Brasil', 'Luciana', 'Microsoft Maria Desktop', 'pt-BR-Wavenet-F'],
+      en: ['Google US English', 'Microsoft Zira Desktop', 'en-US-Wavenet-C'],
+      es: ['Google español', 'Microsoft Sabina Desktop', 'es-ES-Standard-A'],
+    };
+
+    const voicePrefs = preferredVoices[language] || [];
+    const langPrefix = { pt: 'pt', en: 'en', es: 'es' }[language];
+
     let voice = voices.find(
-      v => v.lang === 'pt-BR' && preferred.some(name => v.name.includes(name))
+      v => v.lang.startsWith(langPrefix) && voicePrefs.some(name => v.name.includes(name))
     );
-    if (!voice) voice = voices.find(v => v.lang === 'pt-BR');
+
+    if (!voice) {
+      voice = voices.find(v => v.lang.startsWith(langPrefix));
+    }
+
     return voice;
   };
 
@@ -65,7 +72,11 @@ const BreathingSession: React.FC = () => {
     const utterance = new SpeechSynthesisUtterance(text);
     const voice = getCalmVoice();
     if (voice) utterance.voice = voice;
-    utterance.lang = 'pt-BR';
+    utterance.lang = {
+      pt: 'pt-BR',
+      en: 'en-US',
+      es: 'es-ES',
+    }[language];
     utterance.rate = 0.8;
     utterance.pitch = 1.1;
 

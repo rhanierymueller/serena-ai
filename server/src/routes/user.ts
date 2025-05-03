@@ -26,7 +26,7 @@ const resendActivationLimiter = rateLimit({
 });
 
 router.post("/users", (async (req: any, res: any) => {
-  const { name, email, gender, password, birthDate, provider = "credentials" } = req.body;
+  const { name, email, gender, password, birthDate, region, provider = "credentials" } = req.body;
 
   if (!name || !email) {
     return res.status(400).json({ errorCode: "missingCredentials" });
@@ -48,6 +48,7 @@ router.post("/users", (async (req: any, res: any) => {
         name,
         gender,
         birthDate,
+        region,
         password: hashedPassword,
         provider,
         active: false, 
@@ -69,6 +70,7 @@ router.post("/users", (async (req: any, res: any) => {
       gender,
       password: hashedPassword,
       birthDate,
+      region,
       provider,
       active: false,
       activationToken,
@@ -85,28 +87,20 @@ router.post("/users", (async (req: any, res: any) => {
 router.post("/login", [loginLimiter], async (req: any, res: any, next: NextFunction) => {
   const { email, password } = req.body;
   
-  const userAgent = req.headers['user-agent'] || 'Unknown';
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
-  console.log(`📱 Tentativa de login: Email=${email}, Mobile=${isMobile}, UserAgent=${userAgent}`);
-
   if (!email || !password) {
-    console.log(`❌ Login falhou: Credenciais ausentes. Email=${email}`);
     return res.status(400).json({ errorCode: "missingCredentials" });
   }
 
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !user.password) {
-    console.log(`❌ Login falhou: Usuário não encontrado. Email=${email}`);
     return res.status(401).json({ errorCode: "userNotFound" });
   }
   if (!user.active) {
-    console.log(`❌ Login falhou: Conta não ativada. Email=${email}`);
     return res.status(401).json({ errorCode: "accountNotActivated" });
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    console.log(`❌ Login falhou: Senha incorreta. Email=${email}`);
     return res.status(401).json({ errorCode: "wrongPassword" });
   }
 
@@ -117,11 +111,7 @@ router.post("/login", [loginLimiter], async (req: any, res: any, next: NextFunct
     if (err) {
       console.error(`❌ Erro durante login com Passport: ${err.message}`, err);
       return next(err);
-    }
-    
-    
-    console.log(`✅ Login bem-sucedido: Email=${email}, SessionID=${req.sessionID}`);
-    
+    }    
     
     res.json({
       ...userSafe,
@@ -261,6 +251,66 @@ router.post("/forgot-password", [forgotPasswordLimiter], async (req: any, res: a
   await sendResetPasswordEmail(email, user.name, resetLink);
 
   return res.status(200).json({ message: "Reset password email sent." });
+});
+
+router.post("/users/update-plan", async (req: any, res: any) => {
+  const { userId, plan, tokenAmount } = req.body;
+
+  if (!userId || !plan) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  try {
+    const currentUser = await prisma.user.findUnique({ where: { id: userId } });
+    
+    if (!currentUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+        
+    await prisma.$transaction(async (tx) => {
+      if (currentUser.plan !== "pro") {
+        await tx.user.update({
+          where: { id: userId },
+          data: { plan },
+        });
+      }
+
+      if (tokenAmount) {
+        const existing = await tx.userToken.findUnique({ where: { userId } });
+
+        if (existing) {
+          await tx.userToken.update({
+            where: { userId },
+            data: { total: existing.total + tokenAmount },
+          });
+        } else {
+          await tx.userToken.create({
+            data: {
+              userId,
+              total: tokenAmount,
+              used: 0,
+            },
+          });
+        }
+      }
+    });
+
+    const updatedUser = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { token: true },
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found after update" });
+    }
+
+    const { password, activationToken, resetToken, ...userSafe } = updatedUser;
+
+    return res.status(200).json(userSafe);
+  } catch (error) {
+    console.error("❌ Erro ao atualizar plano manualmente:", error);
+    return res.status(500).json({ error: "Failed to update plan" });
+  }
 });
 
 export default router;

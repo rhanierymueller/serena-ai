@@ -13,6 +13,7 @@ model User {
   email            String        @unique
   gender           String?
   birthDate        String?
+  region           String?       @default("other") // Região do usuário (brasil ou other)
   createdAt        DateTime      @default(now())
   password         String?
   plan             String        @default("free")

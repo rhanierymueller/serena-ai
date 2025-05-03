@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Sparkles, RefreshCcw, Volume2 } from 'lucide-react';
 import PageLayout from '../components/PageLayout';
 import { useI18n } from '../i18n/I18nContext';
@@ -9,13 +9,58 @@ const MotivationalSpin: React.FC = () => {
   const { t, language } = useI18n();
   const [loading, setLoading] = useState(false);
   const [quote, setQuote] = useState<string | null>(null);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [voicesReady, setVoicesReady] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  useEffect(() => {
+    const tryLoadVoices = () => {
+      const available = speechSynthesis.getVoices();
+      if (available.length > 0) {
+        setVoices(available);
+        setVoicesReady(true);
+        return true;
+      }
+      return false;
+    };
+
+    if (!tryLoadVoices()) {
+      const interval = setInterval(() => {
+        if (tryLoadVoices()) clearInterval(interval);
+      }, 200);
+      return () => clearInterval(interval);
+    }
+  }, []);
+
+  const getVoiceByLanguage = (): SpeechSynthesisVoice | undefined => {
+    const preferredVoices: { [key: string]: string[] } = {
+      pt: ['Google português do Brasil', 'Luciana', 'Microsoft Maria Desktop', 'pt-BR-Wavenet-F'],
+      en: ['Google US English', 'Microsoft Zira Desktop', 'en-US-Wavenet-C'],
+      es: ['Google español', 'Microsoft Sabina Desktop', 'es-ES-Standard-A'],
+    };
+
+    const langPrefix = { pt: 'pt', en: 'en', es: 'es' }[language];
+    const preferred = preferredVoices[language] || [];
+
+    let voice = voices.find(
+      v => v.lang.startsWith(langPrefix) && preferred.some(name => v.name.includes(name))
+    );
+
+    if (!voice) voice = voices.find(v => v.lang.startsWith(langPrefix));
+    return voice;
+  };
+
   const speak = (text: string) => {
+    if (!voicesReady) return;
     const utterance = new SpeechSynthesisUtterance(text);
+    const voice = getVoiceByLanguage();
+    if (voice) utterance.voice = voice;
+
     utterance.lang = language === 'en' ? 'en-US' : language === 'es' ? 'es-ES' : 'pt-BR';
+
     utterance.pitch = 1.1;
     utterance.rate = 0.95;
+    speechSynthesis.cancel(); // para evitar sobreposição
     speechSynthesis.speak(utterance);
   };
 
