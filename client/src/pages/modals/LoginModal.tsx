@@ -140,7 +140,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
         }
         onCancel={onClose}
         onConfirm={handleSubmitModal}
-        //confirmDisabled={!captchaVerified}
+        confirmDisabled={!captchaVerified}
         confirmText={t('login.confirm')}
         cancelText={t('register.cancel')}
         size="sm"
