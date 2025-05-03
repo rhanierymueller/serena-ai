@@ -22,7 +22,6 @@ const PlansPage: React.FC = () => {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        
         const userData = await checkAuth();
         setUser(userData);
       } catch (error) {
@@ -39,9 +38,7 @@ const PlansPage: React.FC = () => {
         setLoading(true);
         const config = await getPublicConfig();
 
-        
         const formattedPlans = config.plans.map(plan => {
-          
           const priceToShow = language === 'pt' ? plan.priceBrl : plan.priceUsd;
           return {
             tokens: plan.tokens,
@@ -54,7 +51,7 @@ const PlansPage: React.FC = () => {
         setPlans(formattedPlans);
       } catch (error) {
         console.error('Erro ao carregar planos:', error);
-        
+
         const defaultPriceUsd2k = 9.99;
         const defaultPriceUsd5k = 19.99;
         const defaultPriceUsd10k = 29.99;
@@ -62,7 +59,6 @@ const PlansPage: React.FC = () => {
         const defaultPriceBrl5k = 99.0;
         const defaultPriceBrl10k = 149.9;
 
-        
         const priceToShow2k = language === 'pt' ? defaultPriceBrl2k : defaultPriceUsd2k;
         const priceToShow5k = language === 'pt' ? defaultPriceBrl5k : defaultPriceUsd5k;
         const priceToShow10k = language === 'pt' ? defaultPriceBrl10k : defaultPriceUsd10k;
@@ -100,7 +96,7 @@ const PlansPage: React.FC = () => {
       alert(t('plansPage.loginRequired'));
       return;
     }
-    handleStripeSubscriptionCheckout(user.id, user.email, tokenAmount);
+    handleStripeSubscriptionCheckout(user.id, user.email, tokenAmount, language);
   };
 
   const tokensLeft = total - used;

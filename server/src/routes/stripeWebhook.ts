@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import type Stripe from "stripe";
+import Stripe from "stripe";
 import { prisma } from "../lib/prisma";
 import {stripe} from "../lib/stripe";
 
@@ -13,7 +13,7 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req: R
     return res.status(400).send("Missing signature or secret");
   }
 
-  let event: Stripe.Event;
+  let event: any;
 
   try {
     event = stripe.webhooks.constructEvent(
@@ -28,11 +28,10 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req: R
 
   switch (event.type) {
     case "checkout.session.completed": {
-      const session = event.data.object as Stripe.Checkout.Session;
+      const session = event.data.object;
     
       const userId = session.metadata?.userId;
       const tokenAmount = Number(session.metadata?.tokenAmount);
-    
       if (!userId || !tokenAmount) {
         console.warn("⚠️ Metadata ausente na sessão:", session.metadata);
         break;

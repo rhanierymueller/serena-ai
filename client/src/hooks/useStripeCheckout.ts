@@ -2,9 +2,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { BASE_URL } from '../config';
 import { getPublicConfig } from '../services/configService';
 
-
 let stripePromise: Promise<any> | null = null;
-
 
 const getStripeInstance = async () => {
   if (!stripePromise) {
@@ -20,7 +18,8 @@ const getStripeInstance = async () => {
 export async function handleStripeSubscriptionCheckout(
   userId: string,
   email: string,
-  tokenAmount: number
+  tokenAmount: number,
+  region: string
 ) {
   try {
     const res = await fetch(`${BASE_URL}/api/stripe/create-token-checkout`, {
@@ -30,6 +29,7 @@ export async function handleStripeSubscriptionCheckout(
         userId,
         userEmail: email,
         tokenAmount,
+        region,
       }),
     });
 
@@ -37,7 +37,6 @@ export async function handleStripeSubscriptionCheckout(
 
     if (!data.sessionId) throw new Error('Stripe session not created');
 
-    
     const stripe = await getStripeInstance();
     if (!stripe) throw new Error('Stripe.js not loaded');
 

@@ -1,9 +1,11 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { prisma } from "../lib/prisma";
-import { stripe, PRICE_MAP, getPriceMap } from "../lib/stripe";
- 
+import { stripe, getPriceMap } from "../lib/stripe";
+
 
 const router = express.Router();
+
+
 
 router.post("/create-token-checkout", async (req: any, res: any) => {
   const { userId, userEmail, tokenAmount } = req.body;
@@ -12,19 +14,24 @@ router.post("/create-token-checkout", async (req: any, res: any) => {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  if (typeof tokenAmount !== "number" || !PRICE_MAP[tokenAmount]) {
+  if (typeof tokenAmount !== "number") {
     return res.status(400).json({ error: "Invalid token amount" });
   }
 
-  let customerId: string;
-
   const user = await prisma.user.findUnique({ where: { id: userId } });
-  
+
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
 
-  const priceMap = getPriceMap(user.region || 'other');
+  const region = req.body.region || user.region || 'other';
+  const priceMap = getPriceMap(region);
+  
+  if (!priceMap[tokenAmount]) {
+    return res.status(400).json({ error: "Invalid token amount for region" });
+  }
+
+  let customerId: string;
 
   if (user.stripeCustomerId) {
     customerId = user.stripeCustomerId;
@@ -43,7 +50,7 @@ router.post("/create-token-checkout", async (req: any, res: any) => {
   }
 
   const session = await stripe.checkout.sessions.create({
-    mode: "subscription",
+    mode: "payment", 
     payment_method_types: ["card"],
     line_items: [{ price: priceMap[tokenAmount], quantity: 1 }],
     customer: customerId,
@@ -52,8 +59,7 @@ router.post("/create-token-checkout", async (req: any, res: any) => {
     metadata: {
       userId,
       tokenAmount: tokenAmount.toString(),
-      planType: "pro", 
-      // @ts-ignore - A propriedade region existe no modelo User, mas o TypeScript não a reconhece
+      planType: "pro",
       region: user.region || 'other',
     },
   });

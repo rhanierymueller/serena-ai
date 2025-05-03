@@ -11,7 +11,7 @@ import Select from '../../components/Select';
 import { createUser } from '../../services/userService';
 import { useToast } from '../../context/ToastContext';
 import EmailVerificationModal from './EmailVerificationModal';
-import { formatDate, parseDateToBrFormat } from '../../utils/formatters';
+import { parseDateToBrFormat } from '../../utils/formatters';
 
 interface RegisterModalProps {
   onClose: () => void;
@@ -275,25 +275,6 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
                   onChange={handleCaptchaChange}
                   theme="dark"
                 />
-              </div>
-
-              <div className="flex justify-end gap-4">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="px-4 py-2 text-sm font-medium text-white hover:text-gray-300 transition"
-                >
-                  {t('common.cancel')}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSubmitModal}
-                  className="px-4 py-2 text-sm font-medium bg-primary text-white rounded-md hover:bg-primary-dark transition flex items-center gap-2"
-                  disabled={formik.isSubmitting}
-                >
-                  {formik.isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {t('register.submit')}
-                </button>
               </div>
             </form>
           </div>
