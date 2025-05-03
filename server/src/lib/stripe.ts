@@ -23,7 +23,7 @@ if (
 
 // ✅ Inicializa o Stripe
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2022-11-15", // use a versão estável suportada
+  apiVersion: "2025-03-31.basil"
 });
 
 // ✅ Mapeia preços por moeda
