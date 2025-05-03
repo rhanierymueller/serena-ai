@@ -20,6 +20,7 @@ const Home: React.FC = () => {
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const [userName, setUserName] = useState<string | null>(
     () => getUser()?.name?.split(' ')[0] ?? null
@@ -67,6 +68,20 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     updateUserState();
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   const updateUserState = async () => {
@@ -144,28 +159,32 @@ const Home: React.FC = () => {
 
       <div
         className="fixed inset-0 z-0 pointer-events-none"
-        style={{
-          backgroundImage: "url('/image/ceu.webp')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          WebkitMaskImage: `linear-gradient(to bottom, 
-                              black 0%, 
-                              black calc(100% - ${footerHeight}px), 
-                              transparent calc(100% - ${footerHeight}px)), 
-                            radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, 
-                              white 0%, 
-                              transparent 100%)`,
-          maskImage: `linear-gradient(to bottom, 
-                        black 0%, 
-                        black calc(100% - ${footerHeight}px), 
-                        transparent calc(100% - ${footerHeight}px)), 
-                      radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, 
-                        white 0%, 
-                        transparent 100%)`,
-          WebkitMaskComposite: 'source-in',
-          maskComposite: 'intersect',
-          transition: 'mask-image 0.2s ease, -webkit-mask-image 0.2s ease',
-        }}
+        style={
+          isMobile
+            ? { backgroundColor: '#000' }
+            : {
+                backgroundImage: "url('/image/ceu.webp')",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                WebkitMaskImage: `linear-gradient(to bottom, 
+                    black 0%, 
+                    black calc(100% - ${footerHeight}px), 
+                    transparent calc(100% - ${footerHeight}px)), 
+                  radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, 
+                    white 0%, 
+                    transparent 100%)`,
+                maskImage: `linear-gradient(to bottom, 
+                    black 0%, 
+                    black calc(100% - ${footerHeight}px), 
+                    transparent calc(100% - ${footerHeight}px)), 
+                  radial-gradient(circle 140px at ${mouse.x}px ${mouse.y}px, 
+                    white 0%, 
+                    transparent 100%)`,
+                WebkitMaskComposite: 'source-in',
+                maskComposite: 'intersect',
+                transition: 'mask-image 0.2s ease, -webkit-mask-image 0.2s ease',
+              }
+        }
       />
 
       <Header fixed showMenu onLogoutSuccess={() => setUserName(null)} />
