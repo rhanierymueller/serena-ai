@@ -78,20 +78,22 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onSuccess }) => {
         title={t('login.title')}
         description={
           <form onSubmit={formik.handleSubmit} className="space-y-4 text-white">
-            <div className="flex flex-col gap-4">
-              <button
-                type="button"
-                onClick={() => (window.location.href = `${API_URL}/api/signin/google`)}
-                className="flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition"
-              >
-                <svg
-                  className="w-5 h-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 48 48"
-                ></svg>
-                <span>{t('login.googleAuth')}</span>
-              </button>
-            </div>
+            {false ? (
+              <div className="flex flex-col gap-4">
+                <button
+                  type="button"
+                  onClick={() => (window.location.href = `${API_URL}/api/signin/google`)}
+                  className="flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 48 48"
+                  ></svg>
+                  <span>{t('login.googleAuth')}</span>
+                </button>
+              </div>
+            ) : null}
 
             <div>
               <label className="text-sm mb-1 block">{t('login.email')}</label>

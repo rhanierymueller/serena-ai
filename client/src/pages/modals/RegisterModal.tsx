@@ -140,15 +140,16 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ onClose, initialData }) =
         description={
           <div className="w-full max-w-md mx-auto space-y-6 text-white">
             <form className="w-full max-w-lg mx-auto px-4 space-y-4" onSubmit={formik.handleSubmit}>
-              <button
-                type="button"
-                onClick={() => (window.location.href = '/api/signin/google')}
-                className="flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-md w-full font-medium hover:bg-gray-100 transition"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 48 48"></svg>
-                <span>{t('login.googleAuth')}</span>
-              </button>
-
+              {false ? (
+                <button
+                  type="button"
+                  onClick={() => (window.location.href = '/api/signin/google')}
+                  className="flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-md w-full font-medium hover:bg-gray-100 transition"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 48 48"></svg>
+                  <span>{t('login.googleAuth')}</span>
+                </button>
+              ) : null}
               <div className="flex gap-4">
                 <div className="w-1/2">
                   <label className="text-sm">{t('register.firstName')} *</label>
