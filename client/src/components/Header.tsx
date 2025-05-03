@@ -237,7 +237,7 @@ const Header: React.FC<HeaderProps> = ({
             {t('header.professionalArea')}
           </button>
           <button onClick={handleChatClick} className="block w-full text-left text-white py-2">
-            {t('chat.title') || 'Chat'}
+            {t('header.chatTitle')}
           </button>
           <button
             onClick={() => {
