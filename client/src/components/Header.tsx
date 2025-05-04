@@ -90,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({
         {backTo ? (
           <button
             onClick={() => navigate(backTo)}
-            className="flex items-center gap-2 text-sm text-white px-3 py-1 hover:bg-[#2C3E50] rounded-xl transition"
+            className="flex items-center gap-2 text-sm text-white px-3 mx-4 py-1 hover:bg-[#2C3E50] rounded-xl transition"
           >
             <ArrowLeft size={18} className="text-[#6DAEDB]" />
             <span>{t('home.disclaimer.back')}</span>
