@@ -226,7 +226,10 @@ const Header: React.FC<HeaderProps> = ({
       </div>
 
       {menuOpen && (
-        <div className="md:hidden bg-[#111] border-t border-[#2a3b47] px-4 py-4 space-y-3">
+        <div
+          className="md:hidden fixed left-0 right-0 z-30 bg-[#111] border-t border-[#2a3b47] px-4 py-4 space-y-3"
+          style={{ top: '56px' }}
+        >
           <button
             onClick={() => {
               navigate('/profissional');
