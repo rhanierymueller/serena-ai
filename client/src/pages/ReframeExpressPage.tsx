@@ -15,38 +15,29 @@ const ReframeExpressPage: React.FC = () => {
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   const handleChatRedirect = async () => {
-    // Ativar estado de loading
     setIsRedirecting(true);
     try {
       if (reframeDataRef.current) {
-        // Criar um novo chat
         const userId = getUser()?.id ?? null;
         const newChat = await createChat(userId);
 
-        // Preparar mensagem de contexto
         const { thought, reframe } = reframeDataRef.current;
         const contextMessage = `${t('reframe.chatContext')}\n\nPensamento original: "${thought}"\n\nReestruturação: "${reframe}"`;
 
-        // Enviar mensagem para o chat
         await sendMessage(newChat.id, 'user', contextMessage);
 
-        // Gerar resposta da IA automaticamente
         try {
           await generateReply(newChat.id);
         } catch (replyError) {
           console.error('Erro ao gerar resposta automática:', replyError);
-          // Continua mesmo se falhar ao gerar resposta
         }
 
-        // Navegar para o novo chat
         navigate(`/chat?id=${newChat.id}`);
       } else {
-        // Fallback se não houver dados de reframe
         navigate('/chat');
       }
     } catch (error) {
       console.error('Erro ao criar chat com contexto:', error);
-      // Fallback em caso de erro
       navigate('/chat');
     }
   };

@@ -95,8 +95,10 @@ const ReframeExpress: React.FC<ReframeExpressProps> = ({
             placeholder={t('reframe.thoughtPlaceholder')}
             className="w-full p-3 bg-[#1f2d36] border border-[#2a3b47] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6DAEDB]"
             rows={3}
+            maxLength={128}
             disabled={isLoading || !!reframe}
           />
+          <div className="text-right text-sm text-[#AAB9C3] mt-1">{thought.length}/128</div>
         </div>
 
         {thought && !reframe && (
