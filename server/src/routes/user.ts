@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router, NextFunction } from "express";
 import { prisma } from "../lib/prisma";
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from "uuid";
@@ -332,6 +332,39 @@ router.post("/users/accept-terms", async (req: any, res: any) => {
     console.error("❌ Erro ao atualizar aceitação dos termos:", error);
     return res.status(500).json({ error: "Failed to update terms acceptance" });
   }
+});
+
+router.get('/users/:id/streak', async (req: any, res: any) => {
+  const { id } = req.params;
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+  return res.json({ streakCount: user.streakCount, streakLastDay: user.streakLastDay });
+});
+
+router.post('/users/:id/streak', async (req: any, res: any) => {
+  const { id } = req.params;
+  const today = new Date();
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+
+  let streakCount = user.streakCount || 1;
+  let lastDay = user.streakLastDay ? new Date(user.streakLastDay) : null;
+  const todayStr = today.toISOString().slice(0, 10);
+  const lastDayStr = lastDay ? lastDay.toISOString().slice(0, 10) : null;
+
+  if (lastDayStr !== todayStr) {
+    if (lastDay && (today.getTime() - lastDay.getTime()) / 86400000 === 1) {
+      streakCount += 1;
+    } else if (lastDay && (today.getTime() - lastDay.getTime()) / 86400000 > 1) {
+      streakCount = 1;
+    }
+    await prisma.user.update({
+      where: { id },
+      data: { streakCount, streakLastDay: today },
+    });
+  }
+
+  return res.json({ streakCount, streakLastDay: today });
 });
 
 export default router;

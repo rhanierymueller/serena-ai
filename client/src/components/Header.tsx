@@ -11,6 +11,7 @@ import {
   Sparkles,
   MessageSquare,
   Briefcase,
+  RefreshCw,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '../i18n/I18nContext';
@@ -18,6 +19,7 @@ import Select from './Select';
 import Modal from './Modal';
 import { BASE_URL } from '../config';
 import { useUser } from '../context/UserContext';
+import StreakBadge from './StreakBadge';
 
 type Language = 'pt' | 'en' | 'es';
 
@@ -51,7 +53,6 @@ const Header: React.FC<HeaderProps> = ({
   const [accountOpen, setAccountOpen] = useState(false);
   const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
 
-  // Nome do usuário, se logado
   const userName = user?.name ? user.name.split(' ')[0] : null;
 
   const handleChatClick = () => {
@@ -124,6 +125,7 @@ const Header: React.FC<HeaderProps> = ({
 
           {showMenu && (
             <div className="hidden md:flex items-center gap-4 ml-4">
+              <StreakBadge />
               <button
                 onClick={handleChatClick}
                 className="flex items-center gap-2 text-sm text-white px-4 py-2 hover:bg-[#2C3E50] rounded-xl transition"
@@ -143,29 +145,34 @@ const Header: React.FC<HeaderProps> = ({
                 {selfCareOpen && (
                   <div className="absolute top-full left-0 bg-[#111] border border-[#2a3b47] rounded-xl shadow-xl flex flex-col z-50 w-56">
                     <button
+                      onClick={() => navigate('/reframe')}
+                      className="flex items-center gap-2 px-4 py-2 text-left hover:bg-[#2C3E50] text-white text-sm"
+                    >
+                      <RefreshCw size={16} className="text-[#6DAEDB]" />
+                      {t('reframe.title')}
+                    </button>
+                    <button
                       onClick={() => navigate('/motivacional')}
                       className="flex items-center gap-2 px-4 py-2 text-left hover:bg-[#2C3E50] text-white text-sm"
                     >
                       <Sparkles size={16} className="text-[#6DAEDB]" />
                       {t('home.motivation')}
                     </button>
+                    <button
+                      onClick={() => navigate('/respiracao')}
+                      className="flex items-center gap-2 px-4 py-2 text-left hover:bg-[#2C3E50] text-white text-sm"
+                    >
+                      <Wind size={16} className="text-[#6DAEDB]" />
+                      {t('home.breathing')}
+                    </button>
                     {userName && (
-                      <>
-                        <button
-                          onClick={() => navigate('/mood-tracker')}
-                          className="flex items-center gap-2 px-4 py-2 text-left hover:bg-[#2C3E50] text-white text-sm"
-                        >
-                          <NotebookPen size={16} className="text-[#6DAEDB]" />
-                          {t('home.moodTracker')}
-                        </button>
-                        <button
-                          onClick={() => navigate('/respiracao')}
-                          className="flex items-center gap-2 px-4 py-2 text-left hover:bg-[#2C3E50] text-white text-sm"
-                        >
-                          <Wind size={16} className="text-[#6DAEDB]" />
-                          {t('home.breathing')}
-                        </button>
-                      </>
+                      <button
+                        onClick={() => navigate('/mood-tracker')}
+                        className="flex items-center gap-2 px-4 py-2 text-left hover:bg-[#2C3E50] text-white text-sm"
+                      >
+                        <NotebookPen size={16} className="text-[#6DAEDB]" />
+                        {t('home.moodTracker')}
+                      </button>
                     )}
                   </div>
                 )}
@@ -215,12 +222,11 @@ const Header: React.FC<HeaderProps> = ({
           )}
 
           {showMenu && (
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden text-white p-2 rounded-md hover:bg-[#2C3E50] transition"
-            >
-              {menuOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
+            <div className="md:hidden flex items-center gap-2">
+              <button onClick={() => setMenuOpen(!menuOpen)} className="text-white p-2 rounded-xl">
+                {menuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -244,12 +250,30 @@ const Header: React.FC<HeaderProps> = ({
           </button>
           <button
             onClick={() => {
+              navigate('/reframe');
+              setMenuOpen(false);
+            }}
+            className="block w-full text-left text-white py-2"
+          >
+            {t('reframe.title')}
+          </button>
+          <button
+            onClick={() => {
               navigate('/motivacional');
               setMenuOpen(false);
             }}
             className="block w-full text-left text-white py-2"
           >
             {t('home.motivation')}
+          </button>
+          <button
+            onClick={() => {
+              navigate('/respiracao');
+              setMenuOpen(false);
+            }}
+            className="block w-full text-left text-white py-2"
+          >
+            {t('home.breathing')}
           </button>
           {userName && (
             <>
@@ -261,15 +285,6 @@ const Header: React.FC<HeaderProps> = ({
                 className="block w-full text-left text-white py-2"
               >
                 {t('home.moodTracker')}
-              </button>
-              <button
-                onClick={() => {
-                  navigate('/respiracao');
-                  setMenuOpen(false);
-                }}
-                className="block w-full text-left text-white py-2"
-              >
-                {t('home.breathing')}
               </button>
               <button
                 onClick={() => {

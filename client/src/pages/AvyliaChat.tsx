@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Mic, Send, AlertTriangle, LogOut, Square } from 'lucide-react';
 import LogoIcon from '/image/image.png';
 import ChatSidebar from '../components/ChatSidebar';
+import QuestionSuggestions from '../components/QuestionSuggestions';
 import { useI18n } from '../i18n/I18nContext';
 import { createChat, getChats } from '../services/chatService';
 import { getMessages, sendMessage } from '../services/messageService';
@@ -212,7 +213,30 @@ const AvyliaChat: React.FC = () => {
         const user = await checkAuth();
 
         if (user?.plan) setPlan(user.plan);
+        
+        // Verificar se há um ID de chat na URL
+        const params = new URLSearchParams(location.search);
+        const chatIdFromUrl = params.get('id');
+        
+        if (chatIdFromUrl) {
+          // Carregar o chat específico da URL
+          try {
+            setChatId(chatIdFromUrl);
+            const msgs = await getMessages(chatIdFromUrl);
+            setMessages(
+              msgs.map((m: { role: string; content: any }) => ({
+                sender: m.role === 'user' ? 'user' : 'bot',
+                text: m.content,
+              }))
+            );
+            return; // Sair da função se o chat foi carregado com sucesso
+          } catch (chatError) {
+            console.error('Erro ao carregar chat específico:', chatError);
+            // Continuar para carregar os chats normalmente se houver erro
+          }
+        }
 
+        // Carregar os chats normalmente se não houver ID na URL ou se houve erro
         const chats = await getChats(user?.id ?? null);
         if (chats.length) {
           setChatId(chats[0].id);
@@ -233,7 +257,7 @@ const AvyliaChat: React.FC = () => {
     };
 
     initChat();
-  }, []);
+  }, [location.search]);
 
   const isEmpty = messages.length === 0;
 
@@ -310,6 +334,7 @@ const AvyliaChat: React.FC = () => {
                 Avylia <span className="text-white/80">AI</span>
               </h1>
             </div>
+            <QuestionSuggestions onSelectQuestion={question => handleSend(question)} />
             <div className="w-full max-w-lg">
               <div className="border border-gray-700 rounded-2xl bg-[#1a1a1a] p-4">
                 <div className="w-full flex flex-row items-end gap-2">

@@ -13,6 +13,7 @@ import PrivacyPage from './pages/PrivacyPage';
 import ActivateAccount from './pages/ActivateAccount';
 import ResetPassword from './pages/ResetPassword';
 import ProfessionalArea from './pages/ProfessionalArea';
+import ReframeExpressPage from './pages/ReframeExpressPage';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
       <Route path="/activate/:token" element={<ActivateAccount />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/profissional" element={<ProfessionalArea />} />
+      <Route path="/reframe" element={<ReframeExpressPage />} />
     </Routes>
   );
 };

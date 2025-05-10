@@ -21,6 +21,7 @@ import moodRoutes from "./routes/moodRoutes.js";
 import motivacionalRoutes from "./routes/motivacionalRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import configRoutes from "./routes/configRoutes.js";
+import thoughtReframeRoutes from "./routes/thoughtReframeRoutes.js";
 import { prisma } from "./lib/prisma.js";
 
 dotenv.config();
@@ -144,6 +145,7 @@ app.use("/api/mood", moodRoutes);
 app.use('/api/motivacional', motivacionalRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/config', configRoutes);
+app.use('/api/thought-reframe', thoughtReframeRoutes);
 
 
 app.get("/", (_, res) => {
