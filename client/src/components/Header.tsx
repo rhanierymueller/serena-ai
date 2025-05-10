@@ -19,6 +19,7 @@ import Select from './Select';
 import Modal from './Modal';
 import { BASE_URL } from '../config';
 import { useUser } from '../context/UserContext';
+import StreakBadge from './StreakBadge';
 
 type Language = 'pt' | 'en' | 'es';
 
@@ -124,6 +125,7 @@ const Header: React.FC<HeaderProps> = ({
 
           {showMenu && (
             <div className="hidden md:flex items-center gap-4 ml-4">
+              <StreakBadge />
               <button
                 onClick={handleChatClick}
                 className="flex items-center gap-2 text-sm text-white px-4 py-2 hover:bg-[#2C3E50] rounded-xl transition"
@@ -220,12 +222,11 @@ const Header: React.FC<HeaderProps> = ({
           )}
 
           {showMenu && (
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden text-white p-2 rounded-md hover:bg-[#2C3E50] transition"
-            >
-              {menuOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
+            <div className="md:hidden flex items-center gap-2">
+              <button onClick={() => setMenuOpen(!menuOpen)} className="text-white p-2 rounded-xl">
+                {menuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           )}
         </div>
       </div>

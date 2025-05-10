@@ -184,13 +184,44 @@ const ReframeExpress: React.FC<ReframeExpressProps> = ({
             animate={{ opacity: 1 }}
             className={`p-4 rounded-lg ${isSuicidal ? 'bg-red-900 bg-opacity-30 border border-red-700' : 'bg-[#2C3E50]'}`}
           >
-            <p className={`${isSuicidal ? 'text-red-300 font-bold' : 'text-[#AAB9C3]'}`}>{error}</p>
+            <p className={`${isSuicidal ? 'text-red-300 font-bold' : 'text-[#AAB9C3]'}`}>
+              {isSuicidal ? t('reframe.emergencyHelp') : error}
+            </p>
             {isSuicidal && (
-              <p className="mt-2 text-white">
-                <a href="tel:188" className="underline font-bold">
-                  188
-                </a>{' '}
-                - {t('reframe.callCVV')}
+              <p className="mt-2 text-white font-bold">
+                {t('reframe.emergencyHelp')}
+                <br />
+                {language === 'pt' ? (
+                  <>
+                    <a href="tel:188" className="underline font-bold">
+                      188
+                    </a>{' '}
+                    - {t('reframe.callCVV')}
+                  </>
+                ) : language === 'es' ? (
+                  <>
+                    <a href="tel:717003717" className="underline font-bold">
+                      717 003 717
+                    </a>{' '}
+                    - Teléfono de la Esperanza (España)
+                  </>
+                ) : (
+                  <>
+                    <a href="tel:988" className="underline font-bold">
+                      988
+                    </a>{' '}
+                    - Suicide & Crisis Lifeline (USA)
+                    <br />
+                    <a
+                      href="https://www.befrienders.org/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline"
+                    >
+                      Find help worldwide
+                    </a>
+                  </>
+                )}
               </p>
             )}
             <button onClick={handleReset} className="mt-3 text-sm text-[#6DAEDB] hover:underline">

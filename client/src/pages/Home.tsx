@@ -9,8 +9,9 @@ import LoginModal from './modals/LoginModal';
 import { TypingText } from '../components/TypingText';
 import { getUser, saveUser, clearUser } from '../services/userSession';
 import Header from '../components/Header';
-import { checkAuth, fetchUserProfile } from '../services/userService';
+import { checkAuth } from '../services/userService';
 import { BASE_URL } from '../config';
+import OnboardingModal from '../components/OnboardingModal';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -21,6 +22,12 @@ const Home: React.FC = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !localStorage.getItem('onboardingCompleted');
+    }
+    return false;
+  });
 
   const [userName, setUserName] = useState<string | null>(
     () => getUser()?.name?.split(' ')[0] ?? null
@@ -151,8 +158,14 @@ const Home: React.FC = () => {
     setShowRegister(false);
   };
 
+  const handleCloseOnboarding = () => {
+    localStorage.setItem('onboardingCompleted', 'true');
+    setShowOnboarding(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-black text-white overflow-hidden relative">
+      {showOnboarding && <OnboardingModal onClose={handleCloseOnboarding} />}
       {transitioning && (
         <div className="fixed inset-0 z-50 bg-[#0d0d0d] animate-fadeOutToBlack pointer-events-none" />
       )}
@@ -210,15 +223,15 @@ const Home: React.FC = () => {
                 <TypingText text={`${t('home.welcome')} ${userName}`} />
               </div>
             )}
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-4 items-center">
+              <button
+                onClick={handleTestClick}
+                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold transition-all"
+              >
+                {t('home.avyChat')}
+              </button>
               {!userName ? (
                 <>
-                  <button
-                    onClick={handleTestClick}
-                    className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold transition-all"
-                  >
-                    {t('home.avyChat')}
-                  </button>
                   <button
                     onClick={() => setShowRegister(true)}
                     className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold transition-all"

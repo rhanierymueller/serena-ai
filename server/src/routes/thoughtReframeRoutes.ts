@@ -106,7 +106,8 @@ router.post('/', async (req: any, res: any) => {
 function containsSuicidalContent(text: string): boolean {
   const suicidalKeywords = [
     'suicídio', 'suicida', 'me matar', 'acabar com minha vida', 'não quero mais viver',
-    'suicide', 'kill myself', 'end my life', 'don\'t want to live'
+    'suicide', 'kill myself', 'end my life', "don't want to live", 'i want to die', 'i will kill myself', 'i want to kill myself', 'i want to end my life', 'i want to commit suicide', 'i will kill me',
+    'suicidio', 'suicida', 'matarme', 'acabar con mi vida', 'no quiero vivir', 'quiero morir', 'me quiero matar', 'quiero suicidarme'
   ];
   
   const lowerText = text.toLowerCase();

@@ -27,6 +27,8 @@ model User {
   moodEntries      MoodEntry[]
   thoughtReframes  ThoughtReframe[]
   resetToken       String?          @unique
+  streakCount      Int              @default(1)
+  streakLastDay    DateTime?
 }
 
 

@@ -355,5 +355,29 @@
     "description": "Transforme um pensamento negativo em uma perspectiva mais equilibrada em apenas 60 segundos. Esta ferramenta usa princípios da Terapia Cognitivo-Comportamental para ajudar você a desafiar pensamentos automáticos.",
     "chatContext": "Estou usando a ferramenta de Reestruturação Expressa para transformar pensamentos negativos em perspectivas mais equilibradas. Aqui está o resultado:",
     "redirecting": "Preparando chat..."
+  },
+  "onboarding": {
+    "step1_title": "Bem-vindo à Avylia AI!",
+    "step1_desc": "Descubra uma experiência de conversa empática com inteligência artificial. Vamos te mostrar como aproveitar ao máximo a plataforma!",
+    "step2_title": "Avy Chat",
+    "step2_desc": "Converse com a IA de forma natural e segura. Clique em 'Avy Chat' para começar uma nova conversa a qualquer momento.",
+    "step3_title": "Crie sua conta",
+    "step3_desc": "Crie uma conta para salvar seu histórico, personalizar sua experiência e acessar recursos exclusivos.",
+    "step4_title": "Histórico de conversas",
+    "step4_desc": "Acesse facilmente suas conversas anteriores e continue de onde parou.",
+    "step5_title": "Personalização do perfil",
+    "step5_desc": "Personalize seu perfil para uma experiência única e adaptada às suas necessidades.",
+    "step6_title": "Privacidade e Segurança",
+    "step6_desc": "Seus dados são protegidos e sua privacidade é prioridade. Você pode usar a plataforma de forma anônima ou autenticada.",
+    "step7_title": "Suporte e contato",
+    "step7_desc": "Conte com nosso suporte sempre que precisar. Estamos aqui para ajudar!",
+    "step8_title": "Pronto para começar!",
+    "step8_desc": "Agora é só explorar! Clique em 'Avy Chat' ou crie sua conta para aproveitar todos os recursos.",
+    "back": "Voltar",
+    "next": "Próximo",
+    "skip": "Pular",
+    "start": "Começar",
+    "streak_first_day": "Primeiro dia de uso!",
+    "streak_n_days": "Você está há {{count}} dias consecutivos usando a Avylia AI!"
   }
 }

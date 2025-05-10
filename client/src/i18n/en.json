@@ -352,5 +352,29 @@
     "description": "Transform a negative thought into a more balanced perspective in just 60 seconds. This tool uses Cognitive Behavioral Therapy principles to help you challenge automatic thoughts.",
     "chatContext": "I'm using the Express Reframe tool to transform negative thoughts into more balanced perspectives. Here's the result:",
     "redirecting": "Preparing chat..."
+  },
+  "onboarding": {
+    "step1_title": "Welcome to Avylia AI!",
+    "step1_desc": "Discover an empathetic conversation experience with artificial intelligence. We'll show you how to make the most of the platform!",
+    "step2_title": "Avy Chat",
+    "step2_desc": "Chat with the AI naturally and safely. Click 'Avy Chat' to start a new conversation at any time.",
+    "step3_title": "Create your account",
+    "step3_desc": "Create an account to save your history, personalize your experience, and access exclusive features.",
+    "step4_title": "Conversation history",
+    "step4_desc": "Easily access your previous conversations and pick up where you left off.",
+    "step5_title": "Profile customization",
+    "step5_desc": "Customize your profile for a unique experience tailored to your needs.",
+    "step6_title": "Privacy and Security",
+    "step6_desc": "Your data is protected and your privacy is a priority. You can use the platform anonymously or authenticated.",
+    "step7_title": "Support and contact",
+    "step7_desc": "Count on our support whenever you need it. We're here to help!",
+    "step8_title": "Ready to start!",
+    "step8_desc": "Now just explore! Click 'Avy Chat' or create your account to enjoy all the features.",
+    "back": "Back",
+    "next": "Next",
+    "skip": "Skip",
+    "start": "Start",
+    "streak_first_day": "First day of use!",
+    "streak_n_days": "You have been using Avylia AI for {{count}} consecutive days!"
   }
 }

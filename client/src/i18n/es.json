@@ -353,5 +353,29 @@
     "description": "Transforma un pensamiento negativo en una perspectiva más equilibrada en solo 60 segundos. Esta herramienta utiliza principios de la Terapia Cognitivo-Conductual para ayudarte a desafiar pensamientos automáticos.",
     "chatContext": "Estoy usando la herramienta de Reestructuración Express para transformar pensamientos negativos en perspectivas más equilibradas. Aquí está el resultado:",
     "redirecting": "Preparando chat..."
+  },
+  "onboarding": {
+    "step1_title": "¡Bienvenido a Avylia AI!",
+    "step1_desc": "Descubre una experiencia de conversación empática con inteligencia artificial. ¡Te mostraremos cómo aprovechar al máximo la plataforma!",
+    "step2_title": "Avy Chat",
+    "step2_desc": "Chatea con la IA de forma natural y segura. Haz clic en 'Avy Chat' para iniciar una nueva conversación en cualquier momento.",
+    "step3_title": "Crea tu cuenta",
+    "step3_desc": "Crea una cuenta para guardar tu historial, personalizar tu experiencia y acceder a funciones exclusivas.",
+    "step4_title": "Historial de conversaciones",
+    "step4_desc": "Accede fácilmente a tus conversaciones anteriores y continúa donde lo dejaste.",
+    "step5_title": "Personalización del perfil",
+    "step5_desc": "Personaliza tu perfil para una experiencia única y adaptada a tus necesidades.",
+    "step6_title": "Privacidad y Seguridad",
+    "step6_desc": "Tus datos están protegidos y tu privacidad es prioridad. Puedes usar la plataforma de forma anónima o autenticada.",
+    "step7_title": "Soporte y contacto",
+    "step7_desc": "Cuenta con nuestro soporte siempre que lo necesites. ¡Estamos aquí para ayudarte!",
+    "step8_title": "¡Listo para empezar!",
+    "step8_desc": "¡Ahora solo explora! Haz clic en 'Avy Chat' o crea tu cuenta para disfrutar de todas las funciones.",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "skip": "Saltar",
+    "start": "Comenzar",
+    "streak_first_day": "¡Primer día de uso!",
+    "streak_n_days": "¡Llevas {{count}} días consecutivos usando Avylia AI!"
   }
 }
