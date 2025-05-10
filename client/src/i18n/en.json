@@ -49,7 +49,15 @@
       "pro": "Pro",
       "free": "Free"
     },
-    "tokensRemaining": "Tokens remaining"
+    "tokensRemaining": "Tokens remaining",
+    "suggestions": {
+      "title": "Suggested questions",
+      "questions": {
+        "0": "How can I better deal with my anxiety?",
+        "1": "What breathing techniques can help me calm down?",
+        "2": "How can I improve my self-esteem?"
+      }
+    }
   },
   "sidebar": {
     "newConversation": "New conversation",
@@ -322,5 +330,27 @@
     "title": "Professional Area",
     "inDevelopment": "In Development",
     "description": "We are working to create a special area dedicated to mental health professionals."
+  },
+  "reframe": {
+    "title": "Express Reframe",
+    "step1": "Automatic thought",
+    "step2": "Rational zoom",
+    "thoughtPlaceholder": "Write the thought that's bothering you now...",
+    "beliefStrength": "Belief strength",
+    "showEvidence": "Show evidence",
+    "hideEvidence": "Hide evidence",
+    "evidencePrompt": "Reflect on these questions:",
+    "generateBtn": "Reframe",
+    "processing": "Processing thought...",
+    "result": "New perspective",
+    "newThought": "New thought",
+    "chatCTA": "I want to talk more ➜ Avy Chat",
+    "errorProcessing": "Error processing your thought. Please try again.",
+    "emergencyHelp": "Sensitive content detected. Get 24/7 help: CVV 188",
+    "callCVV": "Call the Center for Life Valorization",
+    "tryAgain": "Try again",
+    "description": "Transform a negative thought into a more balanced perspective in just 60 seconds. This tool uses Cognitive Behavioral Therapy principles to help you challenge automatic thoughts.",
+    "chatContext": "I'm using the Express Reframe tool to transform negative thoughts into more balanced perspectives. Here's the result:",
+    "redirecting": "Preparing chat..."
   }
 }

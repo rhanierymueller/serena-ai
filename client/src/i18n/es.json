@@ -51,7 +51,15 @@
       "free": "Gratuito"
     },
     "tokensRemaining": "Tokens restantes",
-    "verifyingPayment": "Verificando pago..."
+    "verifyingPayment": "Verificando pago...",
+    "suggestions": {
+      "title": "Preguntas sugeridas",
+      "questions": {
+        "0": "¿Cómo puedo manejar mejor mi ansiedad?",
+        "1": "¿Qué técnicas de respiración pueden ayudarme a calmarme?",
+        "2": "¿Cómo puedo mejorar mi autoestima?"
+      }
+    }
   },
   "sidebar": {
     "newConversation": "Nueva conversación",
@@ -323,5 +331,27 @@
     "title": "Área Profesional",
     "inDevelopment": "En Desarrollo",
     "description": "Estamos trabajando para crear un área especial dedicada a los profesionales de la salud mental."
+  },
+  "reframe": {
+    "title": "Reestructuración Express",
+    "step1": "Pensamiento automático",
+    "step2": "Zoom racional",
+    "thoughtPlaceholder": "Escribe el pensamiento que te está molestando ahora...",
+    "beliefStrength": "Intensidad de la creencia",
+    "showEvidence": "Ver evidencia",
+    "hideEvidence": "Ocultar evidencia",
+    "evidencePrompt": "Reflexiona sobre estas preguntas:",
+    "generateBtn": "Reestructurar",
+    "processing": "Procesando pensamiento...",
+    "result": "Nueva perspectiva",
+    "newThought": "Nuevo pensamiento",
+    "chatCTA": "Quiero hablar más ➜ Avy Chat",
+    "errorProcessing": "Error al procesar tu pensamiento. Por favor, inténtalo de nuevo.",
+    "emergencyHelp": "Contenido sensible detectado. Obtén ayuda 24/7: CVV 188",
+    "callCVV": "Llama al Centro de Valoración de la Vida",
+    "tryAgain": "Intentar de nuevo",
+    "description": "Transforma un pensamiento negativo en una perspectiva más equilibrada en solo 60 segundos. Esta herramienta utiliza principios de la Terapia Cognitivo-Conductual para ayudarte a desafiar pensamientos automáticos.",
+    "chatContext": "Estoy usando la herramienta de Reestructuración Express para transformar pensamientos negativos en perspectivas más equilibradas. Aquí está el resultado:",
+    "redirecting": "Preparando chat..."
   }
 }

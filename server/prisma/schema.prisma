@@ -8,24 +8,25 @@ datasource db {
 }
 
 model User {
-  id               String        @id @default(uuid())
+  id               String           @id @default(uuid())
   name             String
-  email            String        @unique
+  email            String           @unique
   gender           String?
   birthDate        String?
-  region           String?       @default("other") // Região do usuário (brasil ou other)
-  createdAt        DateTime      @default(now())
+  region           String?          @default("other") // Região do usuário (brasil ou other)
+  createdAt        DateTime         @default(now())
   password         String?
-  plan             String        @default("free")
-  provider         String        @default("credentials")
+  plan             String           @default("free")
+  provider         String           @default("credentials")
   stripeCustomerId String?
-  active           Boolean       @default(false)
-  activationToken  String?       @unique
-  acceptedTerms    Boolean       @default(false)
+  active           Boolean          @default(false)
+  activationToken  String?          @unique
+  acceptedTerms    Boolean          @default(false)
   chats            Chat[]
   token            UserToken?
   moodEntries      MoodEntry[]
-  resetToken       String?       @unique
+  thoughtReframes  ThoughtReframe[]
+  resetToken       String?          @unique
 }
 
 
@@ -74,4 +75,15 @@ model Message {
   content   String
   createdAt DateTime @default(now())
   chat      Chat     @relation(fields: [chatId], references: [id])
+}
+
+model ThoughtReframe {
+  id               String   @id @default(uuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+  originalThought  String
+  beliefStrength   Int
+  reframedThought  String
+  language         String   @default("pt-BR")
+  createdAt        DateTime @default(now())
 }

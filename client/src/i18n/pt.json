@@ -49,7 +49,15 @@
       "pro": "Pro",
       "free": "Gratuito"
     },
-    "tokensRemaining": "Tokens restantes"
+    "tokensRemaining": "Tokens restantes",
+    "suggestions": {
+      "title": "Sugestões de perguntas",
+      "questions": {
+        "0": "Como posso lidar melhor com minha ansiedade?",
+        "1": "Quais técnicas de respiração podem me ajudar a me acalmar?",
+        "2": "Como posso melhorar minha autoestima?"
+      }
+    }
   },
   "sidebar": {
     "newConversation": "Nova conversa",
@@ -325,5 +333,27 @@
     "title": "Área do Profissional",
     "inDevelopment": "Em Desenvolvimento",
     "description": "Estamos trabalhando para criar uma área especial dedicada aos profissionais da saúde mental."
+  },
+  "reframe": {
+    "title": "Reestruturação Expressa",
+    "step1": "Pensamento automático",
+    "step2": "Zoom racional",
+    "thoughtPlaceholder": "Escreva o pensamento que está te incomodando agora...",
+    "beliefStrength": "Intensidade da crença",
+    "showEvidence": "Ver evidências",
+    "hideEvidence": "Ocultar evidências",
+    "evidencePrompt": "Reflita sobre estas perguntas:",
+    "generateBtn": "Reestruturar",
+    "processing": "Processando pensamento...",
+    "result": "Novo olhar",
+    "newThought": "Novo pensamento",
+    "chatCTA": "Quero conversar mais ➜ Avy Chat",
+    "errorProcessing": "Erro ao processar seu pensamento. Tente novamente.",
+    "emergencyHelp": "Detectamos conteúdo sensível. Procure ajuda 24h: CVV 188",
+    "callCVV": "Ligue para o Centro de Valorização da Vida",
+    "tryAgain": "Tentar novamente",
+    "description": "Transforme um pensamento negativo em uma perspectiva mais equilibrada em apenas 60 segundos. Esta ferramenta usa princípios da Terapia Cognitivo-Comportamental para ajudar você a desafiar pensamentos automáticos.",
+    "chatContext": "Estou usando a ferramenta de Reestruturação Expressa para transformar pensamentos negativos em perspectivas mais equilibradas. Aqui está o resultado:",
+    "redirecting": "Preparando chat..."
   }
 }
