@@ -125,7 +125,7 @@ const AvyliaChat: React.FC = () => {
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     await sendMessage(chatId, 'user', text);
-    if (plan === 'free') setIsTyping(true);
+    setIsTyping(true);
     try {
       const botReply = await generateReply(chatId);
       const botMsg: Message = { sender: 'bot', text: botReply.content };

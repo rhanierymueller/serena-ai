@@ -83,19 +83,30 @@ const ChatSidebar: React.FC<{
           collapsed ? 'w-12' : 'w-64'
         } bg-[#111] text-white h-screen p-4 border-r border-gray-800 flex flex-col transition-all duration-300`}
       >
-        <button
-          onClick={() => {
-            if (onCloseMobileSidebar) {
-              onCloseMobileSidebar();
-            } else {
-              setCollapsed(!collapsed);
-            }
-          }}
-          className="mb-6 self-end text-gray-400 hover:text-white"
-          title={collapsed ? t('sidebar.expand') : t('sidebar.collapse')}
-        >
-          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-        </button>
+        <div className="flex justify-between items-center mb-6">
+          {onCloseMobileSidebar && (
+            <button
+              onClick={() => navigate('/')}
+              className="text-gray-400 hover:text-white"
+              title={t('sidebar.exit')}
+            >
+              <LogOut size={20} />
+            </button>
+          )}
+          <button
+            onClick={() => {
+              if (onCloseMobileSidebar) {
+                onCloseMobileSidebar();
+              } else {
+                setCollapsed(!collapsed);
+              }
+            }}
+            className="self-end text-gray-400 hover:text-white"
+            title={collapsed ? t('sidebar.expand') : t('sidebar.collapse')}
+          >
+            {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          </button>
+        </div>
 
         {!collapsed && (
           <>

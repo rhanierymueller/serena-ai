@@ -24,10 +24,14 @@ export async function callOpenRouter(
           ...messages,
         ];
 
+    const isPro = config?.max_tokens && config.max_tokens > 400;
+    
+    const model = isPro ? "openai/gpt-3.5-turbo" : "deepseek/deepseek-chat:free";
+        
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: "deepseek/deepseek-chat:free",
+        model: model,
         temperature: config?.temperature ?? 0.6,
         top_p: config?.top_p ?? 0.9,
         max_tokens: config?.max_tokens ?? 400,

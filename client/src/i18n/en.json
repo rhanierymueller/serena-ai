@@ -69,7 +69,7 @@
     "deleteConfirmBtn": "Delete",
     "cancel": "Cancel",
     "menu": "Menu",
-    "exit": "Exit"
+    "exit": "Back"
   },
   "register": {
     "title": "Create Account",

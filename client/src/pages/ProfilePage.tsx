@@ -139,7 +139,24 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  if (loading || !user) return <div className="text-white p-4">{t('profile.loading')}</div>;
+  if (loading || !user) {
+    return (
+      <PageLayout title={t('profile.title')} backTo="/">
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="bg-black/80 p-6 sm:p-8 rounded-2xl border border-gray-700 max-w-2xl shadow-lg w-full">
+            <div className="flex justify-center items-center h-40">
+              <div className="text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6DAEDB]"></div>
+                </div>
+                <p className="text-white">{t('profile.loading')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout title={t('profile.title')} backTo="/">

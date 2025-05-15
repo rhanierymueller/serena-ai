@@ -50,58 +50,34 @@ router.post("/", async (req: any, res: any) => {
   let reply: string;
 
   /* =======================================================================
-     TIER PRO  –  GPT-3.5-turbo com limite dinâmico de tokens
+     Chamada ao modelo via OpenRouter (para ambos os planos)
   ======================================================================= */
-  if (isPro && chat.user) {
-    const systemPrompt: ChatCompletionMessageParam = {
-      role: "system",
-      content:
-        "Você é uma terapeuta empática. Responda em texto simples, sem markdown.",
-    };
-
-    const promptMsgs = [systemPrompt, ...history];
-
-    /* 1. Tokens do prompt + saldo restante ------------------------------ */
-    const promptTokens = countPromptTokens(promptMsgs);
-    const saldoOpenAI = await remainingOpenAITokens(chat.user.id); 
-
+  try {
     
-    const maxCompletion = Math.floor((saldoOpenAI - promptTokens) * 0.9);
-
-    if (maxCompletion < 50) {
-      return res
-        .status(403)
-        .json({ error: "Saldo insuficiente de tokens para nova resposta." });
-    }
-
-    /* 2. Chamada ao modelo ---------------------------------------------- */
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      temperature: 0.6,
-      top_p: 0.9,
-      max_tokens: maxCompletion,
-      messages: promptMsgs,
-    });
-
-    const usedNow = completion.usage?.total_tokens ?? 0;
-    await consumeTokens(chat.user.id, usedNow);
-
-    reply =
-      completion.choices[0].message.content ??
-      "Desculpe, não consegui entender.";
-  }
-
-  /* =======================================================================
-     TIER FREE – DeepSeek via OpenRouter
-  ======================================================================= */
-  else {
     reply = await callOpenRouter(
       history.map((m) => ({
         role: m.role,
-        content:
-          typeof m.content === "string" ? m.content : "[mensagem não suportada]",
+        content: typeof m.content === "string" ? m.content : "[mensagem não suportada]",
       }))
     );
+    
+    console.log("Resposta recebida do modelo");
+    
+    if (isPro && chat.user) {
+      const systemPrompt: ChatCompletionMessageParam = {
+        role: "system",
+        content: "Você é uma terapeuta empática. Responda em texto simples, sem markdown.",
+      };
+      
+      const estimatedTokens = countPromptTokens([systemPrompt, ...history]) + 
+                             (reply ? countContentTokens(reply) : 0);
+      
+      await consumeTokens(chat.user.id, estimatedTokens);
+    }
+  } catch (error) {
+    console.error(`Erro ao chamar OpenRouter (plano: ${isPro ? 'pro' : 'free'}):`, error);
+    console.error("Detalhes do erro:", JSON.stringify(error, null, 2));
+    return res.status(500).json({ error: `Erro ao gerar resposta com o modelo ${isPro ? 'pro' : 'free'}` });
   }
 
   /* ---------- fallback de segurança ---------- */
