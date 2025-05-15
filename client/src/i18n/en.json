@@ -219,6 +219,7 @@
     },
     "plan": "Plan",
     "saveChanges": "Save Changes",
+    "saveChangesSuccess": "Changes saved successfully!",
     "loading": "Loading...",
     "plans": {
       "free": {

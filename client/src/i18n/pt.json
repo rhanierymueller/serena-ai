@@ -217,6 +217,7 @@
     },
     "plan": "Plano",
     "saveChanges": "Salvar Alterações",
+    "saveChangesSuccess": "Alterações salvas com sucesso!",
     "loading": "Carregando...",
     "plans": {
       "free": {

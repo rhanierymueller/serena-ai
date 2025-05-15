@@ -220,6 +220,7 @@
     },
     "plan": "Plan",
     "saveChanges": "Guardar cambios",
+    "saveChangesSuccess": "¡Cambios guardados con éxito!",
     "loading": "Cargando...",
     "plans": {
       "free": {
