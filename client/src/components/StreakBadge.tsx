@@ -3,6 +3,7 @@ import { getUser } from '../services/userSession';
 import { BASE_URL } from '../config';
 import { Flame } from 'lucide-react';
 import { useI18n } from '../i18n/I18nContext';
+import { useUser } from '../context/UserContext';
 
 function getTodayStr() {
   return new Date().toISOString().slice(0, 10);
@@ -18,9 +19,9 @@ export default function StreakBadge() {
   const [streak, setStreak] = useState(1);
   const [showTooltip, setShowTooltip] = useState(false);
   const { t } = useI18n();
+  const { user } = useUser();
 
   useEffect(() => {
-    const user = getUser();
     const today = getTodayStr();
 
     if (user?.id) {
@@ -44,21 +45,11 @@ export default function StreakBadge() {
         })
         .catch(() => setStreak(1));
     } else {
-      const lastDay = localStorage.getItem('streak_lastDay');
-      let currentStreak = Number(localStorage.getItem('streak_count') || 1);
-      if (lastDay !== today) {
-        const diff = lastDay ? daysBetween(today, lastDay) : 0;
-        if (lastDay && diff === 1) {
-          currentStreak += 1;
-        } else if (lastDay && diff > 1) {
-          currentStreak = 1;
-        }
-        localStorage.setItem('streak_lastDay', today);
-        localStorage.setItem('streak_count', String(currentStreak));
-      }
-      setStreak(currentStreak);
+      setStreak(1);
     }
-  }, []);
+  }, [user]);
+
+  if (!user?.id) return null;
 
   return (
     <span

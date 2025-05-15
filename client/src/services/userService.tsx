@@ -79,11 +79,11 @@ export function loginUser({ email, password }: { email: string; password: string
 export async function checkAuth(): Promise<UserProfile | null> {
   try {
     const sessionID = getSessionID();
-    if (sessionID) {
-      return await fetchJson<UserProfile>(`${BASE_URL}/api/auth/me?sessionID=${sessionID}`);
-    }
+    const response = sessionID
+      ? await fetchJson<UserProfile | null>(`${BASE_URL}/api/auth/me?sessionID=${sessionID}`)
+      : await fetchJson<UserProfile | null>(`${BASE_URL}/api/auth/me`);
 
-    return await fetchJson<UserProfile>(`${BASE_URL}/api/auth/me`);
+    return response;
   } catch (error) {
     console.warn('Usuário não autenticado:', error);
     return null;

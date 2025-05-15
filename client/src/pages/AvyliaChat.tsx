@@ -213,11 +213,11 @@ const AvyliaChat: React.FC = () => {
         const user = await checkAuth();
 
         if (user?.plan) setPlan(user.plan);
-        
+
         // Verificar se há um ID de chat na URL
         const params = new URLSearchParams(location.search);
         const chatIdFromUrl = params.get('id');
-        
+
         if (chatIdFromUrl) {
           // Carregar o chat específico da URL
           try {
@@ -259,6 +259,8 @@ const AvyliaChat: React.FC = () => {
     initChat();
   }, [location.search]);
 
+  console.log(messages, 'messages');
+
   const isEmpty = messages.length === 0;
 
   return (
@@ -268,6 +270,7 @@ const AvyliaChat: React.FC = () => {
           currentChatId={chatId}
           onSelectChat={id => setChatId(id)}
           onCreateNew={() => setMessages([])}
+          onDeleteChat={() => setMessages([])}
         />
       </div>
 
@@ -281,6 +284,10 @@ const AvyliaChat: React.FC = () => {
                 setShowSidebarMobile(false);
               }}
               onCreateNew={() => {
+                setMessages([]);
+                setShowSidebarMobile(false);
+              }}
+              onDeleteChat={() => {
                 setMessages([]);
                 setShowSidebarMobile(false);
               }}

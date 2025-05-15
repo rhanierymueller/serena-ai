@@ -128,19 +128,13 @@ router.get('/auth/me', (req: any, res: any) => {
       
       if (!sessionStore || typeof sessionStore.get !== 'function') {
         console.error('❌ Erro: sessionStore não disponível ou não tem método get');
-        return res.status(401).json({ 
-          error: 'Not authenticated',
-          message: 'Sessão inválida ou expirada. Por favor, faça login novamente.'
-        });
+        return res.json(null);
       }
       
       
       sessionStore.get(querySessionID, async (err: any, session: any) => {
         if (err || !session || !session.passport || !session.passport.user) {
-          return res.status(401).json({ 
-            error: 'Not authenticated',
-            message: 'Sessão inválida ou expirada. Por favor, faça login novamente.'
-          });
+          return res.json(null);
         }
         
         
@@ -148,10 +142,7 @@ router.get('/auth/me', (req: any, res: any) => {
         const user = await prisma.user.findUnique({ where: { id: userId } });
         
         if (!user) {
-          return res.status(401).json({ 
-            error: 'Not authenticated',
-            message: 'Usuário não encontrado. Por favor, faça login novamente.'
-          });
+          return res.json(null);
         }
         
         
@@ -164,13 +155,10 @@ router.get('/auth/me', (req: any, res: any) => {
       });
     } catch (error) {
       console.error('❌ Erro ao verificar sessionID:', error);
-      return res.status(401).json({ 
-        error: 'Not authenticated',
-        message: 'Erro ao verificar sessão. Por favor, faça login novamente.'
-      });
+      return res.json(null);
     }
   } else {
-    res.status(401).json({ error: 'Not authenticated' });
+    res.json(null);
   }
 });
 

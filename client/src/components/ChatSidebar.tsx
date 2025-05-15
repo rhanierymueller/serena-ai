@@ -19,7 +19,8 @@ const ChatSidebar: React.FC<{
   onCreateNew: () => void;
   currentChatId: string | null;
   onCloseMobileSidebar?: () => void;
-}> = ({ onSelectChat, onCreateNew, currentChatId, onCloseMobileSidebar }) => {
+  onDeleteChat?: () => void;
+}> = ({ onSelectChat, onCreateNew, currentChatId, onCloseMobileSidebar, onDeleteChat }) => {
   const { t } = useI18n();
   const navigate = useNavigate();
   const [history, setHistory] = useState<ChatHistoryItem[]>([]);
@@ -30,7 +31,6 @@ const ChatSidebar: React.FC<{
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        
         const user = await checkAuth();
         const userId = user?.id ?? null;
         const chats = await getChats(userId);
@@ -45,7 +45,6 @@ const ChatSidebar: React.FC<{
 
   const handleNewChat = async () => {
     try {
-      
       const user = await checkAuth();
       const userId = user?.id ?? null;
       const newChat = await createChat(userId);
@@ -61,13 +60,13 @@ const ChatSidebar: React.FC<{
     if (!chatToDelete) return;
 
     try {
-      
       const user = await checkAuth();
       const userId = user?.id ?? null;
       await deleteChat(chatToDelete, userId);
       setHistory(prev => prev.filter(chat => chat.id !== chatToDelete));
       if (chatToDelete === currentChatId) {
         onSelectChat('');
+        onDeleteChat?.();
       }
     } catch (err) {
       console.error('Erro ao deletar chat:', err);

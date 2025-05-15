@@ -205,15 +205,22 @@ const Home: React.FC = () => {
       <main className="flex-1 z-10 px-4 flex items-center justify-center">
         <div className="max-w-full w-full mx-auto px-4 flex flex-col-reverse lg:flex-row items-center justify-center gap-12">
           <div className="flex-1 flex flex-col items-center text-center mx-auto">
-            <div className="flex items-center gap-3 mb-8">
-              <img
-                src={LogoIcon}
-                alt="Avylia logo"
-                className="h-16 w-16 md:h-24 md:w-24 select-none"
-              />
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                Avylia <span className="text-white/80">AI</span>
-              </h1>
+            <div className="flex items-center gap-3 mb-2 flex-col">
+              <div className="flex items-center gap-3">
+                <img
+                  src={LogoIcon}
+                  alt="Avylia logo"
+                  className="h-16 w-16 md:h-24 md:w-24 select-none"
+                />
+                <div className="flex flex-col items-start">
+                  <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+                    Avylia <span className="text-white/80">AI</span>
+                  </h1>
+                </div>
+                <span className="mt-1 inline-block px-3 py-1 rounded-full bg-gradient-to-r from-blue-500 to-cyan-600 text-xs font-semibold text-white shadow-sm uppercase tracking-wider opacity-80">
+                  Beta
+                </span>
+              </div>
             </div>
             <p className="text-lg md:text-xl text-[#AAB9C3] max-w-xl mb-6">
               {t('header.subtitle')}
@@ -224,14 +231,14 @@ const Home: React.FC = () => {
               </div>
             )}
             <div className="flex flex-wrap justify-center gap-4 items-center">
-              <button
-                onClick={handleTestClick}
-                className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold transition-all"
-              >
-                {t('home.avyChat')}
-              </button>
               {!userName ? (
                 <>
+                  <button
+                    onClick={handleTestClick}
+                    className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold transition-all"
+                  >
+                    {t('home.avyChat')}
+                  </button>
                   <button
                     onClick={() => setShowRegister(true)}
                     className="bg-[#6DAEDB] hover:bg-[#4F91C3] text-black px-6 py-3 rounded-2xl text-sm md:text-lg font-semibold transition-all"

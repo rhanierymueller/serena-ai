@@ -3,6 +3,7 @@ export interface UserProfile {
   id: string;
   email: string;
   name: string;
+  acceptedTerms: boolean;
   plan?: 'free' | 'pro';
   sessionID?: string;
   isMobile?: boolean;

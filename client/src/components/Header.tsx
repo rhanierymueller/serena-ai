@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft,
   BadgeDollarSign,
@@ -52,11 +52,18 @@ const Header: React.FC<HeaderProps> = ({
   const [selfCareOpen, setSelfCareOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
   const userName = user?.name ? user.name.split(' ')[0] : null;
 
+  useEffect(() => {
+    if (user) {
+      setHasAcceptedTerms(user.acceptedTerms || false);
+    }
+  }, [user]);
+
   const handleChatClick = () => {
-    if (user?.acceptedTerms) {
+    if (hasAcceptedTerms) {
       navigate('/chat');
     } else {
       setShowDisclaimerModal(true);
