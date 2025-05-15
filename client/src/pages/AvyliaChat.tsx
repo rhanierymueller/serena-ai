@@ -259,7 +259,25 @@ const AvyliaChat: React.FC = () => {
     initChat();
   }, [location.search]);
 
-  console.log(messages, 'messages');
+  useEffect(() => {
+    const loadMessages = async () => {
+      if (!chatId) return;
+      
+      try {
+        const msgs = await getMessages(chatId);
+        setMessages(
+          msgs.map((m: { role: string; content: any }) => ({
+            sender: m.role === 'user' ? 'user' : 'bot',
+            text: m.content,
+          }))
+        );
+      } catch (error) {
+        console.error('Erro ao carregar mensagens:', error);
+      }
+    };
+
+    loadMessages();
+  }, [chatId]);
 
   const isEmpty = messages.length === 0;
 
@@ -269,8 +287,35 @@ const AvyliaChat: React.FC = () => {
         <ChatSidebar
           currentChatId={chatId}
           onSelectChat={id => setChatId(id)}
-          onCreateNew={() => setMessages([])}
-          onDeleteChat={() => setMessages([])}
+          onCreateNew={async () => {
+            try {
+              const user = await checkAuth();
+              const userId = user?.id ?? null;
+              const newChat = await createChat(userId);
+              setChatId(newChat.id);
+              setMessages([]);
+            } catch (err) {
+              console.error('Erro ao criar novo chat:', err);
+            }
+          }}
+          onDeleteChat={async () => {
+            try {
+              setMessages([]);
+              
+              const user = await checkAuth();
+              const userId = user?.id ?? null;
+              const chats = await getChats(userId);
+              
+              if (chats.length > 0) {
+                setChatId(chats[0].id);
+              } else {
+                const newChat = await createChat(userId);
+                setChatId(newChat.id);
+              }
+            } catch (err) {
+              console.error('Erro ao processar exclusão de chat:', err);
+            }
+          }}
         />
       </div>
 
@@ -283,13 +328,40 @@ const AvyliaChat: React.FC = () => {
                 setChatId(id);
                 setShowSidebarMobile(false);
               }}
-              onCreateNew={() => {
-                setMessages([]);
-                setShowSidebarMobile(false);
+              onCreateNew={async () => {
+                try {
+                  const user = await checkAuth();
+                  const userId = user?.id ?? null;
+                  const newChat = await createChat(userId);
+                  setChatId(newChat.id);
+                  setMessages([]);
+                  setShowSidebarMobile(false);
+                } catch (err) {
+                  console.error('Erro ao criar novo chat:', err);
+                }
               }}
-              onDeleteChat={() => {
-                setMessages([]);
-                setShowSidebarMobile(false);
+              onDeleteChat={async () => {
+                try {
+                  // Quando um chat é excluído, sempre mostramos a tela inicial
+                  setMessages([]);
+                  
+                  // Verificar se ainda existem chats
+                  const user = await checkAuth();
+                  const userId = user?.id ?? null;
+                  const chats = await getChats(userId);
+                  
+                  if (chats.length > 0) {
+                    // Se ainda existem chats, selecione o primeiro
+                    setChatId(chats[0].id);
+                  } else {
+                    // Se não existem mais chats, crie um novo
+                    const newChat = await createChat(userId);
+                    setChatId(newChat.id);
+                  }
+                  setShowSidebarMobile(false);
+                } catch (err) {
+                  console.error('Erro ao processar exclusão de chat:', err);
+                }
               }}
               onCloseMobileSidebar={() => setShowSidebarMobile(false)}
             />

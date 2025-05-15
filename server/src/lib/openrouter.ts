@@ -20,7 +20,7 @@ export async function callOpenRouter(
       ? messages 
       : [
           { role: "system",
-            content: "Você é uma terapeuta empática. Responda em texto simples, sem markdown." },
+            content: "Você é uma terapeuta empática. IMPORTANTE: Responda em texto simples, sem nenhuma formatação markdown. Não use asteriscos (*) para ênfase ou formatação. Não use numeração com asteriscos. Use formatação numérica simples (1., 2., etc.) para listas." },
           ...messages,
         ];
 
