@@ -30,7 +30,6 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
     }
 
     const res = await fetch(url, defaultOptions);
-
     let json;
     const text = await res.text();
     try {
@@ -72,10 +71,6 @@ export function loginUser({ email, password }: { email: string; password: string
   });
 }
 
-/**
- * Verifica se o usuário está autenticado
- * Usa sessionID se disponível para melhorar a confiabilidade da autenticação
- */
 export async function checkAuth(): Promise<UserProfile | null> {
   try {
     const sessionID = getSessionID();
@@ -90,10 +85,6 @@ export async function checkAuth(): Promise<UserProfile | null> {
   }
 }
 
-/**
- * Busca o perfil do usuário diretamente do servidor
- * Usa sessionID se disponível para melhorar a confiabilidade da autenticação
- */
 export async function fetchUserProfile(): Promise<UserProfile | null> {
   try {
     const sessionID = getSessionID();

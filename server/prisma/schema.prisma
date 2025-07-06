@@ -8,27 +8,36 @@ datasource db {
 }
 
 model User {
-  id               String           @id @default(uuid())
-  name             String
-  email            String           @unique
-  gender           String?
-  birthDate        String?
-  region           String?          @default("other") // Região do usuário (brasil ou other)
-  createdAt        DateTime         @default(now())
-  password         String?
-  plan             String           @default("free")
-  provider         String           @default("credentials")
-  stripeCustomerId String?
-  active           Boolean          @default(false)
-  activationToken  String?          @unique
-  acceptedTerms    Boolean          @default(false)
-  chats            Chat[]
-  token            UserToken?
-  moodEntries      MoodEntry[]
-  thoughtReframes  ThoughtReframe[]
-  resetToken       String?          @unique
-  streakCount      Int              @default(1)
-  streakLastDay    DateTime?
+  id                  String           @id @default(uuid())
+  name                String
+  email               String           @unique
+  gender              String?
+  birthdate           String?          @map("birthDate") // Mapeia birthdate do código para birthDate do banco
+  phone               String?          // Novo campo para telefone
+  region              String?          @default("other") // Região do usuário (brasil ou other)
+  createdAt           DateTime         @default(now())
+  password            String?
+  plan                String           @default("free")
+  provider            String           @default("credentials")
+  stripeCustomerId    String?
+  active              Boolean          @default(false)
+  activationToken     String?          @unique
+  acceptedTerms       Boolean          @default(false)
+  chats               Chat[]
+  token               UserToken?
+  moodEntries         MoodEntry[]
+  thoughtReframes     ThoughtReframe[]
+  resetToken          String?          @unique
+  streakCount         Int              @default(1)
+  streakLastDay       DateTime?
+  // Campos do psicólogo
+  isPsychologist      Boolean          @default(false)
+  crpNumber           String?
+  crpStatus           String?          // pending, approved, rejected
+  specialty           String?
+  professionalLicense String?
+  identityFrontPhoto  String?
+  identityBackPhoto   String?
 }
 
 

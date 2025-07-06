@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import translations from '.';
-
 type Language = 'pt' | 'en' | 'es';
 
 interface I18nContextProps {
@@ -18,7 +17,6 @@ const I18nContext = createContext<I18nContextProps>({
 const getDefaultLanguage = (): Language => {
   const saved = localStorage.getItem('language') as Language | null;
   if (saved) return saved;
-
   const browserLang = navigator.language.slice(0, 2);
   if (['pt', 'en', 'es'].includes(browserLang)) {
     return browserLang as Language;

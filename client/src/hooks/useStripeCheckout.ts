@@ -34,9 +34,7 @@ export async function handleStripeSubscriptionCheckout(
     });
 
     const data = await res.json();
-
     if (!data.sessionId) throw new Error('Stripe session not created');
-
     const stripe = await getStripeInstance();
     if (!stripe) throw new Error('Stripe.js not loaded');
 

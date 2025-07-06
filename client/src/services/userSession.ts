@@ -11,10 +11,6 @@ export interface UserProfile {
 }
 
 const SESSION_ID_KEY = 'Avylia_session_id';
-
-/**
- * Verifica se o localStorage está disponível e funcionando
- */
 function isLocalStorageAvailable() {
   try {
     const testKey = '__storage_test__';
@@ -25,10 +21,6 @@ function isLocalStorageAvailable() {
     return false;
   }
 }
-
-/**
- * Verifica se o sessionStorage está disponível e funcionando
- */
 function isSessionStorageAvailable() {
   try {
     const testKey = '__storage_test__';
@@ -42,17 +34,10 @@ function isSessionStorageAvailable() {
 
 const useLocalStorage = isLocalStorageAvailable();
 const useSessionStorage = isSessionStorageAvailable();
-
 let memoryStorage: UserProfile | null = null;
-
-/**
- * Salva o usuário no armazenamento disponível
- * Tenta salvar em todos os armazenamentos disponíveis
- */
 export function saveUser(user: UserProfile | null) {
   if (user) {
     memoryStorage = user;
-
     const userData = JSON.stringify(user);
 
     if (useLocalStorage) {
@@ -110,11 +95,6 @@ export function saveUser(user: UserProfile | null) {
     }
   }
 }
-
-/**
- * Obtém o usuário do armazenamento disponível
- * Tenta obter de todos os armazenamentos disponíveis
- */
 export function getUser(): UserProfile | null {
   if (useLocalStorage) {
     try {
@@ -140,12 +120,6 @@ export function getUser(): UserProfile | null {
 
   return memoryStorage;
 }
-
-/**
- * Salva o sessionID para uso em dispositivos móveis
- * Mesmo em dispositivos móveis, tentamos salvar em localStorage/sessionStorage
- * como fallback, mas também mantemos em memória
- */
 export function saveSessionID(sessionID: string | undefined) {
   if (!sessionID) return;
 
@@ -169,11 +143,6 @@ export function saveSessionID(sessionID: string | undefined) {
     console.warn('Falha ao salvar sessionID no sessionStorage:', e);
   }
 }
-
-/**
- * Obtém o sessionID salvo
- * Tenta obter de todas as fontes disponíveis
- */
 export function getSessionID(): string | null {
   if (memoryStorage?.sessionID) {
     return memoryStorage.sessionID;
@@ -203,10 +172,6 @@ export function getSessionID(): string | null {
 
   return null;
 }
-
-/**
- * Limpa o usuário de todos os armazenamentos
- */
 export function clearUser() {
   memoryStorage = null;
 

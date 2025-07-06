@@ -78,6 +78,9 @@ app.use("/api/stripe/webhook", stripeWebhook);
 
 app.use(express.json());
 
+// Servir arquivos estáticos para uploads
+app.use('/uploads', express.static('src/uploads'));
+
 app.use((req, res, next) => {
   
   const isMobileHeader = req.headers['x-mobile-device'] === 'true';

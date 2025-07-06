@@ -17,11 +17,7 @@ interface ErrorResponse {
 }
 
 export const thoughtReframeService = {
-  /**
-   * Envia um pensamento para ser reestruturado
-   * @param data Dados do pensamento a ser reestruturado
-   * @returns Resposta com o pensamento reestruturado
-   */
+
   async reframeThought(data: ReframeRequest): Promise<ReframeResponse> {
     try {
       const response = await fetch(`${BASE_URL}/api/thought-reframe`, {

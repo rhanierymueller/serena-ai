@@ -16,10 +16,6 @@ interface PublicConfig {
 }
 
 let cachedConfig: PublicConfig | null = null;
-
-/**
- * Busca as configurações públicas do servidor
- */
 export const getPublicConfig = async (): Promise<PublicConfig> => {
   if (cachedConfig) {
     return cachedConfig;

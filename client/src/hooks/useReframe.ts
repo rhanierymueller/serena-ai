@@ -15,10 +15,6 @@ interface ReframeResult {
   generateReframe: (thought: string, beliefStrength: number) => Promise<void>;
   reset: () => void;
 }
-
-/**
- * Hook para gerenciar a reestruturação cognitiva de pensamentos
- */
 export function useReframe(options: UseReframeOptions = {}): ReframeResult {
   const { language, t } = useI18n();
   const [reframe, setReframe] = useState<string | null>(null);
@@ -28,28 +24,23 @@ export function useReframe(options: UseReframeOptions = {}): ReframeResult {
 
   const generateReframe = async (thought: string, beliefStrength: number) => {
     if (!thought.trim()) return;
-    
     setIsLoading(true);
     setError(null);
     setReframe(null);
     setIsSuicidal(false);
-    
+
     try {
       const data = await thoughtReframeService.reframeThought({
         thought,
         belief: beliefStrength,
         lang: language
       });
-      
+
       setReframe(data.reframe);
       options.onSuccess?.(data.reframe);
-      
-      // Salvar no localStorage se não estiver logado
       thoughtReframeService.saveToLocalStorage(thought, data.reframe, beliefStrength);
     } catch (err: any) {
       console.error('Erro ao processar reestruturação:', err);
-      
-      // Verificar se é um erro de conteúdo suicida
       if (err.isSuicidal) {
         setIsSuicidal(true);
         const errorMessage = err.helpMessage || t('reframe.emergencyHelp');

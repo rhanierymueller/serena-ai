@@ -5,7 +5,8 @@
     "selfCare": "Self Care",
     "account": "Account",
     "chatTitle": "Avy chat",
-    "professionalArea": "Professional Area"
+    "professionalArea": "Professional Area",
+    "home": "Home"
   },
   "home": {
     "avyChat": "Avy Chat",
@@ -26,6 +27,40 @@
       "text": "Avylia AI is a virtual assistant for informational and empathetic listening purposes. It does not replace professional care from psychologists, therapists, or psychiatrists. If you are going through a difficult time, please seek specialized medical help.",
       "understood": "I understand",
       "back": "Back"
+    },
+    "features": {
+      "title": "Features",
+      "subtitle": "Discover how Avylia AI can transform your emotional well-being journey",
+      "empathicChat": {
+        "title": "Empathic AI Chat",
+        "description": "Talk to our AI specialized in emotional well-being, available 24/7 to listen and support you."
+      },
+      "moodTracking": {
+        "title": "Mood Tracking",
+        "description": "Monitor your emotional state daily and visualize patterns that help you better understand your feelings."
+      },
+      "breathingExercises": {
+        "title": "Breathing Exercises",
+        "description": "Practice guided breathing techniques to reduce stress and find moments of calm in your day."
+      },
+      "cognitiveRestructuring": {
+        "title": "Cognitive Restructuring",
+        "description": "Learn to identify and transform negative thoughts into more balanced and healthy perspectives."
+      },
+      "professionalArea": {
+        "title": "Professional Area",
+        "description": "Dedicated space for mental health professionals to monitor and support their patients."
+      },
+      "dailyMotivation": {
+        "title": "Daily Motivation",
+        "description": "Receive inspiring messages and practical tips to keep your motivation and well-being high."
+      }
+    },
+    "cta": {
+      "title": "Ready to start your journey?",
+      "subtitle": "Join thousands of people who have already transformed their lives with Avylia AI",
+      "startNow": "Start Now",
+      "testFree": "Try for Free"
     }
   },
   "footer": {
@@ -45,6 +80,7 @@
     "goHome": "Return to homepage",
     "typing": "Avylia is typing...",
     "planLabel": "Plan",
+    "stopSpeech": "Stop speech",
     "plan": {
       "pro": "Pro",
       "free": "Free"
@@ -84,9 +120,33 @@
     "password": "Password",
     "firstNamePlaceholder": "Enter your first name",
     "lastNamePlaceholder": "Enter your last name",
+    "emailPlaceholder": "example@email.com",
+    "passwordPlaceholder": "Minimum 8 characters with letters, numbers and symbols",
+    "confirmPasswordPlaceholder": "Type the same password again",
+    "exampleName": "John",
+    "exampleLastName": "Smith",
     "confirmPassword": "Confirm password",
     "successMessage": "Account created successfully! Check your email to activate your account.",
     "checkYourEmail": "Check your email to activate your account.",
+    "isPsychologist": "I'm a psychologist",
+    "psychologistInfo": "Professional information",
+    "crpNumber": "CRP Number",
+    "crpState": "CRP State",
+    "specialty": "Specialty",
+    "professionalLicense": "Professional license",
+    "specialtyPlaceholder": "Ex: Clinical Psychology, Neuropsychology, etc.",
+    "professionalLicensePlaceholder": "Professional license number (optional)",
+    "identityDocuments": "Identity documents",
+    "identityFront": "Front of ID",
+    "identityBack": "Back of ID",
+    "uploadFile": "Click to upload",
+    "validateCrp": "Validate CRP",
+    "crpValidated": "CRP validated",
+    "crpValidationSuccess": "CRP validated successfully!",
+    "crpValidationFailed": "CRP validation failed",
+    "crpValidationError": "Error validating CRP",
+    "uploadError": "Error uploading file",
+    "selectState": "Select state",
     "validation": {
       "firstName": "First name is required.",
       "lastName": "Last name is required.",
@@ -102,7 +162,22 @@
       "passwordSymbol": "Password must contain a special character.",
       "passwordMatch": "Passwords do not match.",
       "passwordConfirm": "Password confirmation is required.",
-      "emailExists": "This email is already registered."
+      "emailExists": "This email is already registered.",
+      "crpRequired": "CRP number is required.",
+      "crpInvalidFormat": "Invalid CRP format. Use: XX/XXXXX",
+      "crpStateRequired": "CRP state is required.",
+      "crpStateInvalid": "Select a valid state.",
+      "specialtyRequired": "Specialty is required.",
+      "specialtyMinLength": "Specialty must be at least 3 characters.",
+      "specialtyMaxLength": "Specialty must be at most 100 characters.",
+      "professionalLicenseMaxLength": "Professional license must be at most 50 characters.",
+      "crpDataRequired": "CRP number and state are required.",
+      "crpNotValidated": "CRP must be validated before continuing.",
+      "identityFilesRequired": "Identity photos are required.",
+      "crpInvalidRegionRange": "Invalid CRP region. Must be between 01 and 23.",
+      "crpInvalidSequential": "Invalid CRP number. Sequential numbers are not accepted.",
+      "crpRegionStateMismatch": "CRP region does not match selected state.",
+      "crpNotFoundInDatabase": "CRP not found in the Federal Council of Psychology database."
     }
   },
   "login": {
@@ -191,12 +266,21 @@
   },
   "terms": {
     "title": "Terms of Use",
-    "intro": "Welcome to Avylia AI. By using our services, you agree to the following terms of use. Please read carefully before proceeding.",
-    "noMedical": "Avylia AI is a virtual assistant focused on emotional support and guided reflections. We do not provide medical diagnoses or replace mental health professionals.",
-    "privacy": "All interactions may be recorded for continuous improvement purposes, respecting your privacy according to our Privacy Policy.",
+    "intro": "Welcome to Avylia AI. By using our services, you agree to the following terms of use. Please read carefully before continuing.",
+    "noMedical": "Avylia AI is a virtual assistant focused on emotional support and guided reflections. We do not offer medical diagnoses or replace mental health professionals.",
+    "privacy": "All interactions may be recorded for continuous service improvement purposes, respecting your privacy according to our Privacy Policy.",
     "agreement": "Using the service implies full acceptance of these terms. If you do not agree, please do not use Avylia AI.",
     "changes": "We reserve the right to update the terms at any time. Check this page periodically to stay informed about changes.",
-    "lastUpdate": "Last updated: April 2025."
+    "lastUpdate": "Last updated: April 2025.",
+    "medicalWarning": "Medical Warning",
+    "privacyTitle": "Privacy",
+    "agreementTitle": "Usage Agreement",
+    "changesTitle": "Updates",
+    "commitmentTitle": "Our Commitment to You",
+    "dataProtectedTitle": "Your Data Protected",
+    "dataProtectedDescription": "We guarantee total privacy and security of your personal information.",
+    "responsibleUseTitle": "Responsible Use",
+    "responsibleUseDescription": "Our AI is a support tool, not replacing professional medical care."
   },
   "profile": {
     "title": "My Profile",
@@ -205,6 +289,14 @@
     "name": "Name",
     "email": "Email",
     "gender": "Gender",
+    "phone": "Phone",
+    "birthdate": "Date of Birth",
+    "region": "Country",
+    "personalInfo": "Personal Information",
+    "accountInfo": "Account Information",
+    "tokensAvailable": "Available Tokens",
+    "subtitle": "Manage your personal information and plans",
+    "freePlan": "Free",
     "deleteAccount": "Delete Account",
     "confirmDeleteTitle": "Are you sure you want to delete your account?",
     "confirmDeleteText": "This action is irreversible.",
@@ -221,6 +313,63 @@
     "saveChanges": "Save Changes",
     "saveChangesSuccess": "Changes saved successfully!",
     "loading": "Loading...",
+    "saving": "Saving...",
+    "accountDeletedSuccess": "Account deleted successfully!",
+    "placeholders": {
+      "name": "Your full name",
+      "email": "your@email.com",
+      "birthdate": "DD/MM/YYYY",
+      "selectCountry": "Select your country",
+      "phoneNumber": "Phone number",
+      "phoneBrazil": "(11) 99999-9999",
+      "phoneUS": "(555) 123-4567",
+      "phonePortugal": "912 345 678"
+    },
+    "helpText": {
+      "emailReadonly": "Email cannot be changed",
+      "phoneInstruction": "Select the country code and enter only the local number",
+      "tokenUsage": "of"
+    },
+    "validation": {
+      "nameRequired": "Name must have at least 2 characters",
+      "emailInvalid": "Invalid email",
+      "phoneBrazilInvalid": "Brazilian phone must have at least 10 digits (area code + number)",
+      "phoneUSInvalid": "American phone must have 10 digits (area + number)",
+      "phonePortugalInvalid": "Portuguese phone must have 9 digits",
+      "phoneGenericInvalid": "Phone must have at least 8 digits",
+      "birthdateFormat": "Date must be in DD/MM/YYYY format",
+      "birthdateInvalid": "Invalid birth date",
+      "fixFormErrors": "Please fix the form errors",
+      "invalidUser": "Invalid user for update.",
+      "invalidUserDelete": "Invalid user for deletion."
+    },
+    "countries": {
+      "select": "Select your country",
+      "brazil": "Brazil",
+      "argentina": "Argentina",
+      "bolivia": "Bolivia",
+      "chile": "Chile",
+      "colombia": "Colombia",
+      "ecuador": "Ecuador",
+      "guyana": "Guyana",
+      "paraguay": "Paraguay",
+      "peru": "Peru",
+      "suriname": "Suriname",
+      "uruguay": "Uruguay",
+      "venezuela": "Venezuela",
+      "usa": "United States",
+      "canada": "Canada",
+      "mexico": "Mexico",
+      "portugal": "Portugal",
+      "spain": "Spain",
+      "france": "France",
+      "germany": "Germany",
+      "italy": "Italy",
+      "uk": "United Kingdom",
+      "japan": "Japan",
+      "australia": "Australia",
+      "other": "Other"
+    },
     "plans": {
       "free": {
         "title": "Free Plan",
@@ -237,8 +386,17 @@
   },
   "about": {
     "title": "About the Creator",
+    "subtitle": "Learn the story behind Avylia AI",
     "description": "Hi! My name is Rhaniery Mueller, founder of Mueller Solutions. With years of experience as a fullstack developer, I created Avylia AI to bring technology and mental well-being closer together. I believe in the power of digital empathy and the potential of voice assistants to make emotional care more accessible to everyone.",
-    "backHome": "Back to Home"
+    "backHome": "Back to Home",
+    "developer": "Developer",
+    "fullStackAI": "Full Stack & AI",
+    "mission": "Mission",
+    "mentalWellness": "Mental Wellness",
+    "vision": "Vision",
+    "healthInnovation": "Health Innovation",
+    "values": "Values",
+    "empathyCare": "Empathy & Care"
   },
   "moodTracker": {
     "title": "Mood Journal",
@@ -296,10 +454,19 @@
     "title": "Privacy Policy",
     "intro": "This policy explains how Avylia AI collects, uses, and protects your personal data.",
     "dataCollection": "We collect information such as name, email, and chat interactions to provide a personalized experience.",
+    "dataCollectionTitle": "Data Collection",
     "dataUse": "Data is used exclusively for authentication, personalization, and to improve the AI experience.",
+    "dataUseTitle": "Data Use",
     "sharing": "We do not share your data with third parties, except for essential services like AI providers (e.g., OpenAI) and hosting platforms.",
+    "sharingTitle": "Sharing",
     "security": "We apply technical and organizational measures to protect your data. No system is 100% secure, but we strive to mitigate risks as much as possible.",
+    "securityTitle": "Security",
     "rights": "You may request the deletion of your data at any time by contacting suporte@avylia.com.",
+    "rightsTitle": "Your Rights",
+    "storage": "Your data is stored securely on encrypted servers, following the best information security practices.",
+    "storageTitle": "Storage",
+    "transparencyTitle": "Total Transparency",
+    "transparencyDescription": "We believe in total transparency about how we collect, use, and protect your data. Our privacy policy is clear and accessible.",
     "lastUpdate": "Last updated: April 2025"
   },
   "errors": {
@@ -331,6 +498,102 @@
     "title": "Professional Area",
     "inDevelopment": "In Development",
     "description": "We are working to create a special area dedicated to mental health professionals."
+  },
+  "professional": {
+    "title": "Professional Area",
+    "subtitle": "Access your dashboard to track and manage your patients",
+    "login": {
+      "title": "Professional Login",
+      "subtitle": "Access your account to manage patients",
+      "email": "Professional Email",
+      "password": "Password",
+      "enterPlatform": "Enter Platform",
+      "forgotPassword": "Forgot your password?",
+      "clickHere": "Click here"
+    },
+    "dashboard": {
+      "totalClients": "Total Patients",
+      "activeClients": "Active Patients",
+      "pendingClients": "Pending",
+      "totalSessions": "Total Sessions",
+      "manageClients": "Manage Patients",
+      "searchPlaceholder": "Search patient...",
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending"
+    },
+    "client": {
+      "status": "Status",
+      "progress": "Progress",
+      "sessions": "Sessions",
+      "chat": "Chat",
+      "video": "Video",
+      "details": "Details",
+      "schedule": "Schedule",
+      "phone": "Phone",
+      "joinDate": "Join Date",
+      "lastSession": "Last Session",
+      "currentPlan": "Current Plan",
+      "moodTrend": "Mood Trend",
+      "improving": "Improving",
+      "stable": "Stable",
+      "declining": "Declining",
+      "close": "Close"
+    },
+    "notes": {
+      "title": "Clinical Notes",
+      "newNote": "New Note",
+      "addNote": "Add",
+      "placeholder": "Enter your clinical note...",
+      "generalNotes": "General Notes",
+      "count": "note(s)",
+      "noNotes": "No clinical notes found"
+    },
+    "meetings": {
+      "title": "Scheduled Meetings",
+      "schedule": "Schedule Meeting",
+      "scheduleMeeting": "Schedule Meeting",
+      "date": "Date",
+      "time": "Time",
+      "duration": "Duration (minutes)",
+      "scheduled": "Scheduled",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "copyLink": "Copy Link",
+      "meetingLink": "Meeting Link",
+      "linkCopied": "Link copied to clipboard!",
+      "noMeetings": "No meetings scheduled",
+      "cancel": "Cancel",
+      "count": "meeting(s)"
+    },
+    "videoCall": {
+      "title": "Video call with",
+      "connected": "Connected",
+      "cameraOn": "Camera on",
+      "cameraOff": "Camera off",
+      "microphoneOn": "Microphone on",
+      "microphoneMuted": "Microphone muted",
+      "turnOffCamera": "Turn off camera",
+      "turnOnCamera": "Turn on camera",
+      "muteAudio": "Mute microphone",
+      "unmuteAudio": "Unmute microphone",
+      "endCall": "End call",
+      "openChat": "Open chat",
+      "closeChat": "Close chat",
+      "chatDuringSession": "Chat during session",
+      "messagePlaceholder": "Message...",
+      "cameraError": "Error accessing camera. Check permissions.",
+      "waitingConnection": "Waiting for connection..."
+    },
+    "chat": {
+      "title": "Therapeutic Chat",
+      "placeholder": "Type your message...",
+      "defaultMessage": "Hello, Dr. {professionalName}. How are you today?",
+      "patientMessage": "I'm feeling better since our last session. The breathing exercises are helping a lot.",
+      "thanksMessage": "Thank you for accepting the video call!"
+    },
+    "logout": "Logout"
   },
   "reframe": {
     "title": "Express Reframe",
@@ -377,5 +640,12 @@
     "start": "Start",
     "streak_first_day": "First day of use!",
     "streak_n_days": "You have been using Avylia AI for {{count}} consecutive days!"
-  }
+  },
+  "firstNamePlaceholder": "Enter your first name",
+  "lastNamePlaceholder": "Enter your last name",
+  "emailPlaceholder": "example@email.com",
+  "passwordPlaceholder": "Minimum 8 characters with letters, numbers and symbols",
+  "confirmPasswordPlaceholder": "Type the same password again",
+  "exampleName": "John",
+  "exampleLastName": "Smith"
 }

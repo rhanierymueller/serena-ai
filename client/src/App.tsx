@@ -1,19 +1,26 @@
-import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import PlansPage from './pages/PlansPage';
-import ProfilePage from './pages/ProfilePage';
-import TermsPage from './pages/Terms';
-import AboutPage from './pages/AboutPage';
-import MoodTracker from './pages/MoodTracker';
-import BreathingPage from './pages/BreathingPage';
-import MotivationalSpin from './pages/MotivationalSpin';
-import Contact from './pages/Contact';
-import AvyliaChat from './pages/AvyliaChat';
-import PrivacyPage from './pages/PrivacyPage';
-import ActivateAccount from './pages/ActivateAccount';
-import ResetPassword from './pages/ResetPassword';
-import ProfessionalArea from './pages/ProfessionalArea';
-import ReframeExpressPage from './pages/ReframeExpressPage';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastProvider } from './context/ToastContext';
+import { I18nProvider } from './i18n/I18nContext';
+import { UserProvider } from './context/UserContext';
+import { PageLayout } from './components';
+import {
+  Home,
+  AboutPage,
+  Contact,
+  AvyliaChat,
+  MoodTracker,
+  BreathingPage,
+  ReframeExpressPage,
+  MotivationalSpin,
+  ProfessionalArea,
+  ProfilePage,
+  PlansPage,
+  PrivacyPage,
+  Terms,
+  ActivateAccount,
+  ResetPassword,
+} from './pages';
 
 const App = () => {
   return (
@@ -22,7 +29,7 @@ const App = () => {
       <Route path="/chat" element={<AvyliaChat />} />
       <Route path="/planos" element={<PlansPage />} />
       <Route path="/perfil" element={<ProfilePage />} />
-      <Route path="/termos" element={<TermsPage />} />
+      <Route path="/termos" element={<Terms />} />
       <Route path="/privacidade" element={<PrivacyPage />} />
       <Route path="/sobre" element={<AboutPage />} />
       <Route path="/mood-tracker" element={<MoodTracker />} />

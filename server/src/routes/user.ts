@@ -4,6 +4,10 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from "uuid";
 import { sendActivationEmail, sendResetPasswordEmail } from "../lib/email";
 import rateLimit from "express-rate-limit";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { UploadService } from "../lib/uploadService";
 
 const router = Router();
 
@@ -25,11 +29,74 @@ const resendActivationLimiter = rateLimit({
   message: { errorCode: "tooManyRequests" },
 });
 
+// Configuração do multer para upload de imagens
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, '../uploads/identity');
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|pdf/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+    
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb(new Error('Apenas arquivos JPEG, PNG ou PDF são permitidos!'));
+    }
+  }
+});
+
 router.post("/users", (async (req: any, res: any) => {
-  const { name, email, gender, password, birthDate, region, provider = "credentials" } = req.body;
+  const { 
+    name, 
+    email, 
+    gender, 
+    password, 
+    birthdate, 
+    phone,
+    region, 
+    provider = "credentials",
+    isPsychologist = false,
+    crpNumber,
+    specialty,
+    professionalLicense,
+    identityFrontPhoto,
+    identityBackPhoto
+  } = req.body;
 
   if (!name || !email) {
     return res.status(400).json({ errorCode: "missingCredentials" });
+  }
+
+  // Validação específica para psicólogos
+  if (isPsychologist && (!crpNumber || !specialty || !identityFrontPhoto || !identityBackPhoto)) {
+    return res.status(400).json({ errorCode: "missingPsychologistData" });
+  }
+
+  // Verificar se CRP já está em uso
+  if (isPsychologist && crpNumber) {
+    const existingCrp = await prisma.user.findFirst({ 
+      where: { crpNumber: crpNumber, isPsychologist: true } 
+    });
+    if (existingCrp) {
+      return res.status(409).json({ errorCode: "crpAlreadyExists" });
+    }
   }
 
   const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -47,12 +114,20 @@ router.post("/users", (async (req: any, res: any) => {
       data: {
         name,
         gender,
-        birthDate,
+        birthdate,
+        phone,
         region,
         password: hashedPassword,
         provider,
         active: false, 
         activationToken,
+        isPsychologist,
+        crpNumber,
+        specialty,
+        professionalLicense,
+        identityFrontPhoto,
+        identityBackPhoto,
+        crpStatus: isPsychologist ? "pending" : null,
       },
     });
 
@@ -69,11 +144,19 @@ router.post("/users", (async (req: any, res: any) => {
       email,
       gender,
       password: hashedPassword,
-      birthDate,
+      birthdate,
+      phone,
       region,
       provider,
       active: false,
       activationToken,
+      isPsychologist,
+      crpNumber,
+      specialty,
+      professionalLicense,
+      identityFrontPhoto,
+      identityBackPhoto,
+      crpStatus: isPsychologist ? "pending" : null,
     },
   });
 
@@ -83,6 +166,69 @@ router.post("/users", (async (req: any, res: any) => {
   const { password: _, activationToken: __, ...userWithoutPassword } = newUser;
   return res.status(201).json(userWithoutPassword);
 }));
+
+// Rota para upload de documentos de identidade
+router.post("/upload-identity", upload.fields([
+  { name: 'identityFront', maxCount: 1 },
+  { name: 'identityBack', maxCount: 1 }
+]), async (req: any, res: any) => {
+  try {
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    
+    const uploadResult = UploadService.processDocumentUpload(files);
+    
+    if (!uploadResult) {
+      return res.status(400).json({ 
+        errorCode: "invalidFiles",
+        message: "Arquivos inválidos ou ausentes" 
+      });
+    }
+
+    return res.status(200).json(uploadResult);
+  } catch (error) {
+    console.error('Erro no upload:', error);
+    return res.status(500).json({ 
+      errorCode: "uploadError",
+      message: "Erro ao fazer upload dos arquivos" 
+    });
+  }
+});
+
+// Rota para validar CRP
+router.post("/validate-crp", async (req: any, res: any) => {
+  const { crpNumber, state } = req.body;
+  
+  if (!crpNumber || !state) {
+    return res.status(400).json({ 
+      errorCode: "missingCrpData",
+      message: "Número do CRP e estado são obrigatórios" 
+    });
+  }
+
+  try {
+    // Usar UploadService para validar CRP
+    const validationResult = await UploadService.validateCrp(crpNumber, state);
+    
+    if (!validationResult.isValid) {
+      return res.status(400).json({ 
+        errorCode: "invalidCrp",
+        message: validationResult.message || "CRP inválido" 
+      });
+    }
+
+    return res.status(200).json({
+      valid: validationResult.isValid,
+      data: validationResult
+    });
+
+  } catch (error) {
+    console.error('Erro na validação do CRP:', error);
+    return res.status(500).json({ 
+      errorCode: "validationError",
+      message: "Erro ao validar CRP" 
+    });
+  }
+});
 
 router.post("/login", [loginLimiter], async (req: any, res: any, next: NextFunction) => {
   const { email, password } = req.body;
@@ -156,9 +302,19 @@ router.get("/users", async (req: any, res: any) => {
 
 router.put("/users/:id", async (req: any, res: any) => {
   const { id } = req.params;
-  const { name, gender, plan } = req.body;
+  const { name, gender, plan, birthdate, phone, region } = req.body;
 
-  const updated = await prisma.user.update({ where: { id }, data: { name, gender, plan } });
+  const updated = await prisma.user.update({ 
+    where: { id }, 
+    data: { 
+      name, 
+      gender, 
+      plan, 
+      birthdate, 
+      phone, 
+      region 
+    } 
+  });
   const { password: _, activationToken: __, ...userWithoutPassword } = updated;
   return res.json(userWithoutPassword);
 });

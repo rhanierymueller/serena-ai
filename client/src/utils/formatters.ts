@@ -1,11 +1,4 @@
 type Language = 'pt' | 'en' | 'es';
-
-/**
- * Formata uma data de acordo com a linguagem do usuário
- * @param date Data a ser formatada (string no formato dd/mm/yyyy ou objeto Date)
- * @param language Linguagem do usuário (pt, en, es)
- * @returns Data formatada de acordo com a linguagem (dd/mm/yyyy para pt, mm/dd/yyyy para en e es)
- */
 export const formatDate = (date: string | Date, language: Language): string => {
   if (typeof date === 'string') {
     const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;

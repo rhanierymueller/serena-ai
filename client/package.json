@@ -29,6 +29,7 @@
     "react-input-mask": "^2.0.4",
     "react-router-dom": "^7.5.0",
     "recharts": "^2.15.3",
+    "tailwind-scrollbar": "^3.0.5",
     "yup": "^1.6.1"
   },
   "devDependencies": {
